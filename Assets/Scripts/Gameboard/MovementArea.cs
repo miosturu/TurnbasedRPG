@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MovementArea
 {
-
+    // TODO: disallow moving throught the enemy
     public List<Tile> GenerateMovementArea(Tile origin, int maxDistance)
     {
         List<Tile> possibleTiles = new List<Tile>();

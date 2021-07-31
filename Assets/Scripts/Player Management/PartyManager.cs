@@ -9,10 +9,10 @@ public class PartyManager : MonoBehaviour
     public HeroScriptableObject x0z1, x1z1, x2z1;
     public HeroScriptableObject x0z2, x1z2, x2z2;
 
-    public void Awake()
+    /*public void Awake()
     {
         GetMarchingOrder();
-    }
+    }*/
 
     public HeroScriptableObject[,] GetMarchingOrder()
     {

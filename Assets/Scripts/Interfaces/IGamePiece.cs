@@ -8,4 +8,8 @@ public interface IGamePiece
     void Heal(int amount);
     GameObject GetGameObject();
     void HighlightSetActive(bool state);
+    int GetCurrentMovementLeft();
+
+    void ReduceMovement(int amount);
+    void ResetMovement();
 }

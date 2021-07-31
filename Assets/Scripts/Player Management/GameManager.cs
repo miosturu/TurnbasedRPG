@@ -18,6 +18,10 @@ public class GameManager : MonoBehaviour
     private Gameboard gameboard;
     public IGamePiece currentPlayer;
 
+    [Header("Player variables")]
+    List<Tile> movementArea = new List<Tile>(); // Stores all the tiles where current player can go
+
+
     private void Start()
     {
         gameboard = GameObject.Find("MapGenerator").GetComponent<Gameboard>();
@@ -29,8 +33,16 @@ public class GameManager : MonoBehaviour
         AddPlayer("C", 1, 5, 8);
         AddPlayer("D", 1, 3, 8);
 
+        InitializeFirstTurn();
+    }
+
+
+    public void InitializeFirstTurn()
+    {
         currentPlayer = turnManager.firstPlayer.player;
         currentPlayer.HighlightSetActive(true);
+        GenerateMovementArea();
+        ShowMovementArea();
     }
 
 
@@ -56,9 +68,15 @@ public class GameManager : MonoBehaviour
 
     public void EndTurn()
     {
-        currentPlayer.HighlightSetActive(false);
+        ResetMovementArea(); // Disable previous player's movent area
+
+        currentPlayer.ResetMovement();
+        currentPlayer.HighlightSetActive(false); // Highlight current player and dehighlight previous player
         currentPlayer = turnManager.NextTurn();
         currentPlayer.HighlightSetActive(true);
+
+        GenerateMovementArea();
+        ShowMovementArea();
     }
 
 
@@ -68,14 +86,54 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void MovePlayer(GameObject tile)
+    public void MovePlayer(GameObject tile) // TODO: when player is moved, regenerate player's movemnt
     {
-        if (tile.GetComponent<Tile>().currentObject != null)  // If wanted tile has no other object on it
+        //Debug.Log(tile.name + " " + movementArea.Contains(tile.GetComponent<Tile>()));
+
+        if (!movementArea.Contains(tile.GetComponent<Tile>()) || tile.GetComponent<Tile>().currentObject != null)  // If wanted tile has no other object on it and is in range
             return;
+
+        ResetMovementArea();
+
+        List<Tile> path = new BreadthFirstSearch().GeneratePath(currentPlayer.GetGameObject().GetComponentInParent<Tile>(), 
+                                                                                                 tile.GetComponent<Tile>()); // TODO: actually show the player the path when hovering ovet the tile
+
+        int distance = -1;
+
+        foreach (Tile t in path) distance++;
+        currentPlayer.ReduceMovement(distance);
 
         GameObject playerObject = currentPlayer.GetGameObject(); // Player game object
         playerObject.GetComponentInParent<Tile>().currentObject = null; // Remove previous parent
         playerObject.transform.SetParent(tile.gameObject.transform, false); // Move player
         tile.GetComponent<Tile>().currentObject = playerObject; // Set new tile's current object to be player
+
+        GenerateMovementArea();
+        ShowMovementArea();
+    }
+
+
+    public void GenerateMovementArea()
+    {
+        movementArea = new MovementArea().GenerateMovementArea(currentPlayer.GetGameObject().GetComponentInParent<Tile>(), 
+                                                               currentPlayer.GetCurrentMovementLeft());
+    }
+
+
+    public void ShowMovementArea()
+    {
+        foreach (Tile t in movementArea)
+        {
+            t.highlight.SetActive(true);
+        }
+    }
+
+
+    public void ResetMovementArea()
+    {
+        foreach (Tile t in movementArea)
+        {
+            t.highlight.SetActive(false);
+        }
     }
 }

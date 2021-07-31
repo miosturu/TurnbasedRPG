@@ -45,7 +45,7 @@ public class Gameboard : MonoBehaviour
                              { "_", "_", "_", "_", "_", "_" } };
 
         //GeneratePremadeLevel(tiles2);
-        GenerateBlankLevel();
+        GenerateLevel(tiles);
     }
 
     /// <summary>
@@ -55,7 +55,7 @@ public class Gameboard : MonoBehaviour
     ///     '@' will be low obstacle.
     /// </summary>
     /// <param name="symbolicMap"></param>
-    public void GeneratePremadeLevel(string[,] symbolicMap) // TODO
+    public void GenerateLevel(string[,] symbolicMap) // TODO
     {
         float xPos = 0;
         float zPos = 0;
@@ -136,7 +136,7 @@ public class Gameboard : MonoBehaviour
     }
 
 
-    public void GenerateBlankLevel() // TODO somekind of random level generation like in Splunky OR read from text OR TBoI-style
+    public void GenerateLevel() // TODO somekind of random level generation like in Splunky OR read from text OR TBoI-style
     {
         float xPos = 0;
         float zPos = 0;

@@ -55,4 +55,19 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     {
         highlight.SetActive(state);
     }
+
+    public int GetCurrentMovementLeft()
+    {
+        return movementLeft;
+    }
+
+    public void ReduceMovement(int amount)
+    {
+        movementLeft -= amount;
+    }
+
+    public void ResetMovement()
+    {
+        movementLeft = movementSpeed;
+    }
 }
