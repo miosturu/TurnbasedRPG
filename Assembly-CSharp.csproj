@@ -54,6 +54,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Interfaces\IGamePiece.cs" />
+    <Compile Include="Assets\Scripts\Player Management\PartyManager.cs" />
     <Compile Include="Assets\Scripts\Scritable Object Scripts\ActionScriptableObject.cs" />
     <Compile Include="Assets\Scripts\Player Management\GameManager.cs" />
     <Compile Include="Assets\Scripts\Scritable Object Scripts\HeroScriptableObject.cs" />
@@ -67,7 +68,7 @@
     <Compile Include="Assets\Scripts\Gameboard\Gameboard.cs" />
     <Compile Include="Assets\Scripts\Gameboard\Tile.cs" />
     <Compile Include="Assets\Scripts\Player Actions\ActionDoDamage.cs" />
-    <Compile Include="Assets\Scripts\Player Management\PartyManager.cs" />
+    <Compile Include="Assets\Scripts\AI\EnemyAI.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

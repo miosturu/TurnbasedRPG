@@ -425,6 +425,8 @@ MonoBehaviour:
   teamColors:
   - {fileID: 2100000, guid: d9f56560aa39e3541a79e03616c59d41, type: 2}
   - {fileID: 2100000, guid: 6ef48028acc738643ac4cfa012b97f4f, type: 2}
+  gameboard: {fileID: 183724483}
+  movementArea: []
 --- !u!4 &417176095
 Transform:
   m_ObjectHideFlags: 0

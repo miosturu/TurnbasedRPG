@@ -15,23 +15,27 @@ public class GameManager : MonoBehaviour
     public Material[] teamColors;
     public TurnManager turnManager;
 
+    [SerializeField]
     private Gameboard gameboard;
     public IGamePiece currentPlayer;
 
     [Header("Player variables")]
-    List<Tile> movementArea = new List<Tile>(); // Stores all the tiles where current player can go
+    public List<Tile> movementArea = new List<Tile>(); // Stores all the tiles where current player can go
 
+    [Header("AI")]
+    [SerializeField]
+    private EnemyAI ai; // Needs to be gameobject?
 
     private void Start()
     {
-        gameboard = GameObject.Find("MapGenerator").GetComponent<Gameboard>();
         turnManager = new TurnManager();
+        ai = new EnemyAI(gameboard, this);
 
         AddPlayer("A", 0, 0, 0);
-        AddPlayer("B", 0, 2, 0);
+        //AddPlayer("B", 0, 2, 0);
 
         AddPlayer("C", 1, 5, 8);
-        AddPlayer("D", 1, 3, 8);
+        //AddPlayer("D", 1, 3, 8);
 
         InitializeFirstTurn();
     }
@@ -53,7 +57,7 @@ public class GameManager : MonoBehaviour
         p.GetComponentInChildren<Renderer>().material = teamColors[materialIndex];
         PlacePlayer(p, x, z);
 
-        turnManager.AddPlayerToList(p.GetComponent<PlayerGamePiece>());
+        turnManager.AddPlayerToList(p.GetComponent<PlayerGamePiece>(), materialIndex);
     }
 
 
@@ -76,7 +80,17 @@ public class GameManager : MonoBehaviour
         currentPlayer.HighlightSetActive(true);
 
         GenerateMovementArea();
-        ShowMovementArea();
+
+        if (turnManager.currentPlayer.teamNumber == 0)
+        {
+            ShowMovementArea();
+        }
+        else // It's AI's turn
+        {
+            ai.PlayTurn(currentPlayer);
+            EndTurn();
+        }
+
     }
 
 
@@ -86,7 +100,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void MovePlayer(GameObject tile) // TODO: when player is moved, regenerate player's movemnt
+    public void MovePlayer(GameObject tile)
     {
         //Debug.Log(tile.name + " " + movementArea.Contains(tile.GetComponent<Tile>()));
 

@@ -12,12 +12,12 @@ public class TurnManager
     /// Add new player to the initiative.
     /// </summary>
     /// <param name="player">To be added player.</param>
-    public void AddPlayerToList(IGamePiece player)
+    public void AddPlayerToList(IGamePiece player, int teamNumber)
     {
         string pName = player.GetGameObject().name;
         // Debug.Log("Adding player " + pName);
 
-        PlayerTurn playerTurn = new PlayerTurn(player);
+        PlayerTurn playerTurn = new PlayerTurn(player, teamNumber);
 
         if (firstPlayer == null)
         {
@@ -80,10 +80,12 @@ public class PlayerTurn
 {
     public IGamePiece player;
     public PlayerTurn next;
-    // public int initiative;
+    public int initiative;
+    public int teamNumber;
 
-    public PlayerTurn(IGamePiece player)
+    public PlayerTurn(IGamePiece player, int teamNumber)
     {
         this.player = player;
+        this.teamNumber = teamNumber;
     }
 }

@@ -9,7 +9,6 @@ public interface IGamePiece
     GameObject GetGameObject();
     void HighlightSetActive(bool state);
     int GetCurrentMovementLeft();
-
     void ReduceMovement(int amount);
     void ResetMovement();
 }
