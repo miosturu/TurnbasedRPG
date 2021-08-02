@@ -15,8 +15,9 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: fc745bb14eb497c4abf1dcc7b9e9fe7e, type: 3}
   className: Knight
   maxHp: 10
-  armorDie: 6
+  armorDie: 8
   initiativeBonus: 0
+  movementSpeed: 1
   heroActions:
   - {fileID: 11400000, guid: 37d4b4a875a8fda4ba54d298c8e7480f, type: 2}
   - {fileID: 0}

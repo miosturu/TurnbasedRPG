@@ -37,14 +37,8 @@ public class GameManager : MonoBehaviour
 
         //TODO player party management
 
-        //SetPlayerTokens();
+        SetPlayerTokens();
         SetEnemyTokens();
-
-        //AddPlayer("A", 0, 0, 0);
-        //AddPlayer("B", 0, 2, 0);
-
-        //AddPlayer("C", 1, 5, 8);
-        //AddPlayer("D", 1, 3, 8);
 
         InitializeFirstTurn();
     }
@@ -69,12 +63,12 @@ public class GameManager : MonoBehaviour
     {
         EnemyScriptableObject[,] party = enemyParty.GetMarchingOrder();
 
-        for (int x = 0; x < 2; x++)
+        for (int x = 0; x < 3; x++)
         {
-            for (int z = 0; z < 2; z++)
+            for (int z = 0; z < 3; z++)
             {
                 if (party[x, z] != null)
-                    AddPlayer(party[x, z], 1, x, z);
+                    AddPlayer(party[x, z], 1, x+3, z+6);
             }
         }
     }
@@ -96,43 +90,26 @@ public class GameManager : MonoBehaviour
 
 
     /// <summary>
-    /// Add player to combat order
-    /// </summary>
-    /// <param name="name">Player's name</param>
-    /// <param name="materialIndex">What material will be used for token and player's team</param>
-    /// <param name="x">X-position</param>
-    /// <param name="z">Z-position</param>
-    public void AddPlayer(string name, int materialIndex, int x, int z)
-    {
-        GameObject p = Instantiate(playerToken);
-        p.name = name;
-        p.GetComponentInChildren<Renderer>().material = teamColors[materialIndex];
-        PlacePlayer(p, x, z);
-
-        turnManager.AddPlayerToList(p.GetComponent<PlayerGamePiece>(), materialIndex);
-    }
-
-
-    /// <summary>
     /// Add new player from scriptable object.
     /// </summary>
     /// <param name="hero">Hero scriptable object</param>
     /// <param name="team">Hero's team</param>
     /// <param name="x">X-position</param>
     /// <param name="z">Z-Position</param>
-    public void AddPlayer(EnemyScriptableObject hero, int team, int x, int z)
+    public void AddPlayer(EnemyScriptableObject enemy, int team, int x, int z)
     {
         GameObject player = Instantiate(playerToken);
         PlayerGamePiece gamePiece = player.GetComponent<PlayerGamePiece>();
 
         player.GetComponentInChildren<Renderer>().material = teamColors[team];
 
-        player.name = hero.name;
-        gamePiece.sprite.sprite = hero.sprite;
+        player.name = enemy.name;
+        gamePiece.sprite.sprite = enemy.sprite;
 
-        gamePiece.name = hero.name;
-        gamePiece.maxHp = hero.maxHp;
-        gamePiece.movementSpeed = hero.movementSpeed;
+        gamePiece.name = enemy.name;
+        gamePiece.maxHp = enemy.maxHp;
+        gamePiece.movementSpeed = enemy.movementSpeed;
+        gamePiece.movementLeft = enemy.movementSpeed;
 
         PlacePlayer(player, x, z);
         turnManager.AddPlayerToList(player.GetComponent<PlayerGamePiece>(), team);
@@ -152,6 +129,7 @@ public class GameManager : MonoBehaviour
         gamePiece.name = hero.name;
         gamePiece.maxHp = hero.maxHp;
         gamePiece.movementSpeed = hero.movementSpeed;
+        gamePiece.movementLeft = hero.movementSpeed;
 
         PlacePlayer(player, x, z);
         turnManager.AddPlayerToList(player.GetComponent<PlayerGamePiece>(), team);
