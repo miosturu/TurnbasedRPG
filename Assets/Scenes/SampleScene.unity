@@ -428,6 +428,7 @@ MonoBehaviour:
   gameboard: {fileID: 183724483}
   movementArea: []
   partyManager: {fileID: 417176096}
+  enemyParty: {fileID: 11400000, guid: cd66e2c7a578a6948a40e9c3e07eb317, type: 2}
 --- !u!4 &417176095
 Transform:
   m_ObjectHideFlags: 0

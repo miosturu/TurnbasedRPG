@@ -26,7 +26,8 @@ public class GameManager : MonoBehaviour
 
     [Header("AI")]
     [SerializeField]
-    private EnemyAI ai; // Needs to be gameobject?
+    private EnemyAI ai;
+    public EnemyPartyScriptableObject enemyParty;
 
     private void Start()
     {
@@ -36,7 +37,8 @@ public class GameManager : MonoBehaviour
 
         //TODO player party management
 
-        SetPlayerTokens();
+        //SetPlayerTokens();
+        SetEnemyTokens();
 
         //AddPlayer("A", 0, 0, 0);
         //AddPlayer("B", 0, 2, 0);
@@ -60,7 +62,21 @@ public class GameManager : MonoBehaviour
                     AddPlayer(party[x, z], 0, x, z);
             }
         }
+    }
 
+
+    public void SetEnemyTokens()
+    {
+        EnemyScriptableObject[,] party = enemyParty.GetMarchingOrder();
+
+        for (int x = 0; x < 2; x++)
+        {
+            for (int z = 0; z < 2; z++)
+            {
+                if (party[x, z] != null)
+                    AddPlayer(party[x, z], 1, x, z);
+            }
+        }
     }
 
 
@@ -104,6 +120,25 @@ public class GameManager : MonoBehaviour
     /// <param name="team">Hero's team</param>
     /// <param name="x">X-position</param>
     /// <param name="z">Z-Position</param>
+    public void AddPlayer(EnemyScriptableObject hero, int team, int x, int z)
+    {
+        GameObject player = Instantiate(playerToken);
+        PlayerGamePiece gamePiece = player.GetComponent<PlayerGamePiece>();
+
+        player.GetComponentInChildren<Renderer>().material = teamColors[team];
+
+        player.name = hero.name;
+        gamePiece.sprite.sprite = hero.sprite;
+
+        gamePiece.name = hero.name;
+        gamePiece.maxHp = hero.maxHp;
+        gamePiece.movementSpeed = hero.movementSpeed;
+
+        PlacePlayer(player, x, z);
+        turnManager.AddPlayerToList(player.GetComponent<PlayerGamePiece>(), team);
+    }
+
+
     public void AddPlayer(HeroScriptableObject hero, int team, int x, int z)
     {
         GameObject player = Instantiate(playerToken);
