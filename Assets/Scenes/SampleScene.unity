@@ -427,6 +427,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 6ef48028acc738643ac4cfa012b97f4f, type: 2}
   gameboard: {fileID: 183724483}
   movementArea: []
+  partyManager: {fileID: 417176096}
 --- !u!4 &417176095
 Transform:
   m_ObjectHideFlags: 0
@@ -457,7 +458,7 @@ MonoBehaviour:
   x1z0: {fileID: 0}
   x2z0: {fileID: 0}
   x0z1: {fileID: 0}
-  x1z1: {fileID: 0}
+  x1z1: {fileID: 11400000, guid: 5cd928f10f584cc448d70b6df68e2895, type: 2}
   x2z1: {fileID: 0}
   x0z2: {fileID: 0}
   x1z2: {fileID: 0}

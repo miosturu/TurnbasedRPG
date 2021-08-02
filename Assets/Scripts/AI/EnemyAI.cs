@@ -8,14 +8,12 @@ public class EnemyAI
 
     [Space(10)]
 
-    public GameObject[] tokens;
     public Gameboard gameboard;
     public GameManager gameManager;
     public IGamePiece currentGamePiece;
 
     public EnemyAI(Gameboard gameboard, GameManager gameManager)
     {
-        //this.tokens = tokens;
         this.gameboard = gameboard;
         this.gameManager = gameManager;
     }

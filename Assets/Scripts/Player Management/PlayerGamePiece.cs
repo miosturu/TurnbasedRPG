@@ -16,11 +16,8 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     public int armorDie = 6;
 
     [Header("Other")]
-
-    [SerializeField]
-    private GameObject highlight;
-    [SerializeField]
-    private SpriteRenderer sprite;
+    public GameObject highlight;
+    public SpriteRenderer sprite;
 
 
     public void Heal(int amount)

@@ -69,6 +69,8 @@
     <Compile Include="Assets\Scripts\Gameboard\Tile.cs" />
     <Compile Include="Assets\Scripts\Player Actions\ActionDoDamage.cs" />
     <Compile Include="Assets\Scripts\AI\EnemyAI.cs" />
+    <Compile Include="Assets\Scripts\Scritable Object Scripts\EnemyScriptableObject.cs" />
+    <Compile Include="Assets\Scripts\Scritable Object Scripts\EnemyPartyScriptableObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -12,6 +12,7 @@ public class HeroScriptableObject : ScriptableObject
     public int maxHp;
     public int armorDie;
     public int initiativeBonus;
+    public int movementSpeed;
 
     public ActionScriptableObject[] heroActions;
 }
