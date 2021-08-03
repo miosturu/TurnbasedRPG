@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ActionDoDamage
   m_EditorClassIdentifier: 
   actionName: Slash
-  actionIcon: {fileID: 0}
+  actionIcon: {fileID: 21300000, guid: 4893da72de4587e4e90aa0e817142cf8, type: 3}
   damageDie: 6
   range: 1
   needsLineOfSight: 1
