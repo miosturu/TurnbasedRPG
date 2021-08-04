@@ -866,15 +866,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0606acb70bf6a744a810a401a065c07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  x0z0: {fileID: 11400000, guid: 5cd928f10f584cc448d70b6df68e2895, type: 2}
+  x0z0: {fileID: 0}
   x1z0: {fileID: 0}
   x2z0: {fileID: 0}
   x0z1: {fileID: 0}
-  x1z1: {fileID: 11400000, guid: 5cd928f10f584cc448d70b6df68e2895, type: 2}
+  x1z1: {fileID: 11400000, guid: 1de5b355d7b60984286f5a0699e3e4be, type: 2}
   x2z1: {fileID: 0}
   x0z2: {fileID: 0}
-  x1z2: {fileID: 0}
-  x2z2: {fileID: 0}
+  x1z2: {fileID: 11400000, guid: 49cfa4cf33c5ab045a289060bb8bb613, type: 2}
+  x2z2: {fileID: 11400000, guid: 5cd928f10f584cc448d70b6df68e2895, type: 2}
 --- !u!1 &420313748
 GameObject:
   m_ObjectHideFlags: 0

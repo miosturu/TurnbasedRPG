@@ -44,13 +44,16 @@ public class GameManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Set human's tokens on gameboard
+    /// </summary>
     public void SetPlayerTokens()
     {
         HeroScriptableObject[,] party = partyManager.GetMarchingOrder();
 
-        for (int x = 0; x < 2; x++)
+        for (int x = 0; x < 3; x++)
         {
-            for (int z = 0; z < 2; z++)
+            for (int z = 0; z < 3; z++)
             {
                 if (party[x, z] != null)
                     AddPlayer(party[x, z], 0, x, z);
@@ -59,6 +62,9 @@ public class GameManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Set enemy players on gameboard
+    /// </summary>
     public void SetEnemyTokens()
     {
         EnemyScriptableObject[,] party = enemyParty.GetMarchingOrder();
@@ -90,10 +96,10 @@ public class GameManager : MonoBehaviour
 
 
     /// <summary>
-    /// Add new player from scriptable object.
+    /// Add new enemy player from scriptable object.
     /// </summary>
-    /// <param name="hero">Hero scriptable object</param>
-    /// <param name="team">Hero's team</param>
+    /// <param name="enemy">Enemy scriptable object</param>
+    /// <param name="team">Enemy's team</param>
     /// <param name="x">X-position</param>
     /// <param name="z">Z-Position</param>
     public void AddPlayer(EnemyScriptableObject enemy, int team, int x, int z)
@@ -116,6 +122,13 @@ public class GameManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Add new player from scriptable object.
+    /// </summary>
+    /// <param name="hero">Hero scriptable object</param>
+    /// <param name="team">Hero's team</param>
+    /// <param name="x">X-position</param>
+    /// <param name="z">Z-Position</param>
     public void AddPlayer(HeroScriptableObject hero, int team, int x, int z)
     {
         GameObject player = Instantiate(playerToken);
