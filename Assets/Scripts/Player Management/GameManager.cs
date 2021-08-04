@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     public IGamePiece currentPlayer;
 
     [Header("Player variables")]
+    public ActionScriptableObject[] heroActions;
     public List<Tile> movementArea = new List<Tile>(); // Stores all the tiles where current player can go
     [SerializeField]
     private PartyManager partyManager;
@@ -33,6 +34,7 @@ public class GameManager : MonoBehaviour
     {
         turnManager = new TurnManager();
         ai = new EnemyAI(gameboard, this);
+        heroActions = new ActionScriptableObject[4];
 
 
         //TODO player party management
@@ -90,6 +92,7 @@ public class GameManager : MonoBehaviour
     {
         currentPlayer = turnManager.firstPlayer.player;
         currentPlayer.HighlightSetActive(true);
+        heroActions = currentPlayer.GetActions();
         GenerateMovementArea();
         ShowMovementArea();
     }
@@ -144,6 +147,8 @@ public class GameManager : MonoBehaviour
         gamePiece.movementSpeed = hero.movementSpeed;
         gamePiece.movementLeft = hero.movementSpeed;
 
+        gamePiece.actions = hero.heroActions;
+
         PlacePlayer(player, x, z);
         turnManager.AddPlayerToList(player.GetComponent<PlayerGamePiece>(), team);
     }
@@ -182,6 +187,7 @@ public class GameManager : MonoBehaviour
         {
             currentPlayer.HighlightSetActive(true);
             ShowMovementArea();
+            heroActions = (ActionScriptableObject[]) currentPlayer.GetActions(); // TODO get player's actions
         }
         else // It's AI's turn
         {

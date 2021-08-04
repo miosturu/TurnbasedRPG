@@ -11,4 +11,5 @@ public interface IGamePiece
     int GetCurrentMovementLeft();
     void ReduceMovement(int amount);
     void ResetMovement();
+    ActionScriptableObject[] GetActions();
 }

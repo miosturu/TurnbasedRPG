@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\Scritable Object Scripts\EnemyPartyScriptableObject.cs" />
     <Compile Include="Assets\Scripts\AI\EnemyAI.cs" />
     <Compile Include="Assets\Scripts\Scritable Object Scripts\EnemyScriptableObject.cs" />
+    <Compile Include="Assets\Scripts\Player Actions\ActionHealSigleTarget.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

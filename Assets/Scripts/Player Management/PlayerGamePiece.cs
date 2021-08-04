@@ -18,6 +18,7 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     [Header("Other")]
     public GameObject highlight;
     public SpriteRenderer sprite;
+    public ActionScriptableObject[] actions;
 
 
     public void Heal(int amount)
@@ -53,18 +54,27 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
         highlight.SetActive(state);
     }
 
+
     public int GetCurrentMovementLeft()
     {
         return movementLeft;
     }
+
 
     public void ReduceMovement(int amount)
     {
         movementLeft -= amount;
     }
 
+
     public void ResetMovement()
     {
         movementLeft = movementSpeed;
+    }
+
+
+    public ActionScriptableObject[] GetActions()
+    {
+        return actions;
     }
 }
