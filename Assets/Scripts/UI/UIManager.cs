@@ -51,6 +51,8 @@ public class UIManager : MonoBehaviour
 
     public void UpdateHeroInfo()
     {
-        heroNameText.text = gameManager.currentPlayer.ToString();
+        heroNameText.text = "Name: " + gameManager.currentPlayer.ToString();
+        heroHpText.text = "HP: " + gameManager.currentPlayer.GetCurrentHp().ToString() + "/" + gameManager.currentPlayer.GetMaxHp().ToString();
+        heroMovementText.text = "Mov.: " + gameManager.currentPlayer.GetCurrentMovementLeft().ToString();
     }
 }

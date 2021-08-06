@@ -21,6 +21,10 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     public ActionScriptableObject[] actions;
 
 
+    /// <summary>
+    /// Heal player for certain amount. Prevents over healing.
+    /// </summary>
+    /// <param name="amount">Heal amount</param>
     public void Heal(int amount)
     {
         currentHp += amount;
@@ -29,6 +33,10 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     }
 
 
+    /// <summary>
+    /// Take dAmount of damage
+    /// </summary>
+    /// <param name="amount">Damage die</param>
     public void TakeDamage(int amount)
     {
         int reduction = (int)Random.Range(1.0f, (float)armorDie);
@@ -43,24 +51,40 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     }
 
 
+    /// <summary>
+    /// Get the game object where this component is attached.
+    /// </summary>
+    /// <returns>Game object of the component</returns>
     public GameObject GetGameObject()
     {
         return this.gameObject;
     }
 
 
+    /// <summary>
+    /// Enable/disable player's highlight.
+    /// </summary>
+    /// <param name="state">On/off</param>
     public void HighlightSetActive(bool state)
     {
         highlight.SetActive(state);
     }
 
 
+    /// <summary>
+    /// Get how much the player can move yet.
+    /// </summary>
+    /// <returns>Movement left</returns>
     public int GetCurrentMovementLeft()
     {
         return movementLeft;
     }
 
 
+    /// <summary>
+    /// Reduce how much more player can move.
+    /// </summary>
+    /// <param name="amount"></param>
     public void ReduceMovement(int amount)
     {
         movementLeft -= amount;
@@ -76,5 +100,15 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     public ActionScriptableObject[] GetActions()
     {
         return actions;
+    }
+
+    public int GetCurrentHp()
+    {
+        return currentHp;
+    }
+
+    public int GetMaxHp()
+    {
+        return maxHp;
     }
 }

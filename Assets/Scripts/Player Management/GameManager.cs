@@ -30,14 +30,12 @@ public class GameManager : MonoBehaviour
     private EnemyAI ai;
     public EnemyPartyScriptableObject enemyParty;
 
+
     private void Start()
     {
         turnManager = new TurnManager();
         ai = new EnemyAI(gameboard, this);
         heroActions = new ActionScriptableObject[4];
-
-
-        //TODO player party management
 
         SetPlayerTokens();
         SetEnemyTokens();
