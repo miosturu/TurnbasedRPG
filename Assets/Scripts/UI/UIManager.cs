@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,19 +22,21 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
+        gameManager.OnEndTurn += UpdateUI;
+        UpdateUI();
+    } 
 
 
-    private void Update() // TODO use delegates
+    private void UpdateUI(object sender, EventArgs e)
     {
         UpdateActions();
         UpdateHeroInfo();
     }
 
-    public void UpdateUI()
+    private void UpdateUI()
     {
-
+        UpdateActions();
+        UpdateHeroInfo();
     }
 
 
@@ -43,7 +46,7 @@ public class UIManager : MonoBehaviour
 
         for (int i = 0; i < abilityNamesTexts.Length; i++)
         {
-            abilityNamesTexts[i].text = actions[i].name;
+            abilityNamesTexts[i].text = actions[i].actionName;
             abilityButtons[i].image.sprite = actions[i].actionIcon;
         }
     }

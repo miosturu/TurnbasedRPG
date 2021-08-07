@@ -14,20 +14,19 @@ public class GameManager : MonoBehaviour
     public GameObject playerToken;
     public Material[] teamColors;
     public TurnManager turnManager;
-
-    [SerializeField]
-    private Gameboard gameboard;
+    [SerializeField] private Gameboard gameboard;
     public IGamePiece currentPlayer;
+
+    public event EventHandler OnEndTurn; // Event for updating UI
 
     [Header("Player variables")]
     public ActionScriptableObject[] heroActions;
+    public ActionScriptableObject selectedAction;
     public List<Tile> movementArea = new List<Tile>(); // Stores all the tiles where current player can go
-    [SerializeField]
-    private PartyManager partyManager;
+    [SerializeField] private PartyManager partyManager;
 
     [Header("AI")]
-    [SerializeField]
-    private EnemyAI ai;
+    [SerializeField] private EnemyAI ai;
     public EnemyPartyScriptableObject enemyParty;
 
 
@@ -93,6 +92,7 @@ public class GameManager : MonoBehaviour
         heroActions = currentPlayer.GetActions();
         GenerateMovementArea();
         ShowMovementArea();
+        //OnEndTurn?.Invoke(this, EventArgs.Empty); // Fire event to update UI
     }
 
 
@@ -115,6 +115,7 @@ public class GameManager : MonoBehaviour
 
         gamePiece.name = enemy.name;
         gamePiece.maxHp = enemy.maxHp;
+        gamePiece.currentHp = enemy.maxHp;
         gamePiece.movementSpeed = enemy.movementSpeed;
         gamePiece.movementLeft = enemy.movementSpeed;
 
@@ -142,6 +143,7 @@ public class GameManager : MonoBehaviour
 
         gamePiece.name = hero.name;
         gamePiece.maxHp = hero.maxHp;
+        gamePiece.currentHp = hero.maxHp;
         gamePiece.movementSpeed = hero.movementSpeed;
         gamePiece.movementLeft = hero.movementSpeed;
 
@@ -185,7 +187,8 @@ public class GameManager : MonoBehaviour
         {
             currentPlayer.HighlightSetActive(true);
             ShowMovementArea();
-            heroActions = (ActionScriptableObject[]) currentPlayer.GetActions(); // TODO get player's actions
+            heroActions = currentPlayer.GetActions();
+            OnEndTurn?.Invoke(this, EventArgs.Empty); // Fire event to update UI
         }
         else // It's AI's turn
         {
