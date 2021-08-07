@@ -174,6 +174,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void EndTurn()
     {
+        selectedAction = null;
         ResetMovementArea(); // Disable previous player's movent area
         currentPlayer.ResetMovement();
 
@@ -183,7 +184,7 @@ public class GameManager : MonoBehaviour
 
         GenerateMovementArea();
 
-        if (turnManager.currentPlayer.teamNumber == 0)
+        if (turnManager.currentPlayer.teamNumber == 0) // Set up player's turn
         {
             currentPlayer.HighlightSetActive(true);
             ShowMovementArea();
