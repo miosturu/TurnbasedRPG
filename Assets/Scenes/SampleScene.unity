@@ -650,7 +650,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 361096658}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1148860396}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: GetClickedAction
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &361096658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -838,6 +850,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 6ef48028acc738643ac4cfa012b97f4f, type: 2}
   gameboard: {fileID: 183724483}
   heroActions: []
+  selectedAction: {fileID: 0}
   movementArea: []
   partyManager: {fileID: 417176096}
   enemyParty: {fileID: 11400000, guid: cd66e2c7a578a6948a40e9c3e07eb317, type: 2}
@@ -1281,7 +1294,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 706194824}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1148860396}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: GetClickedAction
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &706194824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2052,7 +2077,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1380091310}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1148860396}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: GetClickedAction
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1380091310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2702,7 +2739,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1798234045}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1148860396}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: GetClickedAction
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1798234045
 MonoBehaviour:
   m_ObjectHideFlags: 0

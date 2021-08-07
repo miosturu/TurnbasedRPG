@@ -58,4 +58,10 @@ public class UIManager : MonoBehaviour
         heroHpText.text = "HP: " + gameManager.currentPlayer.GetCurrentHp().ToString() + "/" + gameManager.currentPlayer.GetMaxHp().ToString();
         heroMovementText.text = "Mov.: " + gameManager.currentPlayer.GetCurrentMovementLeft().ToString();
     }
+
+
+    public void GetClickedAction()
+    {
+        Debug.Log("Clicked action");
+    }
 }
