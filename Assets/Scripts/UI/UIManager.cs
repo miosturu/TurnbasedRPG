@@ -60,8 +60,8 @@ public class UIManager : MonoBehaviour
     }
 
 
-    public void GetClickedAction()
+    public void GetClickedAction(Button button)
     {
-        Debug.Log("Clicked action");
+        Debug.Log("Clicked action button: " + button.name);
     }
 }

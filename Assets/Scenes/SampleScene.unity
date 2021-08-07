@@ -654,10 +654,10 @@ MonoBehaviour:
       - m_Target: {fileID: 1148860396}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: GetClickedAction
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 361096657}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1298,10 +1298,10 @@ MonoBehaviour:
       - m_Target: {fileID: 1148860396}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: GetClickedAction
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 706194823}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2081,10 +2081,10 @@ MonoBehaviour:
       - m_Target: {fileID: 1148860396}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: GetClickedAction
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1380091309}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2743,10 +2743,10 @@ MonoBehaviour:
       - m_Target: {fileID: 1148860396}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: GetClickedAction
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1798234044}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
