@@ -37,8 +37,7 @@ public class UIManager : MonoBehaviour
     /// <param name="e">Arguments. Not needed as of 2021/08/08</param>
     private void UpdateUI(object sender, EventArgs e)
     {
-        UpdateActions();
-        UpdateHeroInfo();
+        UpdateUI();
     }
 
 
@@ -47,8 +46,8 @@ public class UIManager : MonoBehaviour
     /// </summary>
     private void UpdateUI()
     {
-        UpdateActions();
         UpdateHeroInfo();
+        UpdateActions();
     }
 
 
@@ -57,15 +56,13 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void UpdateActions()
     {
-        ActionScriptableObject[] actions = gameManager.heroActions;
+        actions = gameManager.currentPlayer.GetActions();
 
         for (int i = 0; i < abilityNamesTexts.Length; i++)
         {
             abilityNamesTexts[i].text = actions[i].actionName;
             abilityButtons[i].image.sprite = actions[i].actionIcon;
         }
-
-        actions = gameManager.currentPlayer.GetActions();
     }
 
 
@@ -94,7 +91,7 @@ public class UIManager : MonoBehaviour
         }
         else // We're clikcing new action
         {
-            gameManager.selectedAction = actions[i];
+            gameManager.selectedAction = actions[i]; 
         }
 
     }

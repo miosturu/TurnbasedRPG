@@ -20,6 +20,6 @@ MonoBehaviour:
   movementSpeed: 1
   heroActions:
   - {fileID: 11400000, guid: 37d4b4a875a8fda4ba54d298c8e7480f, type: 2}
-  - {fileID: 11400000, guid: 37d4b4a875a8fda4ba54d298c8e7480f, type: 2}
+  - {fileID: 11400000, guid: 8caa33aac8717d343a12b1f5975c99d3, type: 2}
   - {fileID: 11400000, guid: 37d4b4a875a8fda4ba54d298c8e7480f, type: 2}
   - {fileID: 11400000, guid: 37d4b4a875a8fda4ba54d298c8e7480f, type: 2}

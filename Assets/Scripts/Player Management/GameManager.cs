@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
         heroActions = currentPlayer.GetActions();
         GenerateMovementArea();
         ShowMovementArea();
-        //OnEndTurn?.Invoke(this, EventArgs.Empty); // Fire event to update UI
+        OnEndTurn?.Invoke(this, EventArgs.Empty); // Fire event to update UI
     }
 
 
@@ -180,7 +180,6 @@ public class GameManager : MonoBehaviour
 
         currentPlayer.HighlightSetActive(false); // Highlight current player and dehighlight previous player
         currentPlayer = turnManager.NextTurn();
-        
 
         GenerateMovementArea();
 
@@ -189,14 +188,13 @@ public class GameManager : MonoBehaviour
             currentPlayer.HighlightSetActive(true);
             ShowMovementArea();
             heroActions = currentPlayer.GetActions();
-            OnEndTurn?.Invoke(this, EventArgs.Empty); // Fire event to update UI
+            OnEndTurn?.Invoke(this, EventArgs.Empty);
         }
         else // It's AI's turn
         {
             ai.PlayTurn(currentPlayer);
-            EndTurn();
+            EndTurn(); // Wait, this is recursion? Should I change this
         }
-
     }
 
 
@@ -213,8 +211,10 @@ public class GameManager : MonoBehaviour
     /// Move player to new tile
     /// </summary>
     /// <param name="tile">New tile</param>
-    public void MovePlayer(GameObject tile)
-    {
+    public void MovePlayer(GameObject tile) // TODO: When we have selected action AND valid tile is clikced -> do the action NOT move
+    {                                       // Also, when the action is selected, don't show allowed movement area BUT the allowed targets
+                                            // In UI some how highlight the selected action, maybe hight contrass gameobject
+
         //Debug.Log(tile.name + " " + movementArea.Contains(tile.GetComponent<Tile>()));
 
         if (!movementArea.Contains(tile.GetComponent<Tile>()) || tile.GetComponent<Tile>().currentObject != null)  // If wanted tile has no other object on it and is in range
@@ -236,7 +236,12 @@ public class GameManager : MonoBehaviour
         tile.GetComponent<Tile>().currentObject = playerObject; // Set new tile's current object to be player
 
         GenerateMovementArea();
-        ShowMovementArea();
+
+        if (turnManager.currentPlayer.teamNumber == 0) // If the player is real player Fire event to update UI
+        {
+            OnEndTurn?.Invoke(this, EventArgs.Empty);
+            ShowMovementArea();
+        }
     }
 
 
