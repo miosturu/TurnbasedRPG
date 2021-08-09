@@ -5,11 +5,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    /*[Header("Debug variables")]
-    public int maxDistance = 1;
-
-    public int originX, originZ, destinationX, destinationZ = 0;*/
-
     [Header("Actual variables")]
     public GameObject playerToken;
     public Material[] teamColors;
@@ -201,8 +196,11 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Remove player from combat.
     /// </summary>
-    public void RemovePlayer()
-    {
+    public void RemovePlayer() // TODO when player dies, remove it from turn order
+    {                          // Maybe could use delegates as in: 
+                               //   1) GameManager creates player and subscribes to event that tells it the player has died
+                               //   2) When the event is reveieved, the fire this function
+
         turnManager.RemovePlayer(currentPlayer);
     }
 
@@ -211,9 +209,9 @@ public class GameManager : MonoBehaviour
     /// Move player to new tile
     /// </summary>
     /// <param name="tile">New tile</param>
-    public void MovePlayer(GameObject tile) // TODO: When we have selected action AND valid tile is clikced -> do the action NOT move
+    public void MovePlayer(GameObject tile) // TODO: When we have selected action AND valid tile is clikced -> do the action NOT move       DONE
     {                                       // Also, when the action is selected, don't show allowed movement area BUT the allowed targets
-                                            // In UI some how highlight the selected action, maybe hight contrass gameobject
+                                            // In UI some how highlight the selected action, maybe hight contrass gameobject                DONE
 
         //Debug.Log(tile.name + " " + movementArea.Contains(tile.GetComponent<Tile>()));
 

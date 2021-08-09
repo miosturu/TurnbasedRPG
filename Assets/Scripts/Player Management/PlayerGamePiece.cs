@@ -34,10 +34,10 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
 
 
     /// <summary>
-    /// Take dAmount of damage
+    /// Take dX of damage. 'D' stands for die/dice. For example if d=6, then roll regular six sided die.
     /// </summary>
     /// <param name="amount">Damage die</param>
-    public void TakeDamage(int amount)
+    public void TakeDamage(int amount) // TODO when the player is dead, remove it from turn order
     {
         int reduction = (int)Random.Range(1.0f, (float)armorDie);
 
@@ -46,6 +46,8 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
         if (currentHp <= 0)
         {
             // Player's character dies
+            Debug.Log("Player " + name + " has died");
+            gameObject.SetActive(false);
             enabled = false;
         }
     }
@@ -91,22 +93,39 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     }
 
 
+    /// <summary>
+    /// Set player's movement to be max movement
+    /// </summary>
     public void ResetMovement()
     {
         movementLeft = movementSpeed;
     }
 
 
+    /// <summary>
+    /// Return player's available actions
+    /// </summary>
+    /// <returns>Available actions</returns>
     public ActionScriptableObject[] GetActions()
     {
         return actions;
     }
 
+
+    /// <summary>
+    /// Return player's current HP.
+    /// </summary>
+    /// <returns>Current HP.</returns>
     public int GetCurrentHp()
     {
         return currentHp;
     }
 
+
+    /// <summary>
+    /// Return player's max HP.
+    /// </summary>
+    /// <returns>Player's max HP.</returns>
     public int GetMaxHp()
     {
         return maxHp;

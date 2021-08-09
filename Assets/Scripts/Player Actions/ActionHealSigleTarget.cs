@@ -11,6 +11,7 @@ public class ActionHealSigleTarget : ActionScriptableObject
 
     public override void Action(Tile target)
     {
+        Debug.Log("Called action 'ActionHealSigleTarget'");
         target.currentObject.GetComponent<IGamePiece>().Heal(healDie); // TODO randomise?
     }
 }
