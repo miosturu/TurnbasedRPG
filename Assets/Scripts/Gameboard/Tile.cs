@@ -33,18 +33,6 @@ public class Tile : MonoBehaviour
     }
 
 
-    /*public void OnMouseEnter()
-    {
-        highlight.SetActive(true);
-    }
-
-
-    public void OnMouseExit()
-    {
-        highlight.SetActive(false);
-    }*/
-
-
     public void OnMouseUp()
     {
         gameManager.MovePlayer(this.gameObject);

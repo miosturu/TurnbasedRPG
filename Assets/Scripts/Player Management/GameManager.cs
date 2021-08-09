@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("Debug variables")]
+    /*[Header("Debug variables")]
     public int maxDistance = 1;
 
-    public int originX, originZ, destinationX, destinationZ = 0;
+    public int originX, originZ, destinationX, destinationZ = 0;*/
 
     [Header("Actual variables")]
     public GameObject playerToken;
@@ -242,6 +242,12 @@ public class GameManager : MonoBehaviour
             OnEndTurn?.Invoke(this, EventArgs.Empty);
             ShowMovementArea();
         }
+    }
+
+
+    public void DoSelectedAction(GameObject tile)
+    {
+        selectedAction.Action(tile.GetComponent<Tile>());
     }
 
 

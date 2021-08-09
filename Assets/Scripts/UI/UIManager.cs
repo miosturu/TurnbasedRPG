@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button[] abilityButtons;
     [SerializeField] private Text[] abilityNamesTexts;
     [SerializeField] private ActionScriptableObject[] actions;
+    [SerializeField] private RawImage[] selectionHighlights;
 
 
     // Start is called before the first frame update
@@ -48,6 +49,7 @@ public class UIManager : MonoBehaviour
     {
         UpdateHeroInfo();
         UpdateActions();
+        ResetSelectionHighlight();
     }
 
 
@@ -84,15 +86,33 @@ public class UIManager : MonoBehaviour
     /// <param name="i">Action's index</param>
     public void GetClickedAction(int i)
     {
-
         if (gameManager.selectedAction == actions[i]) // If we're clicking the same action
         {
             gameManager.selectedAction = null;
+            selectionHighlights[i].enabled = false;
         }
         else // We're clikcing new action
         {
-            gameManager.selectedAction = actions[i]; 
+            gameManager.selectedAction = actions[i];
+            foreach(RawImage image in selectionHighlights)
+                image.enabled = false;
+
+            selectionHighlights[i].enabled = true;
         }
 
+        if (gameManager.selectedAction == null) // Just make sure that there's no highlight if no action is selected. This is here because as of 2021/08/09, one action can be on many button, which can lead to weird behavior
+        {
+            ResetSelectionHighlight();
+        }
+    }
+
+
+    /// <summary>
+    /// Reset all action selection highlights
+    /// </summary>
+    public void ResetSelectionHighlight()
+    {
+        foreach (RawImage image in selectionHighlights)
+            image.enabled = false;
     }
 }
