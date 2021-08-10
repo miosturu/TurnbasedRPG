@@ -10,9 +10,9 @@ public class ActionDoDamage : ActionScriptableObject
 
     public bool needsLineOfSight;
 
-    public override void Action(Tile target)
+    public override void Action(Tile origin, Tile target)
     {
-        target.currentObject.GetComponent<IGamePiece>().TakeDamage((int)Random.Range(1.0f, (float)damageDie));
-        Debug.Log("Doing damage");
+        int dam = (int)Random.Range(1.0f, (float)damageDie);
+        target.currentObject.GetComponent<IGamePiece>().TakeDamage(dam);
     }
 }

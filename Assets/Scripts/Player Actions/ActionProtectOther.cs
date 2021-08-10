@@ -7,7 +7,7 @@ public class ActionProtectOther : ActionScriptableObject
 {
     int numberOfturns = 2;
 
-    public override void Action(Tile target)
+    public override void Action(Tile origin, Tile target)
     {
         Debug.Log("Called 'ActionProtectOther()'-action for " + numberOfturns + " turns");
         throw new System.NotImplementedException();

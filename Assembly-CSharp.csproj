@@ -64,6 +64,7 @@
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\Scripts\Player Management\TurnManager.cs" />
     <Compile Include="Assets\Scripts\Scritable Object Scripts\TileScriptableObject.cs" />
+    <Compile Include="Assets\Scripts\Player Actions\ActionProtectOther.cs" />
     <Compile Include="Assets\Scripts\Player Management\PlayerGamePiece.cs" />
     <Compile Include="Assets\Scripts\Gameboard\Gameboard.cs" />
     <Compile Include="Assets\Scripts\Gameboard\Tile.cs" />
@@ -72,7 +73,7 @@
     <Compile Include="Assets\Scripts\Scritable Object Scripts\EnemyPartyScriptableObject.cs" />
     <Compile Include="Assets\Scripts\AI\EnemyAI.cs" />
     <Compile Include="Assets\Scripts\Scritable Object Scripts\EnemyScriptableObject.cs" />
-    <Compile Include="Assets\Scripts\Player Actions\ActionProtectOther.cs" />
+    <Compile Include="Assets\Scripts\Utility\DiceRoller.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

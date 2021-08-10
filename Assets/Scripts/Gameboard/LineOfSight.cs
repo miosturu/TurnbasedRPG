@@ -58,6 +58,20 @@ public class LineOfSight
     }
 
 
+    public int LoSDistance(GameObject[,] map, Tile origin, Tile destination)
+    {
+        List<Tile> path = GenerateLineOfSight(map, origin, destination);
+        int distance = 0;
+
+        foreach(Tile t in path)
+        {
+            distance++;
+        }
+
+        return distance;
+    }
+
+
     /// <summary>
     /// Helper function. Calculates dx, dz
     /// </summary>

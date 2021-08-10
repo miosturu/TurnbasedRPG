@@ -41,6 +41,8 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     {
         int reduction = (int)Random.Range(1.0f, (float)armorDie);
 
+        Debug.Log("Took " + amount + " damage. Damage was reduced by " + reduction + " points. Current HP: " + currentHp);
+
         if (amount - reduction > 0)
             currentHp -= amount;
         if (currentHp <= 0)

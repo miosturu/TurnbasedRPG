@@ -245,7 +245,7 @@ public class GameManager : MonoBehaviour
 
     public void DoSelectedAction(GameObject tile)
     {
-        selectedAction.Action(tile.GetComponent<Tile>());
+        selectedAction.Action(currentPlayer.GetGameObject().GetComponentInParent<Tile>() , tile.GetComponent<Tile>());
     }
 
 

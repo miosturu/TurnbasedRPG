@@ -50,7 +50,7 @@ public class Tile : MonoBehaviour
         if (gameManager.selectedAction == null)
             gameManager.MovePlayer(this.gameObject);
         else
-            gameManager.selectedAction.Action(this);
+            gameManager.selectedAction.Action(gameManager.currentPlayer.GetGameObject().GetComponentInParent<Tile>(), this);
     }
 
 
@@ -63,5 +63,15 @@ public class Tile : MonoBehaviour
         isWalkable = tileSO.isWalkable;
         canBeAttackedOver = tileSO.canBeAttackedOver;
         GetComponent<MeshRenderer>().material = tileSO.tileMaterial;
+    }
+
+
+    /// <summary>
+    /// Return this tile's gameboard;
+    /// </summary>
+    /// <returns>Tile's gameboard</returns>
+    public GameObject[,] GetGameboardOfTile()
+    {
+        return GetComponentInParent<Gameboard>().map;
     }
 }

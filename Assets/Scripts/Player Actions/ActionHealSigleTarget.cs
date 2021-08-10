@@ -9,9 +9,10 @@ public class ActionHealSigleTarget : ActionScriptableObject
     public int range;
     public bool needsLineOfSight;
 
-    public override void Action(Tile target)
+    public override void Action(Tile origin, Tile target)
     {
-        Debug.Log("Called action 'ActionHealSigleTarget'");
-        target.currentObject.GetComponent<IGamePiece>().Heal(healDie); // TODO randomise?
+        int distance = new LineOfSight().LoSDistance(origin.GetGameboardOfTile(), origin, target);
+
+        target.currentObject.GetComponent<IGamePiece>().Heal(new DiceRoller().RollDice(1, healDie));
     }
 }
