@@ -26,9 +26,9 @@ public class LineOfSight
             }
         }
 
-        List<Tile> los = new List<Tile> { origin }; // Get the tiles from the map
+        List<Tile> los = new List<Tile>(); // Get the tiles from the map
 
-        for (int i = 0; i < points.Count; i++) // 
+        for (int i = 0; i < points.Count; i++)
         {
             int x0 = Mathf.RoundToInt(points[i][0]);
             int z0 = Mathf.RoundToInt(points[i][1]);
@@ -42,7 +42,7 @@ public class LineOfSight
                 int z1 = Mathf.RoundToInt(points[i + 1][1]);
                 tile1 = map[x1, z1].GetComponent<Tile>();
             }
-            catch { }
+            catch { /*Tile of of bounds*/ }
 
             if (tile0.canBeAttackedOver && !IsSurrounded(map, tile0, tile1))
             {
@@ -58,6 +58,29 @@ public class LineOfSight
     }
 
 
+    /// <summary>
+    /// Check if the tile can be seen from origin tile.
+    /// </summary>
+    /// <param name="map">Map where the tiles are</param>
+    /// <param name="origin">Origin tile</param>
+    /// <param name="destination">Destination tile</param>
+    /// <returns>There's a line of sight between the tiles</returns>
+    public bool TileCanBeSeen(GameObject[,] map, Tile origin, Tile destination)
+    {
+        if (LoSDistance(map, origin, destination) - 1 == DiagonalDistance(origin, destination))
+            return true;
+
+        return false;
+    }
+
+
+    /// <summary>
+    /// Check the distance of line of sight.
+    /// </summary>
+    /// <param name="map">LoS' map</param>
+    /// <param name="origin">Where the LoS originates</param>
+    /// <param name="destination">Where the LoS tries to reach</param>
+    /// <returns>Distance of LoS</returns>
     public int LoSDistance(GameObject[,] map, Tile origin, Tile destination)
     {
         List<Tile> path = GenerateLineOfSight(map, origin, destination);

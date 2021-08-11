@@ -11,8 +11,14 @@ public class ActionHealSigleTarget : ActionScriptableObject
 
     public override void Action(Tile origin, Tile target)
     {
-        int distance = new LineOfSight().LoSDistance(origin.GetGameboardOfTile(), origin, target);
-
-        target.currentObject.GetComponent<IGamePiece>().Heal(new DiceRoller().RollDice(1, healDie));
+        if (!needsLineOfSight || new LineOfSight().TileCanBeSeen(origin.GetGameboardOfTile(), origin, target))
+        {
+            target.currentObject.GetComponent<IGamePiece>().Heal(new DiceRoller().RollDice(1, healDie));
+            Debug.Log("Tile can be seen and healing was done");
+        }
+        else
+        {
+            Debug.Log("Healing failed: tile not in line of sight");
+        }
     }
 }

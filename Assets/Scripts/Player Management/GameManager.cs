@@ -61,15 +61,22 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void SetEnemyTokens()
     {
-        EnemyScriptableObject[,] party = enemyParty.GetMarchingOrder();
-
-        for (int x = 0; x < 3; x++)
+        try
         {
-            for (int z = 0; z < 3; z++)
+            EnemyScriptableObject[,] party = enemyParty.GetMarchingOrder();
+
+            for (int x = 0; x < 3; x++)
             {
-                if (party[x, z] != null)
-                    AddPlayer(party[x, z], 1, x+3, z+6);
+                for (int z = 0; z < 3; z++)
+                {
+                    if (party[x, z] != null)
+                        AddPlayer(party[x, z], 1, x + 3, z + 6);
+                }
             }
+        }
+        catch
+        {
+            Debug.Log("No selected enemy party");
         }
     }
 

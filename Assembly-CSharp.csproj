@@ -59,6 +59,7 @@
     <Compile Include="Assets\Scripts\Player Management\GameManager.cs" />
     <Compile Include="Assets\Scripts\Scritable Object Scripts\HeroScriptableObject.cs" />
     <Compile Include="Assets\Scripts\Gameboard\LineOfSight.cs" />
+    <Compile Include="Assets\Scripts\Utility\DiceRoller.cs" />
     <Compile Include="Assets\Scripts\Gameboard\BreadthFirstSearch.cs" />
     <Compile Include="Assets\Scripts\Gameboard\MovementArea.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
@@ -73,7 +74,8 @@
     <Compile Include="Assets\Scripts\Scritable Object Scripts\EnemyPartyScriptableObject.cs" />
     <Compile Include="Assets\Scripts\AI\EnemyAI.cs" />
     <Compile Include="Assets\Scripts\Scritable Object Scripts\EnemyScriptableObject.cs" />
-    <Compile Include="Assets\Scripts\Utility\DiceRoller.cs" />
+    <Compile Include="Assets\Scripts\Utility\TileRegion.cs" />
+    <Compile Include="Assets\Scripts\Scritable Object Scripts\TileRegionScriptableObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
