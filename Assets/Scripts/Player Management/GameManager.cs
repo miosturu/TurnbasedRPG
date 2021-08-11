@@ -194,14 +194,23 @@ public class GameManager : MonoBehaviour
 
 
     /// <summary>
-    /// Remove player from combat.
+    /// Remove current player from combat.
     /// </summary>
-    public void RemovePlayer() // TODO when player dies, remove it from turn order
-    {                          // Maybe could use delegates as in: 
-                               //   1) GameManager creates player and subscribes to event that tells it the player has died
-                               //   2) When the event is reveieved, the fire this function
-
+    public void RemovePlayer()
+    {
         turnManager.RemovePlayer(currentPlayer);
+    }
+
+
+    /// <summary>
+    /// Remove one spesific player from combat and set tile's current object to be null.
+    /// </summary>
+    /// <param name="player">Player that will be deleted</param>
+    public void RemovePlayer(IGamePiece player)
+    {
+        //Get player's position and set CurrentObject = null then remove from the game
+        player.GetGameObject().GetComponentInParent<Tile>().currentObject = null;
+        turnManager.RemovePlayer(player);
     }
 
 

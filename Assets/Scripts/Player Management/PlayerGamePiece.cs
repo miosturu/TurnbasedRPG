@@ -49,6 +49,7 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
         {
             // Player's character dies
             Debug.Log("Player " + name + " has died");
+            GameObject.Find("GameManager").GetComponent<GameManager>().RemovePlayer(this);
             gameObject.SetActive(false);
             enabled = false;
         }
