@@ -48,9 +48,13 @@ public class Tile : MonoBehaviour
     public void OnMouseUp()
     {
         if (gameManager.selectedAction == null)
+        {
             gameManager.MovePlayer(this.gameObject);
+        }
         else
-            gameManager.selectedAction.Action(gameManager.currentPlayer.GetGameObject().GetComponentInParent<Tile>(), this);
+        {
+            gameManager.DoSelectedAction(gameManager.currentPlayer.GetGameObject().GetComponentInParent<Tile>(), this);
+        }
     }
 
 

@@ -15,10 +15,15 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     [Header("Armor")]
     public int armorDie = 6;
 
+    [Header("Action")]
+    public ActionScriptableObject[] actions;
+    public int maxActionsPerTurn = 1;
+    public int actionsLeft = 1;
+
     [Header("Other")]
     public GameObject highlight;
     public SpriteRenderer sprite;
-    public ActionScriptableObject[] actions;
+
 
 
     /// <summary>
@@ -138,5 +143,35 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     public int GetMaxHp()
     {
         return maxHp;
+    }
+
+
+    /// <summary>
+    /// Return how many more actions player can take this turn.
+    /// </summary>
+    /// <returns>How many actions player can take</returns>
+    public int GetHowManyActionsLeft()
+    {
+        return actionsLeft;
+    }
+
+
+    /// <summary>
+    /// Decrease how many more actions player can take this turn.
+    /// </summary>
+    /// <param name="i">How many actions player took.</param>
+    public void DecreaseActionsLeft(int i)
+    {
+        actionsLeft -= i;
+    }
+
+
+    /// <summary>
+    /// Get total actions player can take per turn.
+    /// </summary>
+    /// <returns>Max actions per turn</returns>
+    public int GetMaxActionsPerTurn()
+    {
+        return maxActionsPerTurn;
     }
 }

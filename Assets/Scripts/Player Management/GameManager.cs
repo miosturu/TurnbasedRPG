@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public ActionScriptableObject[] heroActions;
     public ActionScriptableObject selectedAction;
     public List<Tile> movementArea = new List<Tile>(); // Stores all the tiles where current player can go
+    public int playerActionsLeftOnTurn;
     [SerializeField] private PartyManager partyManager;
 
     [Header("AI")]
@@ -94,6 +95,7 @@ public class GameManager : MonoBehaviour
         heroActions = currentPlayer.GetActions();
         GenerateMovementArea();
         ShowMovementArea();
+        playerActionsLeftOnTurn = currentPlayer.GetMaxActionsPerTurn();
         OnEndTurn?.Invoke(this, EventArgs.Empty); // Fire event to update UI
     }
 
@@ -150,6 +152,8 @@ public class GameManager : MonoBehaviour
         gamePiece.movementLeft = hero.movementSpeed;
 
         gamePiece.actions = hero.heroActions;
+        gamePiece.maxActionsPerTurn = hero.maxActionsPerTurn;
+        gamePiece.actionsLeft = hero.maxActionsPerTurn;
 
         PlacePlayer(player, x, z);
         turnManager.AddPlayerToList(player.GetComponent<PlayerGamePiece>(), team);
@@ -180,8 +184,10 @@ public class GameManager : MonoBehaviour
         ResetMovementArea(); // Disable previous player's movent area
         currentPlayer.ResetMovement();
 
+
         currentPlayer.HighlightSetActive(false); // Highlight current player and dehighlight previous player
         currentPlayer = turnManager.NextTurn();
+        playerActionsLeftOnTurn = currentPlayer.GetMaxActionsPerTurn();
 
         GenerateMovementArea();
 
@@ -259,9 +265,25 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void DoSelectedAction(GameObject tile)
+    /// <summary>
+    /// Do selected action.
+    /// </summary>
+    /// <param name="origin">Origin tile</param>
+    /// <param name="target">Target tile</param>
+    public void DoSelectedAction(Tile origin, Tile target)
     {
-        selectedAction.Action(currentPlayer.GetGameObject().GetComponentInParent<Tile>() , tile.GetComponent<Tile>());
+        if (playerActionsLeftOnTurn > 0 && selectedAction.Action(origin, target))
+        {
+            Debug.Log("Action was done");
+            playerActionsLeftOnTurn -= selectedAction.actionCost;
+        }
+        else
+        {
+            Debug.Log("Action failed");
+            if (playerActionsLeftOnTurn <= 0)
+                Debug.Log("Not enough actions left");
+        }
+
     }
 
 

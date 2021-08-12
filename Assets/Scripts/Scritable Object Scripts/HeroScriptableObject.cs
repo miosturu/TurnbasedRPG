@@ -15,4 +15,5 @@ public class HeroScriptableObject : ScriptableObject
     public int movementSpeed;
 
     public ActionScriptableObject[] heroActions;
+    public int maxActionsPerTurn = 1;
 }

@@ -15,4 +15,5 @@ public class EnemyScriptableObject : ScriptableObject
     public int movementSpeed;
 
     public ActionScriptableObject[] enemyActions;
+    public int maxActionsPerTurn = 1;
 }

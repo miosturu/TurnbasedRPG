@@ -19,6 +19,9 @@ public interface IGamePiece
     void ReduceMovement(int amount);
     void ResetMovement();
 
-    // Other functions
+    // Action functions
     ActionScriptableObject[] GetActions();
+    int GetHowManyActionsLeft();
+    int GetMaxActionsPerTurn();
+    void DecreaseActionsLeft(int i);
 }
