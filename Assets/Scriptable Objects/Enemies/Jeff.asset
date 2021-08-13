@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99e663665b4b29742aca55b5ccaca5a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 782259ddaefb651419faa9bbcf47c5a0, type: 3}
   m_Name: Jeff
   m_EditorClassIdentifier: 
   sprite: {fileID: 21300000, guid: a42b94f1c1efab3489fb246b4e802732, type: 3}
@@ -18,8 +18,9 @@ MonoBehaviour:
   armorDie: 4
   initiativeBonus: 0
   movementSpeed: 1
-  enemyActions:
+  heroActions:
   - {fileID: 11400000, guid: 91c7a5432a882234282a8c7a9d397776, type: 2}
   - {fileID: 11400000, guid: 91c7a5432a882234282a8c7a9d397776, type: 2}
   - {fileID: 11400000, guid: 91c7a5432a882234282a8c7a9d397776, type: 2}
   - {fileID: 11400000, guid: 91c7a5432a882234282a8c7a9d397776, type: 2}
+  maxActionsPerTurn: 1

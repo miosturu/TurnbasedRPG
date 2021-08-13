@@ -44,7 +44,7 @@ public class Gameboard : MonoBehaviour
                              { "_", "_", "_", "_", "_", "_" },
                              { "_", "_", "_", "_", "_", "_" } };
 
-        GenerateLevel(tiles);
+        GenerateLevel();
     }
 
     /// <summary>

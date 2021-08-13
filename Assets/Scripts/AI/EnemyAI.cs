@@ -22,6 +22,7 @@ public class EnemyAI
     {
         this.currentGamePiece = currentGamePiece;
         MoveToken();
+        gameManager.EndTurn();
     }
 
     public void MoveToken()

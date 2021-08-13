@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
     {
         try
         {
-            EnemyScriptableObject[,] party = enemyParty.GetMarchingOrder();
+            HeroScriptableObject[,] party = enemyParty.GetMarchingOrder();
 
             for (int x = 0; x < 3; x++)
             {
@@ -97,34 +97,6 @@ public class GameManager : MonoBehaviour
         ShowMovementArea();
         playerActionsLeftOnTurn = currentPlayer.GetMaxActionsPerTurn();
         OnEndTurn?.Invoke(this, EventArgs.Empty); // Fire event to update UI
-    }
-
-
-    /// <summary>
-    /// Add new enemy player from scriptable object.
-    /// </summary>
-    /// <param name="enemy">Enemy scriptable object</param>
-    /// <param name="team">Enemy's team</param>
-    /// <param name="x">X-position</param>
-    /// <param name="z">Z-Position</param>
-    public void AddPlayer(EnemyScriptableObject enemy, int team, int x, int z)
-    {
-        GameObject player = Instantiate(playerToken);
-        PlayerGamePiece gamePiece = player.GetComponent<PlayerGamePiece>();
-
-        player.GetComponentInChildren<Renderer>().material = teamColors[team];
-
-        player.name = enemy.name;
-        gamePiece.sprite.sprite = enemy.sprite;
-
-        gamePiece.name = enemy.name;
-        gamePiece.maxHp = enemy.maxHp;
-        gamePiece.currentHp = enemy.maxHp;
-        gamePiece.movementSpeed = enemy.movementSpeed;
-        gamePiece.movementLeft = enemy.movementSpeed;
-
-        PlacePlayer(player, x, z);
-        turnManager.AddPlayerToList(player.GetComponent<PlayerGamePiece>(), team);
     }
 
 
@@ -201,7 +173,7 @@ public class GameManager : MonoBehaviour
         else // It's AI's turn
         {
             ai.PlayTurn(currentPlayer);
-            EndTurn(); // Wait, this is recursion? Should I change this
+            //EndTurn(); // Wait, this is recursion? Should I change this
         }
     }
 
