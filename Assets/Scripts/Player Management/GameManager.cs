@@ -159,21 +159,23 @@ public class GameManager : MonoBehaviour
 
         currentPlayer.HighlightSetActive(false); // Highlight current player and dehighlight previous player
         currentPlayer = turnManager.NextTurn();
+        currentPlayer.HighlightSetActive(true);
+
         playerActionsLeftOnTurn = currentPlayer.GetMaxActionsPerTurn();
 
         GenerateMovementArea();
 
         if (turnManager.currentPlayer.teamNumber == 0) // Set up player's turn
         {
-            currentPlayer.HighlightSetActive(true);
+            
             ShowMovementArea();
             heroActions = currentPlayer.GetActions();
             OnEndTurn?.Invoke(this, EventArgs.Empty);
         }
         else // It's AI's turn
         {
-            ai.PlayTurn(currentPlayer);
-            //EndTurn(); // Wait, this is recursion? Should I change this
+            // TODO: Disable end turn button
+            StartCoroutine(ai.AITurn(currentPlayer));
         }
     }
 

@@ -12,8 +12,16 @@ public class ActionDoDamage : ActionScriptableObject
 
     public override bool Action(Tile origin, Tile target)
     {
-        int dam = (int)Random.Range(1.0f, (float)damageDie);
-        target.currentObject.GetComponent<IGamePiece>().TakeDamage(dam);
-        return true;
+        if (target.currentObject != null && origin != target && (!needsLineOfSight || new LineOfSight().TileCanBeSeen(origin.GetGameboardOfTile(), origin, target)))
+        {
+            target.currentObject.GetComponent<IGamePiece>().Heal(new DiceRoller().RollDice(1, damageDie));
+            Debug.Log("Tile can be seen and damage was done");
+            return true;
+        }
+        else
+        {
+            Debug.Log("Attack failed");
+            return false;
+        }
     }
 }

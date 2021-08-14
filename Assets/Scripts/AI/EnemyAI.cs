@@ -31,4 +31,13 @@ public class EnemyAI
         Tile target = tiles[Random.Range(0, tiles.Count)];
         gameManager.MovePlayer(target.gameObject);
     }
+
+    public IEnumerator AITurn(IGamePiece currentGamePiece)
+    {
+        this.currentGamePiece = currentGamePiece;
+        yield return new WaitForSeconds(.75f);
+        MoveToken();
+        yield return new WaitForSeconds(1f);
+        gameManager.EndTurn();
+    }
 }
