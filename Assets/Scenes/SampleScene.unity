@@ -2080,6 +2080,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 417176094}
+  endTurnButton: {fileID: 271341379}
   heroNameText: {fileID: 1408187131}
   heroHpText: {fileID: 503498333}
   heroMovementText: {fileID: 1477874538}

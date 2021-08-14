@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
 {
     [Header("References to other objects")]
     [SerializeField] private GameManager gameManager;
+    [SerializeField] private Button endTurnButton;
 
     [Header("Text elements")]
     [SerializeField] private Text heroNameText;
@@ -114,5 +115,15 @@ public class UIManager : MonoBehaviour
     {
         foreach (RawImage image in selectionHighlights)
             image.enabled = false;
+    }
+
+
+    public void EnableOrDisableButtons(bool state)
+    {
+        endTurnButton.enabled = state;
+        foreach(Button button in abilityButtons)
+        {
+            button.enabled = state;
+        }
     }
 }

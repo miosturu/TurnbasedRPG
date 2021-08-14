@@ -167,14 +167,14 @@ public class GameManager : MonoBehaviour
 
         if (turnManager.currentPlayer.teamNumber == 0) // Set up player's turn
         {
-            
+            // TODO: Enable UI functions
             ShowMovementArea();
             heroActions = currentPlayer.GetActions();
-            OnEndTurn?.Invoke(this, EventArgs.Empty);
+            OnEndTurn?.Invoke(this, EventArgs.Empty); // TODO: Args if it's player's turn -> enable buttons
         }
         else // It's AI's turn
         {
-            // TODO: Disable end turn button
+            // TODO: Disable UI functions
             StartCoroutine(ai.AITurn(currentPlayer));
         }
     }
