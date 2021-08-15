@@ -75,6 +75,7 @@
     <Compile Include="Assets\Scripts\Utility\TileRegion.cs" />
     <Compile Include="Assets\Scripts\Scritable Object Scripts\EnemyPartyScriptableObject.cs" />
     <Compile Include="Assets\Scripts\AI\EnemyAI.cs" />
+    <Compile Include="Assets\Scripts\UI\OnEndTurnEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

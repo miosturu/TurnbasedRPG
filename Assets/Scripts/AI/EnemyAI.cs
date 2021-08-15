@@ -18,12 +18,6 @@ public class EnemyAI
         this.gameManager = gameManager;
     }
 
-    public void PlayTurn(IGamePiece currentGamePiece)
-    {
-        this.currentGamePiece = currentGamePiece;
-        MoveToken();
-        gameManager.EndTurn();
-    }
 
     public void MoveToken()
     {
@@ -31,6 +25,7 @@ public class EnemyAI
         Tile target = tiles[Random.Range(0, tiles.Count)];
         gameManager.MovePlayer(target.gameObject);
     }
+
 
     public IEnumerator AITurn(IGamePiece currentGamePiece)
     {

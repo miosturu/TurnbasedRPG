@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Gameboard gameboard;
     public IGamePiece currentPlayer;
 
-    public event EventHandler OnEndTurn; // Event for updating UI
+    public event EventHandler<OnEndTurnEventArgs> OnEndTurn; // Event for updating UI
 
     [Header("Player variables")]
     public ActionScriptableObject[] heroActions;
@@ -96,7 +96,7 @@ public class GameManager : MonoBehaviour
         GenerateMovementArea();
         ShowMovementArea();
         playerActionsLeftOnTurn = currentPlayer.GetMaxActionsPerTurn();
-        OnEndTurn?.Invoke(this, EventArgs.Empty); // Fire event to update UI
+        OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true)); // Fire event to update UI
     }
 
 
@@ -170,11 +170,12 @@ public class GameManager : MonoBehaviour
             // TODO: Enable UI functions
             ShowMovementArea();
             heroActions = currentPlayer.GetActions();
-            OnEndTurn?.Invoke(this, EventArgs.Empty); // TODO: Args if it's player's turn -> enable buttons
+            OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true)); // TODO: Args if it's player's turn -> enable buttons
         }
         else // It's AI's turn
         {
             // TODO: Disable UI functions
+            OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(false));
             StartCoroutine(ai.AITurn(currentPlayer));
         }
     }
@@ -233,7 +234,7 @@ public class GameManager : MonoBehaviour
 
         if (turnManager.currentPlayer.teamNumber == 0) // If the player is real player Fire event to update UI
         {
-            OnEndTurn?.Invoke(this, EventArgs.Empty);
+            OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true));
             ShowMovementArea();
         }
     }

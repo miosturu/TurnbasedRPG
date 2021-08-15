@@ -28,7 +28,7 @@ public class UIManager : MonoBehaviour
         actions = new ActionScriptableObject[4];
         actions = gameManager.currentPlayer.GetActions();
         gameManager.OnEndTurn += UpdateUI;
-        UpdateUI();
+        UpdateUI(true);
     } 
 
 
@@ -37,20 +37,21 @@ public class UIManager : MonoBehaviour
     /// </summary>
     /// <param name="sender">Sender of the message</param>
     /// <param name="e">Arguments. Not needed as of 2021/08/08</param>
-    private void UpdateUI(object sender, EventArgs e)
+    private void UpdateUI(object sender, OnEndTurnEventArgs e)
     {
-        UpdateUI();
+        UpdateUI(e.GetIsPlayerTurn());
     }
 
 
     /// <summary>
     /// Update UI.
     /// </summary>
-    private void UpdateUI()
+    private void UpdateUI(bool isPlayerTurn)
     {
         UpdateHeroInfo();
         UpdateActions();
         ResetSelectionHighlight();
+        EnableOrDisableButtons(isPlayerTurn);
     }
 
 
