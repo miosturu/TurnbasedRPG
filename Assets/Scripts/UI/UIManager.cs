@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     [Header("References to other objects")]
     [SerializeField] private GameManager gameManager;
     [SerializeField] private Button endTurnButton;
+    [SerializeField] private GameObject selectionIndicator;
 
     [Header("Text elements")]
     [SerializeField] private Text heroNameText;
@@ -28,7 +29,7 @@ public class UIManager : MonoBehaviour
         actions = new ActionScriptableObject[4];
         actions = gameManager.currentPlayer.GetActions();
         gameManager.OnEndTurn += UpdateUI;
-        UpdateUI(true);
+        UpdateUI(true, false);
     } 
 
 
@@ -39,19 +40,20 @@ public class UIManager : MonoBehaviour
     /// <param name="e">Arguments. Not needed as of 2021/08/08</param>
     private void UpdateUI(object sender, OnEndTurnEventArgs e)
     {
-        UpdateUI(e.GetIsPlayerTurn());
+        UpdateUI(e.GetIsPlayerTurn(), e.GetPlayerCanMakeActions());
     }
 
 
     /// <summary>
     /// Update UI.
     /// </summary>
-    private void UpdateUI(bool isPlayerTurn)
+    private void UpdateUI(bool isPlayerTurn, bool playerCanMakeActions)
     {
         UpdateHeroInfo();
         UpdateActions();
         ResetSelectionHighlight();
         EnableOrDisableButtons(isPlayerTurn);
+        EnableOrDisableSelectionIndicator(playerCanMakeActions);
     }
 
 
@@ -119,6 +121,10 @@ public class UIManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Set if the buttons can be clicked.
+    /// </summary>
+    /// <param name="state">State of buttons. True = can be clicked, False = can't be clicked</param>
     public void EnableOrDisableButtons(bool state)
     {
         endTurnButton.enabled = state;
@@ -126,5 +132,15 @@ public class UIManager : MonoBehaviour
         {
             button.enabled = state;
         }
+    }
+
+
+    /// <summary>
+    /// Enable or disable selectionIndicator
+    /// </summary>
+    /// <param name="state">State of highlight. True = active, False = inactive</param>
+    public void EnableOrDisableSelectionIndicator(bool state)
+    {
+        selectionIndicator.SetActive(state);
     }
 }

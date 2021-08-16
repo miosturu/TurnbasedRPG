@@ -6,6 +6,8 @@ using UnityEngine;
 public class OnEndTurnEventArgs : EventArgs
 {
     private bool isPlayerTurn;
+    private bool playerCanMakeActions;
+
 
     public OnEndTurnEventArgs(bool isPlayerTurn)
     {
@@ -13,8 +15,21 @@ public class OnEndTurnEventArgs : EventArgs
     }
 
 
+    public OnEndTurnEventArgs(bool isPlayerTurn, bool playerCanMakeActions)
+    {
+        this.isPlayerTurn = isPlayerTurn;
+        this.playerCanMakeActions = playerCanMakeActions;
+    }
+
+
     public bool GetIsPlayerTurn()
     {
         return isPlayerTurn;
+    }
+
+
+    public bool GetPlayerCanMakeActions()
+    {
+        return playerCanMakeActions;
     }
 }

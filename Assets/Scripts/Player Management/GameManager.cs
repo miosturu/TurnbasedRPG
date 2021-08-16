@@ -167,14 +167,12 @@ public class GameManager : MonoBehaviour
 
         if (turnManager.currentPlayer.teamNumber == 0) // Set up player's turn
         {
-            // TODO: Enable UI functions
             ShowMovementArea();
             heroActions = currentPlayer.GetActions();
-            OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true)); // TODO: Args if it's player's turn -> enable buttons
+            OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true));
         }
         else // It's AI's turn
         {
-            // TODO: Disable UI functions
             OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(false));
             StartCoroutine(ai.AITurn(currentPlayer));
         }
@@ -234,7 +232,11 @@ public class GameManager : MonoBehaviour
 
         if (turnManager.currentPlayer.teamNumber == 0) // If the player is real player Fire event to update UI
         {
-            OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true));
+            bool canMakeActions = false;
+            if (playerActionsLeftOnTurn > 0)
+                canMakeActions = true;
+
+            OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, !canMakeActions));
             ShowMovementArea();
         }
     }
@@ -251,6 +253,10 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Action was done");
             playerActionsLeftOnTurn -= selectedAction.actionCost;
+            selectedAction = null;
+
+            if (playerActionsLeftOnTurn <= 0)
+                OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, true));
         }
         else
         {
