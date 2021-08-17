@@ -14,8 +14,7 @@ public class ActionDoDamage : ActionScriptableObject
     {
         if (target.currentObject != null && origin != target && (!needsLineOfSight || new LineOfSight().TileCanBeSeen(origin.GetGameboardOfTile(), origin, target)))
         {
-            target.currentObject.GetComponent<IGamePiece>().Heal(new DiceRoller().RollDice(1, damageDie));
-            Debug.Log("Tile can be seen and damage was done");
+            target.currentObject.GetComponent<IGamePiece>().TakeDamage(new DiceRoller().RollDice(1, damageDie));
             return true;
         }
         else

@@ -49,7 +49,7 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
         if (amount - reduction > 0)
         {
             currentHp -= amount;
-            Debug.Log("Took " + amount + " damage. Damage was reduced by " + reduction + " points. Current HP: " + currentHp);
+            Debug.Log("Took " + amount + " damage. But damage was reduced by " + reduction + " points. Current HP: " + currentHp);
         }
         else
         {

@@ -3,12 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Class used for managing the whole game.
+/// This takes care of player actions, movement, adding and removing players, telling the UI to update, set players to the gameboard, and end turns.
+/// </summary>
 public class GameManager : MonoBehaviour
 {
     [Header("Actual variables")]
+    [SerializeField] private int initiativeDie = 20;
     public GameObject playerToken;
-    public Material[] teamColors;
-    public TurnManager turnManager;
+    [SerializeField] private Material[] teamColors;
+    private TurnManager turnManager;
     [SerializeField] private Gameboard gameboard;
     public IGamePiece currentPlayer;
 
@@ -85,18 +90,31 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Initialize first turn:
     /// 1) Set first player
-    /// 2) Generate player's allowed movement area
-    /// 3) Show the generated area
+    /// 2) Get player's actions
+    /// 3) Generate player's allowed movement area
+    /// 4) Get how many actions player is allowed to take
+    /// 5) Show the generated movement area if human
     /// </summary>
     public void InitializeFirstTurn()
     {
         currentPlayer = turnManager.firstPlayer.player;
-        currentPlayer.HighlightSetActive(true);
         heroActions = currentPlayer.GetActions();
         GenerateMovementArea();
-        ShowMovementArea();
         playerActionsLeftOnTurn = currentPlayer.GetMaxActionsPerTurn();
-        OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true)); // Fire event to update UI
+        currentPlayer.HighlightSetActive(true);
+
+        bool isPlayerTurn = false;
+        if (turnManager.currentPlayer.teamNumber == 0)
+        {
+            isPlayerTurn = true;
+            ShowMovementArea();
+        }
+        else
+        {
+            StartCoroutine(ai.AITurn(currentPlayer));
+        }
+
+        OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(isPlayerTurn, isPlayerTurn)); // Fire event to update UI
     }
 
 
@@ -128,7 +146,7 @@ public class GameManager : MonoBehaviour
         gamePiece.actionsLeft = hero.maxActionsPerTurn;
 
         PlacePlayer(player, x, z);
-        turnManager.AddPlayerToList(player.GetComponent<PlayerGamePiece>(), team);
+        turnManager.AddPlayerToList(player.GetComponent<PlayerGamePiece>(), team, new DiceRoller().RollDice(1, initiativeDie) + hero.initiativeBonus);
     }
 
 

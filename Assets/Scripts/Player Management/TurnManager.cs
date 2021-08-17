@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Manage player turns. This class has reference to first player and knows what player is being played at the moment.
+/// One can add new players based on initiative and remove wanted players.
+/// </summary>
 public class TurnManager
 {
     public PlayerTurn firstPlayer;
@@ -44,6 +48,55 @@ public class TurnManager
 
 
     /// <summary>
+    /// Add players to list based on the initiative.
+    /// </summary>
+    /// <param name="player">Added player</param>
+    /// <param name="teamNumber">Player's team number</param>
+    /// <param name="initiative">Player's initiative</param>
+    public void AddPlayerToList(IGamePiece player, int teamNumber, int initiative)
+    {
+        //Debug.Log("Adding new player " + player.GetGameObject().name + " to list. Ini: " + initiative);
+        PlayerTurn playerTurn = new PlayerTurn(player, teamNumber, initiative);
+
+        if (firstPlayer == null) // If there's no other players
+        {
+            firstPlayer = playerTurn;
+            firstPlayer.next = playerTurn;
+        }
+        else // If there're other players
+        {
+            if (initiative > firstPlayer.initiative)
+            {
+                // Find last of the list
+                PlayerTurn indicator = firstPlayer;
+                while(indicator.next != firstPlayer)
+                {
+                    indicator = indicator.next;
+                }
+
+                playerTurn.next = firstPlayer;
+                indicator.next = playerTurn;
+                firstPlayer = playerTurn;
+
+            }
+            else
+            {
+                PlayerTurn indicator = firstPlayer;
+                while(indicator.next.initiative < playerTurn.initiative)
+                {
+                    indicator = indicator.next;
+                }
+
+                playerTurn.next = indicator.next;
+                indicator.next = playerTurn;
+            }
+        }
+
+        currentPlayer = firstPlayer;
+    }
+
+
+    /// <summary>
     /// Remove wanted player from the initiative rotation
     /// </summary>
     /// <param name="player">To be deleted player</param>
@@ -76,6 +129,9 @@ public class TurnManager
     }
 }
 
+/// <summary>
+/// Sub class of the TurnManager. Holds needed info of the players, such as player, who will play next, player's initiative and player's team.
+/// </summary>
 public class PlayerTurn
 {
     public IGamePiece player;
@@ -83,9 +139,29 @@ public class PlayerTurn
     public int initiative;
     public int teamNumber;
 
+
+    /// <summary>
+    /// Create new PlayerTurn object for containing player info.
+    /// </summary>
+    /// <param name="player">Player</param>
+    /// <param name="teamNumber">Player's team number</param>
     public PlayerTurn(IGamePiece player, int teamNumber)
     {
         this.player = player;
         this.teamNumber = teamNumber;
+    }
+
+
+    /// <summary>
+    /// Create new PlayerTurn object for containing player info.
+    /// </summary>
+    /// <param name="player">Player</param>
+    /// <param name="teamNumber">Player's team number</param>
+    /// <param name="initiative">Player's initiative</param>
+    public PlayerTurn(IGamePiece player, int teamNumber, int initiative)
+    {
+        this.player = player;
+        this.teamNumber = teamNumber;
+        this.initiative = initiative;
     }
 }
