@@ -35,6 +35,8 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
         currentHp += amount;
         if (currentHp > maxHp)
             currentHp = maxHp;
+
+        Debug.Log("Healing for " + amount + " HP. Current HP.:" + currentHp);
     }
 
 

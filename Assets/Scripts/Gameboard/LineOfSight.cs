@@ -59,6 +59,23 @@ public class LineOfSight
 
 
     /// <summary>
+    /// Check if the tile can be seen and it's in range.
+    /// </summary>
+    /// <param name="map">Map where the tiles are</param>
+    /// <param name="origin">Origin of the LoS</param>
+    /// <param name="destination">Destination of LoS</param>
+    /// <param name="maxDistance">Max distance of LoS</param>
+    /// <returns>Tile is in range and can be seen</returns>
+    public bool TileCanBeSeenAndIsInDistance(GameObject[,] map, Tile origin, Tile destination, int maxDistance)
+    {
+        if (TileCanBeSeen(map, origin, destination) && LoSDistance(map, origin, destination) - 1 <= maxDistance)
+            return true;
+
+        return false;
+    }
+
+
+    /// <summary>
     /// Check if the tile can be seen from origin tile.
     /// </summary>
     /// <param name="map">Map where the tiles are</param>

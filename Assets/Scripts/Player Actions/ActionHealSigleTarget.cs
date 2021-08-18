@@ -11,7 +11,7 @@ public class ActionHealSigleTarget : ActionScriptableObject
 
     public override bool Action(Tile origin, Tile target)
     {
-        if (target.currentObject != null && (!needsLineOfSight || new LineOfSight().TileCanBeSeen(origin.GetGameboardOfTile(), origin, target)))
+        if (target.currentObject != null && (!needsLineOfSight || new LineOfSight().TileCanBeSeenAndIsInDistance(origin.GetGameboardOfTile(), origin, target, range)))
         {
             target.currentObject.GetComponent<IGamePiece>().Heal(new DiceRoller().RollDice(1, healDie));
             Debug.Log("Tile can be seen and healing was done");
