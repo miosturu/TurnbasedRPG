@@ -134,6 +134,7 @@ public class GameManager : MonoBehaviour
 
         player.name = hero.name;
         gamePiece.sprite.sprite = hero.sprite;
+        gamePiece.team = team;
 
         gamePiece.name = hero.name;
         gamePiece.maxHp = hero.maxHp;
@@ -316,6 +317,31 @@ public class GameManager : MonoBehaviour
         foreach (Tile t in movementArea)
         {
             t.highlight.SetActive(false);
+        }
+    }
+
+
+    /// <summary>
+    /// Check if the players on tiles a and b are on the same team.
+    /// </summary>
+    /// <param name="a">Tile a</param>
+    /// <param name="b">Tile b</param>
+    /// <returns>Players on tiles a and b are on the same team</returns>
+    public bool PlayersAreOnSameTeam(Tile a, Tile b)
+    {
+        try
+        {
+            int aTeam = turnManager.GetPlayerTeamNumber(a.GetComponentInChildren<IGamePiece>());
+            int bTeam = turnManager.GetPlayerTeamNumber(b.GetComponentInChildren<IGamePiece>());
+
+            Debug.Log("A's team: " + aTeam + " B's team: " + bTeam);
+
+            return a == b;
+        }
+        catch
+        {
+            Debug.Log("Failed to check teams for tiles " + a.name + " and " + b.name);
+            return false;
         }
     }
 }

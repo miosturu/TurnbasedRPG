@@ -19,6 +19,9 @@ public interface IGamePiece
     void ReduceMovement(int amount);
     void ResetMovement();
 
+    // Player management related functions
+    int GetPlayerTeam();
+
     // Action functions
     ActionScriptableObject[] GetActions();
     int GetHowManyActionsLeft();

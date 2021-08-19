@@ -15,5 +15,5 @@ MonoBehaviour:
   actionName: Heal
   actionIcon: {fileID: 21300000, guid: a5674c693e8b5d94da949d4509103148, type: 3}
   healDie: 6
-  range: 5
+  range: 3
   needsLineOfSight: 1

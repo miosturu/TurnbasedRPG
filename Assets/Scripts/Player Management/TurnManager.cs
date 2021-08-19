@@ -127,6 +127,24 @@ public class TurnManager
         //Debug.Log("Turn ended, nexplayer: " + currentPlayer.player.GetGameObject().name);
         return currentPlayer.player;
     }
+
+
+    /// <summary>
+    /// Get wanted player's team number
+    /// </summary>
+    /// <param name="player">Player who's team number is wanted</param>
+    /// <returns>Player's team number</returns>
+    public int GetPlayerTeamNumber(IGamePiece player)
+    {
+        PlayerTurn indicator = firstPlayer;
+
+        while(indicator != indicator.player)
+        {
+            indicator = indicator.next;
+        }
+
+        return indicator.teamNumber;
+    }
 }
 
 /// <summary>

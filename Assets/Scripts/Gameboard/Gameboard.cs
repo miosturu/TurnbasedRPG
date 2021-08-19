@@ -11,7 +11,7 @@ public class Gameboard : MonoBehaviour
     [Header("Map generation options")]
 
     public int mapW = 6, mapH = 9;
-    public GameObject[] tiles; // What tiles are available to be placed // TODO maybe change to just GameObject prefab
+    [SerializeField] private GameObject[] tiles; // What tiles are available to be placed // TODO maybe change to just GameObject prefab
     public GameObject[,] map;  // What tiles are on the gameboard
     public Dictionary<Tile, List<Tile>> graph;
 

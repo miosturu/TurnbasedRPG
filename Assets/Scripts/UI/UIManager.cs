@@ -94,6 +94,7 @@ public class UIManager : MonoBehaviour
         {
             gameManager.selectedAction = null;
             selectionHighlights[i].enabled = false;
+            // TODO: Enable movement area and disable allowed targets
         }
         else // We're clikcing new action
         {
@@ -102,6 +103,7 @@ public class UIManager : MonoBehaviour
                 image.enabled = false;
 
             selectionHighlights[i].enabled = true;
+            // TODO: Disable movement area and show allowed targets
         }
 
         if (gameManager.selectedAction == null) // Just make sure that there's no highlight if no action is selected. This is here because as of 2021/08/09, one action can be on many button, which can lead to weird behavior

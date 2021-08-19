@@ -23,6 +23,7 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     [Header("Other")]
     public GameObject highlight;
     public SpriteRenderer sprite;
+    public int team;
 
 
 
@@ -44,7 +45,7 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     /// Take dX of damage. 'D' stands for die/dice. For example if d=6, then roll regular six sided die.
     /// </summary>
     /// <param name="amount">Damage die</param>
-    public void TakeDamage(int amount) // TODO when the player is dead, remove it from turn order
+    public void TakeDamage(int amount)
     {
         int reduction = (int)Random.Range(1.0f, (float)armorDie);
 
@@ -175,5 +176,15 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     public int GetMaxActionsPerTurn()
     {
         return maxActionsPerTurn;
+    }
+
+
+    /// <summary>
+    /// Return player's team
+    /// </summary>
+    /// <returns></returns>
+    public int GetPlayerTeam()
+    {
+        return team;
     }
 }
