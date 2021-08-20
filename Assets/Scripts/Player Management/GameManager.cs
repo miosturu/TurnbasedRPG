@@ -33,6 +33,11 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        StartCoroutine(SetUpCombat());
+    }
+
+    public IEnumerator SetUpCombat()
+    {
         turnManager = new TurnManager();
         ai = new EnemyAI(gameboard, this);
         heroActions = new ActionScriptableObject[4];
@@ -40,8 +45,12 @@ public class GameManager : MonoBehaviour
         SetPlayerTokens();
         SetEnemyTokens();
 
+        yield return new WaitForSeconds(1.5f);
         InitializeFirstTurn();
+        // Call function from UIManager to get the actions
+        OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(false, false));
     }
+
 
 
     /// <summary>

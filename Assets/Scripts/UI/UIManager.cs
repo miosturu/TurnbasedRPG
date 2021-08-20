@@ -27,9 +27,9 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         actions = new ActionScriptableObject[4];
-        actions = gameManager.currentPlayer.GetActions();
+        //actions = gameManager.currentPlayer.GetActions();
         gameManager.OnEndTurn += UpdateUI;
-        UpdateUI(true, false);
+        //UpdateUI(true, false);
     } 
 
 
