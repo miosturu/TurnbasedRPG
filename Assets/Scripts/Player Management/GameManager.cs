@@ -48,7 +48,14 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         InitializeFirstTurn();
         // Call function from UIManager to get the actions
-        OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(false, false));
+
+        bool isPlayerTurnFirst = false;
+        if (turnManager.firstPlayer.teamNumber == 0)
+        {
+            isPlayerTurnFirst = true;
+        }
+
+        OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(isPlayerTurnFirst, !isPlayerTurnFirst));
     }
 
 

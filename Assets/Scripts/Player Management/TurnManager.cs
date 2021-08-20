@@ -55,7 +55,7 @@ public class TurnManager
     /// <param name="initiative">Player's initiative</param>
     public void AddPlayerToList(IGamePiece player, int teamNumber, int initiative)
     {
-        //Debug.Log("Adding new player " + player.GetGameObject().name + " to list. Ini: " + initiative);
+        Debug.Log("Adding new player " + player.GetGameObject().name + " to list. Ini: " + initiative);
         PlayerTurn playerTurn = new PlayerTurn(player, teamNumber, initiative);
 
         if (firstPlayer == null) // If there's no other players
