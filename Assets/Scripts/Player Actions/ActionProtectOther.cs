@@ -12,4 +12,9 @@ public class ActionProtectOther : ActionScriptableObject
         Debug.Log("Called 'ActionProtectOther()'-action for " + numberOfturns + " turns");
         return true;
     }
+
+    public override bool TargetIsValid(Tile origin, Tile target)
+    {
+        throw new System.NotImplementedException();
+    }
 }

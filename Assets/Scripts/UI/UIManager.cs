@@ -27,9 +27,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         actions = new ActionScriptableObject[4];
-        //actions = gameManager.currentPlayer.GetActions();
         gameManager.OnEndTurn += UpdateUI;
-        //UpdateUI(true, false);
     } 
 
 
@@ -95,6 +93,8 @@ public class UIManager : MonoBehaviour
             gameManager.selectedAction = null;
             selectionHighlights[i].enabled = false;
             // TODO: Enable movement area and disable allowed targets
+            gameManager.ResetValidTargets();
+            gameManager.ShowMovementArea();
         }
         else // We're clikcing new action
         {
@@ -104,11 +104,15 @@ public class UIManager : MonoBehaviour
 
             selectionHighlights[i].enabled = true;
             // TODO: Disable movement area and show allowed targets
+            gameManager.GetValidTargets();
+            gameManager.ResetMovementArea();
         }
 
         if (gameManager.selectedAction == null) // Just make sure that there's no highlight if no action is selected. This is here because as of 2021/08/09, one action can be on many button, which can lead to weird behavior
         {
             ResetSelectionHighlight();
+            gameManager.ResetValidTargets();
+            gameManager.ShowMovementArea();
         }
     }
 

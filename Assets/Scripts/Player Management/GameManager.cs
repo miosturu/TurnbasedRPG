@@ -11,18 +11,18 @@ public class GameManager : MonoBehaviour
 {
     [Header("Actual variables")]
     [SerializeField] private int initiativeDie = 20;
-    public GameObject playerToken;
+    [SerializeField] private GameObject playerToken; // Player prefab
     [SerializeField] private Material[] teamColors;
     private TurnManager turnManager;
     [SerializeField] private Gameboard gameboard;
     public IGamePiece currentPlayer;
-
     public event EventHandler<OnEndTurnEventArgs> OnEndTurn; // Event for updating UI
 
     [Header("Player variables")]
     public ActionScriptableObject[] heroActions;
     public ActionScriptableObject selectedAction;
     public List<Tile> movementArea = new List<Tile>(); // Stores all the tiles where current player can go
+    public List<Tile> validTargets = new List<Tile>(); // Stores all the tiles that player can target with its action
     public int playerActionsLeftOnTurn;
     [SerializeField] private PartyManager partyManager;
 
@@ -36,6 +36,11 @@ public class GameManager : MonoBehaviour
         StartCoroutine(SetUpCombat());
     }
 
+
+    /// <summary>
+    /// Start combat. Create the needed arrays and set the players on gameboard
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator SetUpCombat()
     {
         turnManager = new TurnManager();
@@ -289,17 +294,20 @@ public class GameManager : MonoBehaviour
             Debug.Log("Action was done");
             playerActionsLeftOnTurn -= selectedAction.actionCost;
             selectedAction = null;
-
-            if (playerActionsLeftOnTurn <= 0)
-                OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, true));
         }
         else
         {
-            Debug.Log("Action failed");
+            Debug.Log("Action failed"); // TODO: Maybe deselect selectedAction and show movementArea?
             if (playerActionsLeftOnTurn <= 0)
                 Debug.Log("Not enough actions left");
         }
 
+        ResetValidTargets();
+        if (playerActionsLeftOnTurn <= 0)
+            OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, true));
+
+        GenerateMovementArea();
+        ShowMovementArea();
     }
 
 
@@ -358,6 +366,38 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Failed to check teams for tiles " + a.name + " and " + b.name);
             return false;
+        }
+    }
+
+
+    /// <summary>
+    /// Get valid targets for the selected action.
+    /// </summary>
+    /// <returns>All the valid targets for selected action.</returns>
+    public void GetValidTargets()
+    {
+        validTargets = new List<Tile>();
+        Tile playerTile = currentPlayer.GetGameObject().GetComponentInParent<Tile>();
+
+        foreach(GameObject tileObject in gameboard.map)
+        {
+            Tile tile = tileObject.GetComponent<Tile>();
+            if (selectedAction.TargetIsValid(playerTile, tile))
+            {
+                //Debug.Log("Valid tile: " + tile.name);
+                tile.highlight.SetActive(true);
+                validTargets.Add(tile);
+            }
+        }
+    }
+
+
+    public void ResetValidTargets()
+    {
+        foreach(Tile tile in validTargets)
+        {
+            //tile.highlight.GetComponent<MeshRenderer>().material.color = new Color(1, 1, 0);
+            tile.highlight.SetActive(false);
         }
     }
 }

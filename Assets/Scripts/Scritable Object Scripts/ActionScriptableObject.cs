@@ -9,4 +9,5 @@ public abstract class ActionScriptableObject : ScriptableObject
     public readonly int actionCost = 1;
 
     public abstract bool Action(Tile origin, Tile target);
+    public abstract bool TargetIsValid(Tile origin, Tile target);
 }

@@ -34,7 +34,7 @@ public class ActionHealSigleTarget : ActionScriptableObject
     /// <param name="origin">Origin tile</param>
     /// <param name="target">Target tile</param>
     /// <returns>Heal is valid</returns>
-    public bool TargetIsValid(Tile origin, Tile target)
+    public override bool TargetIsValid(Tile origin, Tile target)
     {
         if
         (
