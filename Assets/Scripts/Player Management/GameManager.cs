@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     [Header("Player variables")]
     public ActionScriptableObject[] heroActions;
     public ActionScriptableObject selectedAction;
-    public List<Tile> movementArea = new List<Tile>(); // Stores all the tiles where current player can go
+    public Dictionary<Tile, int> movementArea = new Dictionary<Tile, int>(); // Stores all the tiles where current player can go
     public List<Tile> validTargets = new List<Tile>(); // Stores all the tiles that player can target with its action
     public int playerActionsLeftOnTurn;
     [SerializeField] private PartyManager partyManager;
@@ -250,7 +250,7 @@ public class GameManager : MonoBehaviour
 
         //Debug.Log(tile.name + " " + movementArea.Contains(tile.GetComponent<Tile>()));
 
-        if (!movementArea.Contains(tile.GetComponent<Tile>()) || tile.GetComponent<Tile>().currentObject != null)  // If wanted tile has no other object on it and is in range
+        if (!movementArea.ContainsKey(tile.GetComponent<Tile>()) || tile.GetComponent<Tile>().currentObject != null)  // If wanted tile has no other object on it and is in range
             return;
 
         ResetMovementArea();
@@ -326,8 +326,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ShowMovementArea()
     {
-        foreach (Tile t in movementArea)
+        foreach (Tile t in movementArea.Keys)
         {
+            t.highlight.GetComponent<MeshRenderer>().material.color = new Color(0.1f * movementArea[t], 0.2f * movementArea[t], 0.05f / movementArea[t]);
             t.highlight.SetActive(true);
         }
     }
@@ -338,7 +339,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ResetMovementArea()
     {
-        foreach (Tile t in movementArea)
+        foreach (Tile t in movementArea.Keys)
         {
             t.highlight.SetActive(false);
         }
@@ -392,11 +393,14 @@ public class GameManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Show valid targets for selected action.
+    /// </summary>
     public void ResetValidTargets()
     {
         foreach(Tile tile in validTargets)
         {
-            //tile.highlight.GetComponent<MeshRenderer>().material.color = new Color(1, 1, 0);
+            tile.highlight.GetComponent<MeshRenderer>().material.color = new Color(1, 1, 0);
             tile.highlight.SetActive(false);
         }
     }

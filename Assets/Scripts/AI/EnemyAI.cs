@@ -21,8 +21,11 @@ public class EnemyAI
 
     public void MoveToken()
     {
-        List<Tile> tiles = gameManager.movementArea;
-        Tile target = tiles[Random.Range(0, tiles.Count)];
+        Dictionary<Tile, int> tiles = gameManager.movementArea;
+
+        Tile[] foo = new Tile[tiles.Count];
+        tiles.Keys.CopyTo(foo, 0);
+        Tile target = foo[Random.Range(0, foo.Length)];
         gameManager.MovePlayer(target.gameObject);
     }
 

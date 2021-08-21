@@ -5,9 +5,9 @@ using UnityEngine;
 public class MovementArea
 {
     // TODO: disallow moving throught the enemy
-    public List<Tile> GenerateMovementArea(Tile origin, int maxDistance)
+    public Dictionary<Tile, int> GenerateMovementArea(Tile origin, int maxDistance)
     {
-        List<Tile> possibleTiles = new List<Tile>();
+        Dictionary<Tile, int> possibleTiles = new Dictionary<Tile, int>();
 
         Queue<Tile> frontier = new Queue<Tile>();
         frontier.Enqueue(origin);
@@ -33,10 +33,10 @@ public class MovementArea
         foreach(Tile t in distance.Keys)
         {
             //Debug.Log(t + " " + distance[t]);
-            t.highlight.GetComponent<MeshRenderer>().material.color = new Color(0.1f * distance[t], 0.2f * distance[t], 0.05f / distance[t]);
+            //t.highlight.GetComponent<MeshRenderer>().material.color = new Color(0.1f * distance[t], 0.2f * distance[t], 0.05f / distance[t]);
 
             if (distance[t] <= maxDistance)
-                possibleTiles.Add(t);
+                possibleTiles.Add(t, distance[t]);
         }
 
         return possibleTiles;
