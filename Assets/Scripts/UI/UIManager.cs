@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text heroMovementText;
 
     [Header("Actions")]
+    [SerializeField] private Text actionInformationText;
     [SerializeField] private Button[] abilityButtons;
     [SerializeField] private Text[] abilityNamesTexts;
     [SerializeField] private ActionScriptableObject[] actions;

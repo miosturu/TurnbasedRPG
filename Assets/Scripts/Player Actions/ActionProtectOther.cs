@@ -13,6 +13,11 @@ public class ActionProtectOther : ActionScriptableObject
         return true;
     }
 
+    public override string GetDescription()
+    {
+        return actionDescription;
+    }
+
     public override bool TargetIsValid(Tile origin, Tile target)
     {
         throw new System.NotImplementedException();

@@ -24,6 +24,11 @@ public class ActionHealSigleTarget : ActionScriptableObject
         }
     }
 
+    public override string GetDescription()
+    {
+        return actionDescription;
+    }
+
 
     /// <summary>
     /// Check if the heal target is valid. Requirements are:

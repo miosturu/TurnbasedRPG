@@ -802,6 +802,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 390794143}
+  - {fileID: 723464669}
   m_Father: {fileID: 1998165012}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -843,11 +844,11 @@ MonoBehaviour:
   movementAreaColor: {r: 0, g: 0.31132078, b: 0.02197562, a: 0}
   movementAreaColorFallOff: 2
   validTargetColor: {r: 0.919791, g: 1, b: 0, a: 0}
-  initiativeDie: 20
-  playerToken: {fileID: 545503022529108546, guid: e688d2741f81fb84dae9bea571833d71, type: 3}
   teamColors:
   - {r: 0.09481192, g: 1, b: 0, a: 0}
   - {r: 1, g: 0, b: 0, a: 1.8965764e+28}
+  initiativeDie: 20
+  playerToken: {fileID: 545503022529108546, guid: e688d2741f81fb84dae9bea571833d71, type: 3}
   gameboard: {fileID: 183724483}
   heroActions: []
   selectedAction: {fileID: 0}
@@ -1563,6 +1564,90 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 716437197}
   m_CullTransparentMesh: 1
+--- !u!1 &723464668
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 723464669}
+  - component: {fileID: 723464671}
+  - component: {fileID: 723464670}
+  m_Layer: 5
+  m_Name: ActionInformationText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &723464669
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 723464668}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 405138913}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: 88, y: -119}
+  m_SizeDelta: {x: 360, y: 155}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &723464670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 723464668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 5a9454dad2911de45a42bf711134b0cf, type: 3}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: '"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+    eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
+    in culpa qui officia deserunt mollit anim id est laborum."'
+--- !u!222 &723464671
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 723464668}
+  m_CullTransparentMesh: 1
 --- !u!1 &730124340
 GameObject:
   m_ObjectHideFlags: 0
@@ -2161,6 +2246,7 @@ MonoBehaviour:
   heroNameText: {fileID: 1408187131}
   heroHpText: {fileID: 503498333}
   heroMovementText: {fileID: 1477874538}
+  actionInformationText: {fileID: 723464670}
   abilityButtons:
   - {fileID: 1380091309}
   - {fileID: 706194823}

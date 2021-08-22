@@ -23,6 +23,11 @@ public class ActionDoDamage : ActionScriptableObject
         }
     }
 
+    public override string GetDescription()
+    {
+        return actionDescription;
+    }
+
 
     /// <summary>
     /// Check if the target is valid for attacking. Requirements are:
