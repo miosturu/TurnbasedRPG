@@ -840,15 +840,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bd2982884c6cee4eac8e55fdfd890a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementAreaColor: {r: 0, g: 0.31132078, b: 0.02197562, a: 0}
+  movementAreaColorFallOff: 2
+  validTargetColor: {r: 0.919791, g: 1, b: 0, a: 0}
   initiativeDie: 20
   playerToken: {fileID: 545503022529108546, guid: e688d2741f81fb84dae9bea571833d71, type: 3}
   teamColors:
-  - {fileID: 2100000, guid: d9f56560aa39e3541a79e03616c59d41, type: 2}
-  - {fileID: 2100000, guid: 6ef48028acc738643ac4cfa012b97f4f, type: 2}
+  - {r: 0.09481192, g: 1, b: 0, a: 0}
+  - {r: 1, g: 0, b: 0, a: 1.8965764e+28}
   gameboard: {fileID: 183724483}
   heroActions: []
   selectedAction: {fileID: 0}
-  movementArea: []
+  validTargets: []
   playerActionsLeftOnTurn: 0
   partyManager: {fileID: 417176096}
   enemyParty: {fileID: 11400000, guid: 1f0b44dd203fd4c498a2d00e3432b575, type: 2}

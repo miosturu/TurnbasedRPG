@@ -9,13 +9,20 @@ using UnityEngine;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
+    [Header("Visual")]
+    [SerializeField] private Color movementAreaColor;
+    [SerializeField] private int movementAreaColorFallOff;
+
+    [SerializeField] private Color validTargetColor;
+
+    [SerializeField] private Color[] teamColors;
+
     [Header("Actual variables")]
     [SerializeField] private int initiativeDie = 20;
+    public IGamePiece currentPlayer;
     [SerializeField] private GameObject playerToken; // Player prefab
-    [SerializeField] private Material[] teamColors;
     private TurnManager turnManager;
     [SerializeField] private Gameboard gameboard;
-    public IGamePiece currentPlayer;
     public event EventHandler<OnEndTurnEventArgs> OnEndTurn; // Event for updating UI
 
     [Header("Player variables")]
@@ -151,7 +158,7 @@ public class GameManager : MonoBehaviour
         GameObject player = Instantiate(playerToken);
         PlayerGamePiece gamePiece = player.GetComponent<PlayerGamePiece>();
 
-        player.GetComponentInChildren<Renderer>().material = teamColors[team];
+        player.GetComponentInChildren<Renderer>().material.color = teamColors[team];
 
         player.name = hero.name;
         gamePiece.sprite.sprite = hero.sprite;
@@ -244,8 +251,8 @@ public class GameManager : MonoBehaviour
     /// Move player to new tile
     /// </summary>
     /// <param name="tile">New tile</param>
-    public void MovePlayer(GameObject tile) // TODO: When we have selected action AND valid tile is clikced -> do the action NOT move       DONE
-    {                                       // Also, when the action is selected, don't show allowed movement area BUT the allowed targets
+    public void MovePlayer(GameObject tile) // When we have selected action AND valid tile is clikced -> do the action NOT move             DONE
+    {                                       // Also, when the action is selected, don't show allowed movement area BUT the allowed targets  DONE
                                             // In UI some how highlight the selected action, maybe hight contrass gameobject                DONE
 
         //Debug.Log(tile.name + " " + movementArea.Contains(tile.GetComponent<Tile>()));
@@ -328,7 +335,9 @@ public class GameManager : MonoBehaviour
     {
         foreach (Tile t in movementArea.Keys)
         {
-            t.highlight.GetComponent<MeshRenderer>().material.color = new Color(0.1f * movementArea[t], 0.2f * movementArea[t], 0.05f / movementArea[t]);
+            t.highlight.GetComponent<MeshRenderer>().material.color = new Color(movementAreaColor.r / movementAreaColorFallOff * movementArea[t],
+                                                                                movementAreaColor.g / movementAreaColorFallOff * movementArea[t],
+                                                                                movementAreaColor.b / movementAreaColorFallOff * movementArea[t]);
             t.highlight.SetActive(true);
         }
     }
@@ -385,9 +394,10 @@ public class GameManager : MonoBehaviour
             Tile tile = tileObject.GetComponent<Tile>();
             if (selectedAction.TargetIsValid(playerTile, tile))
             {
-                //Debug.Log("Valid tile: " + tile.name);
-                tile.highlight.SetActive(true);
+                Debug.Log("Valid tile: " + tile.name);
+                tile.highlight.GetComponent<MeshRenderer>().material.color = validTargetColor;
                 validTargets.Add(tile);
+                tile.highlight.SetActive(true);
             }
         }
     }
@@ -398,10 +408,10 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ResetValidTargets()
     {
-        foreach(Tile tile in validTargets)
+        foreach(Tile t in validTargets)
         {
-            tile.highlight.GetComponent<MeshRenderer>().material.color = new Color(1, 1, 0);
-            tile.highlight.SetActive(false);
+            t.highlight.GetComponent<MeshRenderer>().material.color = new Color(0, 0, 0);
+            t.highlight.SetActive(false);
         }
     }
 }

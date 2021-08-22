@@ -84,6 +84,7 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// Function for selecting wanted action from button. If the same action is selected, then deselect it. Otherwise select new action.
     /// For example if button's variable i = 0, then get actions[0] from array.
+    /// Reset of the tile must be first, other wise there's problems with it.
     /// </summary>
     /// <param name="i">Action's index</param>
     public void GetClickedAction(int i)
@@ -92,7 +93,6 @@ public class UIManager : MonoBehaviour
         {
             gameManager.selectedAction = null;
             selectionHighlights[i].enabled = false;
-            // TODO: Enable movement area and disable allowed targets
             gameManager.ResetValidTargets();
             gameManager.ShowMovementArea();
         }
@@ -103,9 +103,8 @@ public class UIManager : MonoBehaviour
                 image.enabled = false;
 
             selectionHighlights[i].enabled = true;
-            // TODO: Disable movement area and show allowed targets
-            gameManager.GetValidTargets();
             gameManager.ResetMovementArea();
+            gameManager.GetValidTargets();
         }
 
         if (gameManager.selectedAction == null) // Just make sure that there's no highlight if no action is selected. This is here because as of 2021/08/09, one action can be on many button, which can lead to weird behavior
