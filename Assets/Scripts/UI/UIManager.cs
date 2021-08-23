@@ -6,6 +6,11 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("Strings")]
+    [SerializeField] private string playerNameString = "Name: ";
+    [SerializeField] private string playerHpString = "HP: ";
+    [SerializeField] private string playerMovementString = "Mov.: ";
+
     [Header("References to other objects")]
     [SerializeField] private GameManager gameManager;
     [SerializeField] private Button endTurnButton;
@@ -29,6 +34,16 @@ public class UIManager : MonoBehaviour
     {
         actions = new ActionScriptableObject[4];
         gameManager.OnEndTurn += UpdateUI;
+
+        heroNameText.text = playerNameString;
+        heroHpText.text = playerHpString;
+        heroMovementText.text = playerMovementString;
+
+        actionInformationText.text = "";
+        foreach(Text text in abilityNamesTexts)
+        {
+            text.text = "";
+        }
     } 
 
 
@@ -53,6 +68,7 @@ public class UIManager : MonoBehaviour
         ResetSelectionHighlight();
         EnableOrDisableButtons(isPlayerTurn);
         EnableOrDisableSelectionIndicator(playerCanMakeActions);
+        actionInformationText.text = "";
     }
 
 
@@ -76,9 +92,9 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void UpdateHeroInfo()
     {
-        heroNameText.text = "Name: " + gameManager.currentPlayer.ToString();
-        heroHpText.text = "HP: " + gameManager.currentPlayer.GetCurrentHp().ToString() + "/" + gameManager.currentPlayer.GetMaxHp().ToString();
-        heroMovementText.text = "Mov.: " + gameManager.currentPlayer.GetCurrentMovementLeft().ToString();
+        heroNameText.text = playerNameString + gameManager.currentPlayer.ToString();
+        heroHpText.text = playerHpString + gameManager.currentPlayer.GetCurrentHp().ToString() + "/" + gameManager.currentPlayer.GetMaxHp().ToString();
+        heroMovementText.text = playerMovementString + gameManager.currentPlayer.GetCurrentMovementLeft().ToString();
     }
 
 
@@ -94,6 +110,7 @@ public class UIManager : MonoBehaviour
         {
             gameManager.selectedAction = null;
             selectionHighlights[i].enabled = false;
+            actionInformationText.text = "";
             gameManager.ResetValidTargets();
             gameManager.ShowMovementArea();
         }
@@ -104,6 +121,7 @@ public class UIManager : MonoBehaviour
                 image.enabled = false;
 
             selectionHighlights[i].enabled = true;
+            actionInformationText.text = gameManager.selectedAction.GetDescription();
             gameManager.ResetMovementArea();
             gameManager.GetValidTargets();
         }
@@ -111,6 +129,7 @@ public class UIManager : MonoBehaviour
         if (gameManager.selectedAction == null) // Just make sure that there's no highlight if no action is selected. This is here because as of 2021/08/09, one action can be on many button, which can lead to weird behavior
         {
             ResetSelectionHighlight();
+            actionInformationText.text = "";
             gameManager.ResetValidTargets();
             gameManager.ShowMovementArea();
         }

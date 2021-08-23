@@ -1623,10 +1623,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 5a9454dad2911de45a42bf711134b0cf, type: 3}
-    m_FontSize: 14
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 2
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
@@ -2240,6 +2240,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf056fe8d07e4b744a11fb34ad26793f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerNameString: 'Name: '
+  playerHpString: 'HP: '
+  playerMovementString: 'Mov.: '
   gameManager: {fileID: 417176094}
   endTurnButton: {fileID: 271341379}
   selectionIndicator: {fileID: 506613556}

@@ -26,7 +26,7 @@ public class ActionHealSigleTarget : ActionScriptableObject
 
     public override string GetDescription()
     {
-        return actionDescription;
+        return string.Format("Heal die: {0} \nRange: {1}", healDie, range);
     }
 
 

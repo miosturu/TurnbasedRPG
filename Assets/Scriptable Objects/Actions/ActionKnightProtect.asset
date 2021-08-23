@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: Defending stance
   actionIcon: {fileID: 21300000, guid: 1bec9c0e6ed656d4ab7d29c6564fdc77, type: 3}
+  actionDescription: 

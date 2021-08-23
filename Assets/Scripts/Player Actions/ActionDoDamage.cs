@@ -25,7 +25,7 @@ public class ActionDoDamage : ActionScriptableObject
 
     public override string GetDescription()
     {
-        return actionDescription;
+        return string.Format("Damage die: {0} \nRange: {1}", damageDie, range);
     }
 
 
