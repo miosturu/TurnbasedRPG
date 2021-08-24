@@ -216,11 +216,11 @@ public class GameManager : MonoBehaviour
         {
             ShowMovementArea();
             heroActions = currentPlayer.GetActions();
-            OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true));
+            OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, false));
         }
         else // It's AI's turn
         {
-            OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(false));
+            OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(false, true));
             StartCoroutine(ai.AITurn(currentPlayer));
         }
     }
@@ -251,10 +251,8 @@ public class GameManager : MonoBehaviour
     /// Move player to new tile
     /// </summary>
     /// <param name="tile">New tile</param>
-    public void MovePlayer(GameObject tile) // When we have selected action AND valid tile is clikced -> do the action NOT move             DONE
-    {                                       // Also, when the action is selected, don't show allowed movement area BUT the allowed targets  DONE
-                                            // In UI some how highlight the selected action, maybe hight contrass gameobject                DONE
-
+    public void MovePlayer(GameObject tile)
+    {
         //Debug.Log(tile.name + " " + movementArea.Contains(tile.GetComponent<Tile>()));
 
         if (!movementArea.ContainsKey(tile.GetComponent<Tile>()) || tile.GetComponent<Tile>().currentObject != null)  // If wanted tile has no other object on it and is in range
@@ -265,15 +263,17 @@ public class GameManager : MonoBehaviour
         List<Tile> path = new BreadthFirstSearch().GeneratePath(currentPlayer.GetGameObject().GetComponentInParent<Tile>(), 
                                                                                                  tile.GetComponent<Tile>()); // TODO: actually show the player the path when hovering ovet the tile
 
-        int distance = -1;
-
-        foreach (Tile t in path) distance++;
-        currentPlayer.ReduceMovement(distance);
-
         GameObject playerObject = currentPlayer.GetGameObject(); // Player game object
         playerObject.GetComponentInParent<Tile>().currentObject = null; // Remove previous parent
-        playerObject.transform.SetParent(tile.gameObject.transform, false); // Move player
         tile.GetComponent<Tile>().currentObject = playerObject; // Set new tile's current object to be player
+
+        // TODO movement animation goes here. Implemented with coroutine
+        StartCoroutine(AnimatePlayerMovement(playerObject, path, tile.GetComponent<Tile>()));
+
+        int distance = -1;
+        foreach (Tile t in path)
+            distance++;
+        currentPlayer.ReduceMovement(distance);
 
         GenerateMovementArea();
 
@@ -284,8 +284,29 @@ public class GameManager : MonoBehaviour
                 canMakeActions = true;
 
             OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, !canMakeActions));
-            ShowMovementArea();
         }
+    }
+
+
+    /// <summary>
+    /// Move player on gameboard one tile at the time.
+    /// </summary>
+    /// <param name="player">Moved player</param>
+    /// <param name="path">Path of the player</param>
+    /// <param name="target">Target tile</param>
+    /// <returns>Nothing I guess</returns>
+    private IEnumerator AnimatePlayerMovement(GameObject player, List<Tile> path, Tile target)
+    {
+        foreach (Tile t in path)
+        {
+            player.transform.position = t.transform.position;
+            yield return new WaitForSeconds(0.55f);
+        }
+        player.transform.SetParent(target.gameObject.transform, true);
+        GenerateMovementArea();
+        ShowMovementArea();
+
+        yield return null;
     }
 
 

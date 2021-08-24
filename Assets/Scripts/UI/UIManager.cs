@@ -168,4 +168,14 @@ public class UIManager : MonoBehaviour
     {
         selectionIndicator.SetActive(state);
     }
+
+
+    /// <summary>
+    /// Make "End Turn"-button clickable or not.
+    /// </summary>
+    /// <param name="state">Set active or not</param>
+    public void EnableOrDisableEndTurnButton(bool state)
+    {
+        endTurnButton.enabled = state;
+    }
 }
