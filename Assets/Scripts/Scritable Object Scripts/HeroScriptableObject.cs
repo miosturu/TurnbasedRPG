@@ -16,4 +16,5 @@ public class HeroScriptableObject : ScriptableObject
 
     public ActionScriptableObject[] heroActions;
     public int maxActionsPerTurn = 1;
+    public PlayerType playerType;
 }

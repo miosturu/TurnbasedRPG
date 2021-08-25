@@ -24,3 +24,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: aa13176727aa0d549bb6617f3bd9cb19, type: 2}
   - {fileID: 11400000, guid: aa13176727aa0d549bb6617f3bd9cb19, type: 2}
   maxActionsPerTurn: 1
+  playerType: 2

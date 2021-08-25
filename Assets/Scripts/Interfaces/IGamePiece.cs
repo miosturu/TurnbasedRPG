@@ -21,6 +21,7 @@ public interface IGamePiece
 
     // Player management related functions
     int GetPlayerTeam();
+    PlayerType GetPlayerType();
 
     // Action functions
     ActionScriptableObject[] GetActions();

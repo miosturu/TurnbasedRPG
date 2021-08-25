@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Color[] teamColors;
 
+    [SerializeField] private float playerVisualMovementDelay = 0.25f;
+
     [Header("Actual variables")]
     [SerializeField] private int initiativeDie = 20;
     public IGamePiece currentPlayer;
@@ -173,6 +175,7 @@ public class GameManager : MonoBehaviour
         gamePiece.actions = hero.heroActions;
         gamePiece.maxActionsPerTurn = hero.maxActionsPerTurn;
         gamePiece.actionsLeft = hero.maxActionsPerTurn;
+        gamePiece.playerType = hero.playerType;
 
         PlacePlayer(player, x, z);
         turnManager.AddPlayerToList(player.GetComponent<PlayerGamePiece>(), team, new DiceRoller().RollDice(1, initiativeDie) + hero.initiativeBonus);
@@ -300,7 +303,7 @@ public class GameManager : MonoBehaviour
         foreach (Tile t in path)
         {
             player.transform.position = t.transform.position;
-            yield return new WaitForSeconds(0.55f);
+            yield return new WaitForSeconds(playerVisualMovementDelay);
         }
         player.transform.SetParent(target.gameObject.transform, true);
         GenerateMovementArea();

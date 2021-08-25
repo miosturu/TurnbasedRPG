@@ -24,7 +24,7 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     public GameObject highlight;
     public SpriteRenderer sprite;
     public int team;
-
+    public PlayerType playerType;
 
 
     /// <summary>
@@ -186,5 +186,19 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     public int GetPlayerTeam()
     {
         return team;
+    }
+
+
+    /// <summary>
+    /// Return if player is:
+    ///     1) Tank
+    ///     2) Support
+    ///     3) Offence
+    /// -type character
+    /// </summary>
+    /// <returns>Player's class type</returns>
+    public PlayerType GetPlayerType()
+    {
+        return playerType;
     }
 }
