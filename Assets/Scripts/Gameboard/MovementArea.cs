@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MovementArea
 {
-    // TODO: disallow moving throught the enemy
     public Dictionary<Tile, int> GenerateMovementArea(Tile origin, int maxDistance)
     {
         Dictionary<Tile, int> possibleTiles = new Dictionary<Tile, int>();
@@ -22,7 +21,7 @@ public class MovementArea
 
             foreach (Tile next in current.edges)
             {
-                if (!distance.ContainsKey(next))
+                if (!distance.ContainsKey(next) && next.currentObject == null)
                 {
                     frontier.Enqueue(next);
                     distance.Add(next, 1 + distance[current]);

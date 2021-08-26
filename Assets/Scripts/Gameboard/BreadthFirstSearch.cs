@@ -27,7 +27,7 @@ public class BreadthFirstSearch
 
             foreach (Tile next in current.edges)
             {
-                if (!cameFrom.ContainsKey(next))
+                if (!cameFrom.ContainsKey(next) && next.currentObject == null)
                 {
                     frontier.Enqueue(next);
                     cameFrom.Add(next, current);
@@ -46,10 +46,10 @@ public class BreadthFirstSearch
         path.Add(origin);
         path.Reverse();
 
-        foreach (Tile n in cameFrom.Keys)
+        /*foreach (Tile n in cameFrom.Keys)
         {
-            //Debug.Log(n + "<-->" + cameFrom[n]);
-        }
+            Debug.Log(n + "<-->" + cameFrom[n]);
+        }*/
 
         return path;
     }

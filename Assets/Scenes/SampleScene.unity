@@ -847,6 +847,7 @@ MonoBehaviour:
   teamColors:
   - {r: 0.09481192, g: 1, b: 0, a: 0}
   - {r: 1, g: 0, b: 0, a: 1.8965764e+28}
+  playerVisualMovementDelay: 0.25
   initiativeDie: 20
   playerToken: {fileID: 545503022529108546, guid: e688d2741f81fb84dae9bea571833d71, type: 3}
   gameboard: {fileID: 183724483}
@@ -855,7 +856,7 @@ MonoBehaviour:
   validTargets: []
   playerActionsLeftOnTurn: 0
   partyManager: {fileID: 417176096}
-  enemyParty: {fileID: 11400000, guid: 1f0b44dd203fd4c498a2d00e3432b575, type: 2}
+  enemyParty: {fileID: 11400000, guid: cd66e2c7a578a6948a40e9c3e07eb317, type: 2}
 --- !u!4 &417176095
 Transform:
   m_ObjectHideFlags: 0
