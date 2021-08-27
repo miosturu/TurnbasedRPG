@@ -5,6 +5,7 @@ using UnityEngine;
 
 /// <summary>
 /// Very basic chase AI. At the movement the AI can't think furter than its own turn. Maybe in the future one could implement Alpha-Beta-pruning.
+/// The AI can't think of a way to get around a corner.
 /// Also one needs to figure out how to take in the account different kinds of units, such as ranged and melee, because it would be silly if ranged player tries to do melee.
 /// </summary>
 public class EnemyAI
@@ -70,11 +71,11 @@ public class EnemyAI
 
         Tile target = GetHighestValuedTile();
 
-        Debug.Log(target.name);
+        //Debug.Log(target.name);
 
         Tile destination = GetNearestTile(target);
 
-        Debug.Log("Target tile: " + destination.name);
+        //Debug.Log("Target tile: " + destination.name);
 
         yield return new WaitForSeconds(.75f);
         MoveToken(destination);

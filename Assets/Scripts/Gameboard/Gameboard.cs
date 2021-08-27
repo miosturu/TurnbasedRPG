@@ -22,7 +22,6 @@ public class Gameboard : MonoBehaviour
     {
         map = new GameObject[mapW, mapH];
         graph = new Dictionary<Tile, List<Tile>>();
-        //GenerateBlankLevel();
 
         string[,] tiles = { { "_", "_", "_", "#", "#", "#" },
                             { "_", "_", "_", "_", "_", "_" },

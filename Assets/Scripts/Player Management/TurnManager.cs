@@ -55,7 +55,7 @@ public class TurnManager
     /// <param name="initiative">Player's initiative</param>
     public void AddPlayerToList(IGamePiece player, int teamNumber, int initiative)
     {
-        Debug.Log("Adding new player " + player.GetGameObject().name + " to list. Ini: " + initiative);
+        Debug.Log("<color=yellow>Adding new player</color> " + player.GetGameObject().name + " to list. Ini: " + initiative);
         PlayerTurn playerTurn = new PlayerTurn(player, teamNumber, initiative);
 
         if (firstPlayer == null) // If there's no other players
@@ -65,8 +65,10 @@ public class TurnManager
         }
         else // If there're other players
         {
-            if (initiative > firstPlayer.initiative)
+            if (initiative > firstPlayer.initiative) // New initiative is bigger than first player's initiative
             {
+                Debug.Log("<color=green>Initiative of the first player is smaller than new player's initiative:</color> " + firstPlayer.initiative + " vs. " + initiative);
+
                 // Find last of the list
                 PlayerTurn indicator = firstPlayer;
                 while(indicator.next != firstPlayer)
@@ -79,16 +81,18 @@ public class TurnManager
                 firstPlayer = playerTurn;
 
             }
-            else
+            else // New initiative is not bigger than first
             {
+                Debug.Log("<color=blue>First player's initiative is bigger than new player's:</color> " + firstPlayer.initiative + " vs. " + initiative);
+
                 PlayerTurn indicator = firstPlayer;
-                while(indicator.next.initiative < playerTurn.initiative)
+                while (indicator.initiative <= playerTurn.initiative && indicator.next != firstPlayer)
                 {
                     indicator = indicator.next;
                 }
 
                 playerTurn.next = indicator.next;
-                indicator.next = playerTurn;
+                indicator.next = playerTurn; 
             }
         }
 
@@ -144,6 +148,22 @@ public class TurnManager
         }
 
         return indicator.teamNumber;
+    }
+
+
+    /// <summary>
+    /// Print all players if queueu.
+    /// </summary>
+    public void PrintPlayers()
+    {
+        PlayerTurn pt = firstPlayer;
+        while (true)
+        {
+            Debug.Log("<color=red>Player:</color> " + pt.player.GetGameObject().name + " Ini.: " + pt.initiative);
+            pt = pt.next;
+            if (pt == firstPlayer)
+                return;
+        }
     }
 }
 

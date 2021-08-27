@@ -856,7 +856,7 @@ MonoBehaviour:
   validTargets: []
   playerActionsLeftOnTurn: 0
   partyManager: {fileID: 417176096}
-  enemyParty: {fileID: 11400000, guid: cd66e2c7a578a6948a40e9c3e07eb317, type: 2}
+  enemyParty: {fileID: 11400000, guid: 1f0b44dd203fd4c498a2d00e3432b575, type: 2}
 --- !u!4 &417176095
 Transform:
   m_ObjectHideFlags: 0

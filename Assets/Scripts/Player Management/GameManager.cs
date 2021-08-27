@@ -69,6 +69,7 @@ public class GameManager : MonoBehaviour
             isPlayerTurnFirst = true;
         }
 
+        turnManager.PrintPlayers();
         OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(isPlayerTurnFirst, !isPlayerTurnFirst));
     }
 
@@ -270,7 +271,7 @@ public class GameManager : MonoBehaviour
         playerObject.GetComponentInParent<Tile>().currentObject = null; // Remove previous parent
         tile.GetComponent<Tile>().currentObject = playerObject; // Set new tile's current object to be player
 
-        // TODO movement animation goes here. Implemented with coroutine
+        // Movement animation. Implemented with coroutine
         StartCoroutine(AnimatePlayerMovement(playerObject, path, tile.GetComponent<Tile>()));
 
         int distance = -1;
@@ -279,15 +280,6 @@ public class GameManager : MonoBehaviour
         currentPlayer.ReduceMovement(distance);
 
         GenerateMovementArea();
-
-        if (turnManager.currentPlayer.teamNumber == 0) // If the player is real player Fire event to update UI
-        {
-            bool canMakeActions = false;
-            if (playerActionsLeftOnTurn > 0)
-                canMakeActions = true;
-
-            OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, !canMakeActions));
-        }
     }
 
 
@@ -300,14 +292,32 @@ public class GameManager : MonoBehaviour
     /// <returns>Nothing I guess</returns>
     private IEnumerator AnimatePlayerMovement(GameObject player, List<Tile> path, Tile target)
     {
+        int playerTeam = player.GetComponent<IGamePiece>().GetPlayerTeam();
+
+        bool isHumanPlayer = false;
+        if (playerTeam == 0)
+            isHumanPlayer = true;
+
+        OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(isHumanPlayer, true));
+
         foreach (Tile t in path)
         {
             player.transform.position = t.transform.position;
             yield return new WaitForSeconds(playerVisualMovementDelay);
         }
+
         player.transform.SetParent(target.gameObject.transform, true);
         GenerateMovementArea();
         ShowMovementArea();
+
+        if (playerTeam == 0) // If the player is real then show actions of allowed to take some
+        {
+            bool canMakeActions = false;
+            if (playerActionsLeftOnTurn > 0)
+                canMakeActions = true;
+
+            OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, !canMakeActions));
+        }
 
         yield return null;
     }
@@ -328,7 +338,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Action failed"); // TODO: Maybe deselect selectedAction and show movementArea?
+            Debug.Log("Action failed");
             if (playerActionsLeftOnTurn <= 0)
                 Debug.Log("Not enough actions left");
         }
@@ -418,7 +428,7 @@ public class GameManager : MonoBehaviour
             Tile tile = tileObject.GetComponent<Tile>();
             if (selectedAction.TargetIsValid(playerTile, tile))
             {
-                Debug.Log("Valid tile: " + tile.name);
+                //Debug.Log("Valid tile: " + tile.name);
                 tile.highlight.GetComponent<MeshRenderer>().material.color = validTargetColor;
                 validTargets.Add(tile);
                 tile.highlight.SetActive(true);
