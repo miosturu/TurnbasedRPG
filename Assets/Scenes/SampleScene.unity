@@ -385,6 +385,15 @@ MonoBehaviour:
   mapH: 9
   tiles:
   - {fileID: 7614448628141386766, guid: 5e0ae7fa137097d45b2ddd82bf5465c4, type: 3}
+  tilesA: []
+  tilesB: []
+  tilesC:
+  - {fileID: 11400000, guid: 90f24d9a56eae9a4681757ed2d004f0e, type: 2}
+  tilesD: []
+  tilesE: []
+  tilesF: []
+  tilesUniversal:
+  - {fileID: 11400000, guid: 7501daeffd21c754b9edf046d7bdb53e, type: 2}
 --- !u!4 &183724484
 Transform:
   m_ObjectHideFlags: 0

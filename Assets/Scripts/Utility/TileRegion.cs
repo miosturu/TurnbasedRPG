@@ -18,5 +18,6 @@ public enum TileRegion
     C,
     D,
     E,
-    F
+    F,
+    Universal
 }

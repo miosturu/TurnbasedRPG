@@ -17,9 +17,33 @@ public class Gameboard : MonoBehaviour
 
     private readonly int[,] directions = new int[,] { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 }, { -1, 1 }, { 1, 1 }, { 1, -1 }, { -1, -1 } };
 
+    [Header("A")]
+    [SerializeField] private List<TileRegionScriptableObject> tilesA = new List<TileRegionScriptableObject>();
+
+    [Header("B")]
+    [SerializeField] private List<TileRegionScriptableObject> tilesB = new List<TileRegionScriptableObject>();
+
+    [Header("C")]
+    [SerializeField] private List<TileRegionScriptableObject> tilesC = new List<TileRegionScriptableObject>();
+
+    [Header("D")]
+    [SerializeField] private List<TileRegionScriptableObject> tilesD = new List<TileRegionScriptableObject>();
+
+    [Header("E")]
+    [SerializeField] private List<TileRegionScriptableObject> tilesE = new List<TileRegionScriptableObject>();
+
+    [Header("F")]
+    [SerializeField] private List<TileRegionScriptableObject> tilesF = new List<TileRegionScriptableObject>();
+
+    [Header("Universal")]
+    [SerializeField] private List<TileRegionScriptableObject> tilesUniversal = new List<TileRegionScriptableObject>();
+
+    private List<List<TileRegionScriptableObject>> metaList;
+
     // Start is called before the first frame update
     void Start()
     {
+        metaList = new List<List<TileRegionScriptableObject>> { tilesA, tilesB, tilesC, tilesD, tilesE, tilesF };
         map = new GameObject[mapW, mapH];
         graph = new Dictionary<Tile, List<Tile>>();
 
@@ -44,6 +68,7 @@ public class Gameboard : MonoBehaviour
                              { "_", "_", "_", "_", "_", "_" } };
 
         GenerateLevel();
+        //GenerateLevel(0);
     }
 
     /// <summary>
@@ -167,6 +192,121 @@ public class Gameboard : MonoBehaviour
             for (int j = 0; j < mapW; j++) // X
             {
                 Tile node = map[j, i].GetComponent<Tile>();
+                List<Tile> neighbors = new List<Tile>();
+                int nodeX = node.xCoord;
+                int nodeZ = node.zCoord;
+
+                for (int k = 0; k < directions.Length; k++)
+                {
+                    try
+                    {
+                        Tile potentialNeigbor = map[nodeX + directions[k, 0],
+                                                    nodeZ + directions[k, 1]].GetComponent<Tile>();
+
+                        if (potentialNeigbor.isWalkable)
+                        {
+                            node.edges.Add(potentialNeigbor);
+                            neighbors.Add(potentialNeigbor);
+                        }
+                    }
+                    catch { /* No edge in that direction*/ }
+                }
+                graph.Add(node, neighbors);
+            }
+        }
+    }
+
+
+    public void GenerateLevel(int num)
+    {
+        Queue<TileRegionScriptableObject> tileRegions = new Queue<TileRegionScriptableObject>();
+
+        int listIndex = 0;
+        foreach(List<TileRegionScriptableObject> list in metaList) // Select random tile regions.
+        {
+            try
+            {
+                tileRegions.Enqueue(metaList[listIndex][Random.Range(0, metaList[listIndex].Count)]);
+            }
+            catch // If there's no available tile regions, then take generic tile
+            {
+                tileRegions.Enqueue(tilesUniversal[Random.Range(0, tilesUniversal.Count)]);
+            }
+            listIndex++;
+        }
+
+        TileRegionScriptableObject current;
+
+        float offSetX = 0;
+        float offSetZ = 0;
+
+        while(tileRegions.Count > 0)
+        {
+            current = tileRegions.Dequeue();
+            Debug.Log(current.name);
+            // Logic of the map generations goes here
+
+            int index = 0;
+
+            for (int x = 0; x < current.regionW; x++)
+            {
+                for (int z = 0; z < current.regionH; z++)
+                {
+                    GameObject tileObject = null;
+                    TileScriptableObject tileSO = null;
+
+                    TileType tileType = current.tiles[index];
+
+                    switch (tileType)
+                    {
+                        case TileType.Walkable:
+                            tileSO = availableTiles[0];
+                            break;
+                        case TileType.Wall:
+                            tileSO = availableTiles[1];
+                            break;
+                        case TileType.Halfhight:
+                            tileSO = availableTiles[2];
+                            break;
+                        default:
+                            Debug.Log("Error: unknown tile type");
+                            break;
+                    }
+
+                    index++;
+
+                    tileObject = Instantiate(tiles[0]);
+                    tileObject.GetComponent<Tile>().ChangeTileType(tileSO);
+
+                    tileObject.name = x + ", " + z;
+                    map[x, z] = tileObject;
+
+                    Tile tile = tileObject.GetComponent<Tile>();
+                    tile.xCoord = (x + (int)offSetX);
+                    tile.zCoord = (z + (int)offSetZ);
+
+                    tileObject.transform.position = new Vector3((x + (int)offSetX), 0.0f, (z + (int)offSetZ));
+                    tileObject.transform.parent = transform;
+                }
+            }
+
+            if (offSetX == 0)
+            {
+                offSetX += current.regionW;
+            }
+            else
+            {
+                offSetZ += current.regionH;
+                offSetX = 0;
+            }
+        }
+
+
+        for (int x = 0; x < mapW; x++)
+        {
+            for (int z = 0; z < mapH; z++)
+            {
+                Tile node = map[x, z].GetComponent<Tile>();
                 List<Tile> neighbors = new List<Tile>();
                 int nodeX = node.xCoord;
                 int nodeZ = node.zCoord;

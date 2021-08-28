@@ -55,7 +55,7 @@ public class TurnManager
     /// <param name="initiative">Player's initiative</param>
     public void AddPlayerToList(IGamePiece player, int teamNumber, int initiative)
     {
-        Debug.Log("<color=yellow>Adding new player</color> " + player.GetGameObject().name + " to list. Ini: " + initiative);
+        //Debug.Log("<color=yellow>Adding new player</color> " + player.GetGameObject().name + " to list. Ini: " + initiative);
         PlayerTurn playerTurn = new PlayerTurn(player, teamNumber, initiative);
 
         if (firstPlayer == null) // If there's no other players
@@ -67,7 +67,7 @@ public class TurnManager
         {
             if (initiative > firstPlayer.initiative) // New initiative is bigger than first player's initiative
             {
-                Debug.Log("<color=green>Initiative of the first player is smaller than new player's initiative:</color> " + firstPlayer.initiative + " vs. " + initiative);
+                //Debug.Log("<color=green>Initiative of the first player is smaller than new player's initiative:</color> " + firstPlayer.initiative + " vs. " + initiative);
 
                 // Find last of the list
                 PlayerTurn indicator = firstPlayer;
@@ -83,7 +83,7 @@ public class TurnManager
             }
             else // New initiative is not bigger than first
             {
-                Debug.Log("<color=blue>First player's initiative is bigger than new player's:</color> " + firstPlayer.initiative + " vs. " + initiative);
+                //Debug.Log("<color=blue>First player's initiative is bigger than new player's:</color> " + firstPlayer.initiative + " vs. " + initiative);
 
                 PlayerTurn indicator = firstPlayer;
                 while (indicator.initiative <= playerTurn.initiative && indicator.next != firstPlayer)

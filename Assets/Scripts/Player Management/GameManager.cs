@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
             isPlayerTurnFirst = true;
         }
 
-        turnManager.PrintPlayers();
+        //turnManager.PrintPlayers();
         OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(isPlayerTurnFirst, !isPlayerTurnFirst));
     }
 
