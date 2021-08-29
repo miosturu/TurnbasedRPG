@@ -385,13 +385,20 @@ MonoBehaviour:
   mapH: 9
   tiles:
   - {fileID: 7614448628141386766, guid: 5e0ae7fa137097d45b2ddd82bf5465c4, type: 3}
-  tilesA: []
-  tilesB: []
+  tilesA:
+  - {fileID: 11400000, guid: 7501daeffd21c754b9edf046d7bdb53e, type: 2}
+  tilesB:
+  - {fileID: 11400000, guid: 7501daeffd21c754b9edf046d7bdb53e, type: 2}
   tilesC:
   - {fileID: 11400000, guid: 90f24d9a56eae9a4681757ed2d004f0e, type: 2}
-  tilesD: []
-  tilesE: []
-  tilesF: []
+  - {fileID: 11400000, guid: 7501daeffd21c754b9edf046d7bdb53e, type: 2}
+  tilesD:
+  - {fileID: 11400000, guid: 7501daeffd21c754b9edf046d7bdb53e, type: 2}
+  - {fileID: 11400000, guid: 8acc6766fe3484847afd7bd909356504, type: 2}
+  tilesE:
+  - {fileID: 11400000, guid: 7501daeffd21c754b9edf046d7bdb53e, type: 2}
+  tilesF:
+  - {fileID: 11400000, guid: 7501daeffd21c754b9edf046d7bdb53e, type: 2}
   tilesUniversal:
   - {fileID: 11400000, guid: 7501daeffd21c754b9edf046d7bdb53e, type: 2}
 --- !u!4 &183724484
@@ -2890,7 +2897,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -2913,7 +2920,7 @@ Canvas:
   m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
-  m_PixelPerfect: 0
+  m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
