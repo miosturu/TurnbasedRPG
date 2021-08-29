@@ -66,10 +66,26 @@ public class Gameboard : MonoBehaviour
                              { "_", "_", "_", "_", "_", "_" },
                              { "_", "_", "_", "_", "_", "_" },
                              { "_", "_", "_", "_", "_", "_" } };
-
-        GenerateLevel();
-        //GenerateLevel(0);
     }
+
+
+    /// <summary>
+    /// Select what kind of level is going to be generated.
+    /// </summary>
+    /// <param name="mapType">Map type</param>
+    public void GenerateLevel(MapType mapType)
+    {
+        switch (mapType)
+        {
+            case MapType.Random:
+                GenerateRandomLevel();
+                break;
+            default:
+                GenerateBlankLevel();
+                break;
+        }
+    }
+
 
     /// <summary>
     /// Generate map from 2D string array. The map will always be of size 6x9. 
@@ -78,7 +94,7 @@ public class Gameboard : MonoBehaviour
     ///     '@' will be low obstacle.
     /// </summary>
     /// <param name="symbolicMap"></param>
-    public void GenerateLevel(string[,] symbolicMap)
+    private void GeneratePremadeLevel(string[,] symbolicMap)
     {
         float xPos = 0;
         float zPos = 0;
@@ -159,7 +175,7 @@ public class Gameboard : MonoBehaviour
     }
 
 
-    public void GenerateLevel() // TODO somekind of random level generation like in Splunky OR read from text OR TBoI-style
+    private void GenerateBlankLevel() // TODO somekind of random level generation like in Splunky OR read from text OR TBoI-style
     {
         float xPos = 0;
         float zPos = 0;
@@ -217,7 +233,10 @@ public class Gameboard : MonoBehaviour
     }
 
 
-    public void GenerateLevel(int num)
+    /// <summary>
+    /// Generate random level from "TileRegionSO"s.
+    /// </summary>
+    private void GenerateRandomLevel()
     {
         Queue<TileRegionScriptableObject> tileRegions = new Queue<TileRegionScriptableObject>();
 
@@ -248,9 +267,9 @@ public class Gameboard : MonoBehaviour
 
             int index = 0;
 
-            for (int x = 0; x < current.regionW; x++)
+            for (int i = 0; i < current.regionH; i++)
             {
-                for (int z = 0; z < current.regionH; z++)
+                for (int j = 0; j < current.regionW; j++)
                 {
                     GameObject tileObject = null;
                     TileScriptableObject tileSO = null;
@@ -278,14 +297,14 @@ public class Gameboard : MonoBehaviour
                     tileObject = Instantiate(tiles[0]);
                     tileObject.GetComponent<Tile>().ChangeTileType(tileSO);
 
-                    tileObject.name = x + ", " + z;
-                    map[x, z] = tileObject;
+                    tileObject.name = (j + offSetX) + ", " + (i + offSetZ);
+                    map[j + (int)offSetX, i + (int)offSetZ] = tileObject;
 
                     Tile tile = tileObject.GetComponent<Tile>();
-                    tile.xCoord = (x + (int)offSetX);
-                    tile.zCoord = (z + (int)offSetZ);
+                    tile.xCoord = (j + (int)offSetX);
+                    tile.zCoord = (i + (int)offSetZ);
 
-                    tileObject.transform.position = new Vector3((x + (int)offSetX), 0.0f, (z + (int)offSetZ));
+                    tileObject.transform.position = new Vector3((j + (int)offSetX), 0.0f, (i + (int)offSetZ));
                     tileObject.transform.parent = transform;
                 }
             }
@@ -302,11 +321,12 @@ public class Gameboard : MonoBehaviour
         }
 
 
-        for (int x = 0; x < mapW; x++)
+        // Generates abstract graph for pathfinding
+        for (int i = 0; i < mapH; i++) // Z
         {
-            for (int z = 0; z < mapH; z++)
+            for (int j = 0; j < mapW; j++) // X
             {
-                Tile node = map[x, z].GetComponent<Tile>();
+                Tile node = map[j, i].GetComponent<Tile>();
                 List<Tile> neighbors = new List<Tile>();
                 int nodeX = node.xCoord;
                 int nodeZ = node.zCoord;

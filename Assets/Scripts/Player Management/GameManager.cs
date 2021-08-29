@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        gameboard.GenerateLevel(MapType.Random);
         StartCoroutine(SetUpCombat());
     }
 

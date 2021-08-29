@@ -56,6 +56,7 @@
     <Compile Include="Assets\Scripts\Interfaces\IGamePiece.cs" />
     <Compile Include="Assets\Scripts\Player Management\PartyManager.cs" />
     <Compile Include="Assets\Scripts\Scritable Object Scripts\ActionScriptableObject.cs" />
+    <Compile Include="Assets\Scripts\Utility\TileType.cs" />
     <Compile Include="Assets\Scripts\Player Management\GameManager.cs" />
     <Compile Include="Assets\Scripts\Scritable Object Scripts\HeroScriptableObject.cs" />
     <Compile Include="Assets\Scripts\Gameboard\LineOfSight.cs" />
@@ -77,7 +78,7 @@
     <Compile Include="Assets\Scripts\Utility\TileRegion.cs" />
     <Compile Include="Assets\Scripts\Scritable Object Scripts\EnemyPartyScriptableObject.cs" />
     <Compile Include="Assets\Scripts\AI\EnemyAI.cs" />
-    <Compile Include="Assets\Scripts\Utility\TileType.cs" />
+    <Compile Include="Assets\Scripts\Utility\MapType.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
