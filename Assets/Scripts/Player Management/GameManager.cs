@@ -342,6 +342,8 @@ public class GameManager : MonoBehaviour
             Debug.Log("Action failed");
             if (playerActionsLeftOnTurn <= 0)
                 Debug.Log("Not enough actions left");
+            selectedAction = null;
+            OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, false));
         }
 
         ResetValidTargets();
