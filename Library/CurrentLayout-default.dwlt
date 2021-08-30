@@ -122,7 +122,7 @@ MonoBehaviour:
   m_MinSize: {x: 709, y: 492}
   m_MaxSize: {x: 18004, y: 14042}
   vertical: 0
-  controlID: 287
+  controlID: 38
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_MinSize: {x: 433, y: 492}
   m_MaxSize: {x: 14003, y: 14042}
   vertical: 1
-  controlID: 261
+  controlID: 43
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_MinSize: {x: 403, y: 221}
   m_MaxSize: {x: 8003, y: 4021}
   vertical: 0
-  controlID: 262
+  controlID: 44
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -192,8 +192,8 @@ MonoBehaviour:
     y: 0
     width: 423
     height: 462
-  m_MinSize: {x: 201, y: 221}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 15}
   m_Panes:
   - {fileID: 15}
@@ -249,7 +249,7 @@ MonoBehaviour:
   m_MinSize: {x: 433, y: 271}
   m_MaxSize: {x: 14003, y: 10021}
   vertical: 0
-  controlID: 293
+  controlID: 115
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -446,9 +446,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
+      m_SelectedIDs: e83d0000
       m_LastClickedID: 0
-      m_ExpandedIDs: 52fbffff
+      m_ExpandedIDs: fcdbfdff06dcfdff24dcfdff7eddfdfff8e2fdff02e3fdff20e3fdfff2e4fdffd8ebfdffe2ebfdff00ecfdffd2edfdff4c4efeff564efeff744efeff5c52feff9477feffb277feff9a7bfeffac93feff729cfeff309dfeff7ac4ffff28c5ffffe6c5ffff0edaffffc0daffff7edbffff68e2ffff24e3ffff1ee4ffff52fbffff903c0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -508,9 +508,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 3.3914855, y: 1.3169532, z: 0.8205159}
+    m_Target: {x: 4.2012367, y: 0.014738202, z: 4.539088}
     speed: 2
-    m_Value: {x: 3.3914855, y: 1.3169532, z: 0.8205159}
+    m_Value: {x: 4.2012367, y: 0.014738202, z: 4.539088}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -557,13 +557,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.44559604, y: -0.022824543, z: 0.011364702, w: 0.8948738}
+    m_Target: {x: 0.29502627, y: -0.583374, z: 0.23979875, w: 0.7177297}
     speed: 2
-    m_Value: {x: -0.44559607, y: 0.022824543, z: -0.011364703, w: -0.89487386}
+    m_Value: {x: 0.29502553, y: -0.58337253, z: 0.23979816, w: 0.7177279}
   m_Size:
-    m_Target: 1.807395
+    m_Target: 0.90739506
     speed: 2
-    m_Value: 1.807395
+    m_Value: 0.90739506
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -626,19 +626,19 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scriptable Objects/Heroes
+    - Assets/Scriptable Objects/Enemies
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Scriptable Objects/Heroes
+  - Assets/Scriptable Objects/Enemies
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\m1kk0\Documents\Unity Projects\TurnbasedRPG
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 40}
+    scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 943e0000
     m_LastClickedID: 16020
     m_ExpandedIDs: 000000007a3e00007c3e00007e3e0000803e0000823e0000
@@ -700,18 +700,18 @@ MonoBehaviour:
     m_ExpandedInstanceIDs: c6230000e63c000000000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: Token
+      m_OriginalName: Token
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 15812
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 11}
     m_CreateAssetUtility:

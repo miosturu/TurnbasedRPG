@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sprite: {fileID: 21300000, guid: a42b94f1c1efab3489fb246b4e802732, type: 3}
   className: Jeff
-  maxHp: 5
+  maxHp: 8
   armorDie: 4
   initiativeBonus: 0
   movementSpeed: 1

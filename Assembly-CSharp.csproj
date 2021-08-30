@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\Gameboard\MovementArea.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\Scripts\Player Management\TurnManager.cs" />
+    <Compile Include="Assets\Scripts\Utility\MapType.cs" />
     <Compile Include="Assets\Scripts\UI\OnEndTurnEventArgs.cs" />
     <Compile Include="Assets\Scripts\Scritable Object Scripts\TileScriptableObject.cs" />
     <Compile Include="Assets\Scripts\Player Actions\ActionProtectOther.cs" />
@@ -78,7 +79,7 @@
     <Compile Include="Assets\Scripts\Utility\TileRegion.cs" />
     <Compile Include="Assets\Scripts\Scritable Object Scripts\EnemyPartyScriptableObject.cs" />
     <Compile Include="Assets\Scripts\AI\EnemyAI.cs" />
-    <Compile Include="Assets\Scripts\Utility\MapType.cs" />
+    <Compile Include="Assets\Scripts\UI\PlayerHpUIManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

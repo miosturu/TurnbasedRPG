@@ -874,7 +874,7 @@ MonoBehaviour:
   validTargets: []
   playerActionsLeftOnTurn: 0
   partyManager: {fileID: 417176096}
-  enemyParty: {fileID: 11400000, guid: cd66e2c7a578a6948a40e9c3e07eb317, type: 2}
+  enemyParty: {fileID: 11400000, guid: 1f0b44dd203fd4c498a2d00e3432b575, type: 2}
 --- !u!4 &417176095
 Transform:
   m_ObjectHideFlags: 0
@@ -2293,7 +2293,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1148860395}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 663.30536, y: 181.28006, z: 3.1307373}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

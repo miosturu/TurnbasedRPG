@@ -21,6 +21,7 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     public int actionsLeft = 1;
 
     [Header("Other")]
+    [SerializeField] private PlayerHpUIManager playerHpUIManager;
     public GameObject highlight;
     public SpriteRenderer sprite;
     public int team;
@@ -37,6 +38,8 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
         if (currentHp > maxHp)
             currentHp = maxHp;
 
+        playerHpUIManager.ChangeStatusBarWidth(currentHp);
+
         Debug.Log("Healing for " + amount + " HP. Current HP.:" + currentHp);
     }
 
@@ -47,11 +50,14 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     /// <param name="amount">Damage die</param>
     public void TakeDamage(int amount)
     {
-        int reduction = (int)Random.Range(1.0f, (float)armorDie);
+        int reduction = new DiceRoller().RollDice(1, armorDie);
+
+        Debug.Log("Damage roll: " + amount + ". Armor roll: " + reduction);
 
         if (amount - reduction > 0)
         {
             currentHp -= amount;
+            playerHpUIManager.ChangeStatusBarWidth(currentHp);
             Debug.Log("Took " + amount + " damage. But damage was reduced by " + reduction + " points. Current HP: " + currentHp);
         }
         else

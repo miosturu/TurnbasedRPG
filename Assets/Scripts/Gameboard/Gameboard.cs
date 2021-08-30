@@ -262,7 +262,7 @@ public class Gameboard : MonoBehaviour
         while(tileRegions.Count > 0)
         {
             current = tileRegions.Dequeue();
-            Debug.Log(current.name);
+            // Debug.Log(current.name);
             // Logic of the map generations goes here
 
             int index = 0;
