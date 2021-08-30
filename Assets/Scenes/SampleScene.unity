@@ -389,6 +389,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7501daeffd21c754b9edf046d7bdb53e, type: 2}
   tilesB:
   - {fileID: 11400000, guid: 7501daeffd21c754b9edf046d7bdb53e, type: 2}
+  - {fileID: 11400000, guid: 8d8e5116d211a2e43be213044cd83ec1, type: 2}
   tilesC:
   - {fileID: 11400000, guid: 90f24d9a56eae9a4681757ed2d004f0e, type: 2}
   - {fileID: 11400000, guid: 7501daeffd21c754b9edf046d7bdb53e, type: 2}
@@ -397,6 +398,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8acc6766fe3484847afd7bd909356504, type: 2}
   tilesE:
   - {fileID: 11400000, guid: 7501daeffd21c754b9edf046d7bdb53e, type: 2}
+  - {fileID: 11400000, guid: fc8034de35223064c8b1491fdbffef94, type: 2}
   tilesF:
   - {fileID: 11400000, guid: 7501daeffd21c754b9edf046d7bdb53e, type: 2}
   tilesUniversal:
@@ -872,7 +874,7 @@ MonoBehaviour:
   validTargets: []
   playerActionsLeftOnTurn: 0
   partyManager: {fileID: 417176096}
-  enemyParty: {fileID: 11400000, guid: 1f0b44dd203fd4c498a2d00e3432b575, type: 2}
+  enemyParty: {fileID: 11400000, guid: cd66e2c7a578a6948a40e9c3e07eb317, type: 2}
 --- !u!4 &417176095
 Transform:
   m_ObjectHideFlags: 0

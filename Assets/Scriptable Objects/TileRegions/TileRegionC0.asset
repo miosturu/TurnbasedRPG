@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d4af9a6b4519dd40913d561d6f60573, type: 3}
   m_Name: TileRegionC0
   m_EditorClassIdentifier: 
-  region: 0
+  region: 2
   regionH: 3
   regionW: 3
   tiles: 000000000000000000000000000000000000000001000000000000000000000000000000

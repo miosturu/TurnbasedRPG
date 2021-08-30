@@ -336,6 +336,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("Action was done");
             playerActionsLeftOnTurn -= selectedAction.actionCost;
             selectedAction = null;
+            OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, false));
         }
         else
         {
