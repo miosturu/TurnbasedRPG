@@ -72,6 +72,7 @@
     <Compile Include="Assets\Scripts\Player Actions\ActionProtectOther.cs" />
     <Compile Include="Assets\Scripts\Player Management\PlayerGamePiece.cs" />
     <Compile Include="Assets\Scripts\Utility\PlayerType.cs" />
+    <Compile Include="Assets\Scripts\UI\PlayerHpUIManager.cs" />
     <Compile Include="Assets\Scripts\Gameboard\Gameboard.cs" />
     <Compile Include="Assets\Scripts\Gameboard\Tile.cs" />
     <Compile Include="Assets\Scripts\Player Actions\ActionDoDamage.cs" />
@@ -79,7 +80,8 @@
     <Compile Include="Assets\Scripts\Utility\TileRegion.cs" />
     <Compile Include="Assets\Scripts\Scritable Object Scripts\EnemyPartyScriptableObject.cs" />
     <Compile Include="Assets\Scripts\AI\EnemyAI.cs" />
-    <Compile Include="Assets\Scripts\UI\PlayerHpUIManager.cs" />
+    <Compile Include="Assets\Scripts\Utility\StatusEffect.cs" />
+    <Compile Include="Assets\Scripts\Player Management\StatusEffectManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

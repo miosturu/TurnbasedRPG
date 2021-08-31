@@ -13,9 +13,10 @@ public class DiceRoller
 
         for (int i = 0; i < numberOfDice; i++)
         {
-            //Debug.Log("<color=red>Rolling die</color>");
-            total += (int)Random.Range(1f, (float) faces);
+            total += (int)Random.Range(1, faces - 1);
         }
+
+        //Debug.Log("<color=red>Total: </color>" + total);
 
         return total;
     }
