@@ -239,7 +239,7 @@ public class EnemyAI
     /// <summary>
     /// Fall off fucntion for calculating the spread of weight from players.
     /// This function could be any kind of functions as long as it returns float.
-    /// At the movement the fdunction is sigmoid function but more tests need to be made the get the best fit.
+    /// At the movement the function is sigmoid function but more tests need to be made the get the best fit.
     /// </summary>
     /// <param name="a">Input</param>
     /// <returns>Output of the fucntion</returns>
