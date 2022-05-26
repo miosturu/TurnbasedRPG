@@ -78,4 +78,13 @@ public class Tile : MonoBehaviour
     {
         return GetComponentInParent<Gameboard>().map;
     }
+
+
+    /// <summary>
+    /// Create new list of edges.
+    /// </summary>
+    public void ResetEdges()
+    {
+        edges = new List<Tile>();
+    }
 }

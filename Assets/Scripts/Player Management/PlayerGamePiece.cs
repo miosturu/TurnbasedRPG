@@ -52,13 +52,13 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     {
         int reduction = new DiceRoller().RollDice(1, armorDie);
 
-        Debug.Log("Damage roll: " + amount + ". Armor roll: " + reduction);
+        // Debug.Log("Damage roll: " + amount + ". Armor roll: " + reduction);
 
         if (amount - reduction > 0)
         {
             currentHp -= amount;
             playerHpUIManager.ChangeStatusBarWidth(currentHp);
-            Debug.Log("Took " + amount + " damage. But damage was reduced by " + reduction + " points. Current HP: " + currentHp);
+            Debug.Log(name + " took " + amount + " damage.");
         }
         else
         {
@@ -68,7 +68,7 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
         if (currentHp <= 0)
         {
             // Player's character dies
-            Debug.Log("Player " + name + " has died");
+            Debug.Log(name + " took " + amount + " damage and died");
             GameObject.Find("GameManager").GetComponent<GameManager>().RemovePlayer(this);
             gameObject.SetActive(false);
             enabled = false;
@@ -206,5 +206,15 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     public PlayerType GetPlayerType()
     {
         return playerType;
+    }
+
+
+    /// <summary>
+    /// Set token's team.
+    /// </summary>
+    /// <param name="teamNumber">New team number. For human it's 0, for AI it's 1.</param>
+    public void SetPlayerTeam(int teamNumber)
+    {
+        team = teamNumber;
     }
 }

@@ -15,6 +15,6 @@ MonoBehaviour:
   actionName: Power shot
   actionIcon: {fileID: 21300000, guid: d097f42c2f43e1a48aeecd3a78b3662c, type: 3}
   actionDescription: 'Damage die: {0} $Range: {1}'
-  damageDie: 6
+  damageDie: 8
   range: 5
   needsLineOfSight: 1

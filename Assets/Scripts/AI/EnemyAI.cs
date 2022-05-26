@@ -7,6 +7,8 @@ using UnityEngine;
 /// Very basic chase AI. At the movement the AI can't think furter than its own turn. Maybe in the future one could implement Alpha-Beta-pruning.
 /// The AI can't think of a way to get around a corner.
 /// Also one needs to figure out how to take in the account different kinds of units, such as ranged and melee, because it would be silly if ranged player tries to do melee.
+/// 
+/// TODO: Maybe create interface that can accomodate both this and ML agent.
 /// </summary>
 public class EnemyAI
 {
@@ -18,6 +20,8 @@ public class EnemyAI
     private GameManager gameManager;
     private IGamePiece currentGamePiece;
 
+    [Header("Visual")]
+    [SerializeField] private float aiWaitTime = 0.1f;
 
     [Header("Evaluation")]
     private float[,] evaluation;
@@ -77,9 +81,10 @@ public class EnemyAI
 
         //Debug.Log("Target tile: " + destination.name);
 
-        yield return new WaitForSeconds(.75f);
+        yield return new WaitForSeconds(aiWaitTime);
         MoveToken(destination);
-        yield return new WaitForSeconds(1f);
+        //DoSelectedAction();
+        yield return new WaitForSeconds(aiWaitTime);
         gameManager.EndTurn();
     }
 
@@ -103,6 +108,7 @@ public class EnemyAI
                 catch
                 {
                     Debug.Log("Error: " + tile.name + " has no player");
+                    //throw new Exception("Error: " + tile.name + " has no player");
                 }
             }
         }
@@ -239,12 +245,27 @@ public class EnemyAI
     /// <summary>
     /// Fall off fucntion for calculating the spread of weight from players.
     /// This function could be any kind of functions as long as it returns float.
-    /// At the movement the fdunction is sigmoid function but more tests need to be made the get the best fit.
+    /// At the movement the function is sigmoid function but more tests need to be made the get the best fit.
     /// </summary>
     /// <param name="a">Input</param>
     /// <returns>Output of the fucntion</returns>
     private float FallOffFucntion(float a)
     {
         return  -0.4f * (float)System.Math.Tanh(0.6f * (a - 5.2f)) + 0.6f;
+    }
+
+
+    // TODO
+    public void DoSelectedAction()
+    {
+        gameManager.selectedAction = currentGamePiece.GetActions()[0];
+        gameManager.GetValidTargets();
+        if (gameManager.validTargets.Count > 0)
+            try
+            {
+                gameManager.DoSelectedAction(gameManager.currentPlayer.GetGameObject().GetComponentInParent<Tile>(), gameManager.validTargets[0]);
+            }
+            catch { }
+            
     }
 }

@@ -6,17 +6,18 @@ using UnityEngine.UI;
 public class Gameboard : MonoBehaviour
 {
     [Header("Map visual options")]
-    public TileScriptableObject[] availableTiles;
+    public TileScriptableObject[] availableTiles; // Stores the tile prefabs that are used to generate the level.
 
     [Header("Map generation options")]
 
     public int mapW = 6, mapH = 9;
     [SerializeField] private GameObject[] tiles; // What tiles are available to be placed // TODO maybe change to just GameObject prefab
     public GameObject[,] map;  // What tiles are on the gameboard
-    public Dictionary<Tile, List<Tile>> graph;
+    public Dictionary<Tile, List<Tile>> graph; // Stores all the connections of the gameboard
 
-    private readonly int[,] directions = new int[,] { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 }, { -1, 1 }, { 1, 1 }, { 1, -1 }, { -1, -1 } };
+    private readonly int[,] directions = new int[,] { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 }, { -1, 1 }, { 1, 1 }, { 1, -1 }, { -1, -1 } }; // Used to generate the graph. This is looped to check adjacent tiles.
 
+    // The tile regions' tiles
     [Header("A")]
     [SerializeField] private List<TileRegionScriptableObject> tilesA = new List<TileRegionScriptableObject>();
 
@@ -38,7 +39,7 @@ public class Gameboard : MonoBehaviour
     [Header("Universal")]
     [SerializeField] private List<TileRegionScriptableObject> tilesUniversal = new List<TileRegionScriptableObject>();
 
-    private List<List<TileRegionScriptableObject>> metaList;
+    private List<List<TileRegionScriptableObject>> metaList; // List of all the tile lists.
 
     // Start is called before the first frame update
     void Start()
@@ -145,37 +146,14 @@ public class Gameboard : MonoBehaviour
         }
 
         // Generates abstract graph for pathfinding
-        for (int i = 0; i < mapH; i++) // Z
-        {
-            for (int j = 0; j < mapW; j++) // X
-            {
-                Tile node = map[j, i].GetComponent<Tile>();
-                List<Tile> neighbors = new List<Tile>();
-                int nodeX = node.xCoord;
-                int nodeZ = node.zCoord;
-
-                for (int k = 0; k < directions.Length; k++)
-                {
-                    try
-                    {
-                        Tile potentialNeigbor = map[nodeX + directions[k, 0],
-                                                    nodeZ + directions[k, 1]].GetComponent<Tile>();
-
-                        if (potentialNeigbor.isWalkable)
-                        {
-                            node.edges.Add(potentialNeigbor);
-                            neighbors.Add(potentialNeigbor);
-                        }
-                    }
-                    catch { /* No edge in that direction*/ }
-                }
-                graph.Add(node, neighbors);
-            }
-        }
+        GenerateGraph();
     }
 
 
-    private void GenerateBlankLevel() // TODO somekind of random level generation like in Splunky OR read from text OR TBoI-style
+    /// <summary>
+    /// Generate level where everything is made out of ground tiles.
+    /// </summary>
+    private void GenerateBlankLevel()
     {
         float xPos = 0;
         float zPos = 0;
@@ -201,6 +179,105 @@ public class Gameboard : MonoBehaviour
             zPos += 1;
             xPos = 0;
         }
+
+        // Generates abstract graph for pathfinding
+        GenerateGraph();
+    }
+
+
+    /// <summary>
+    /// Generate random level from "TileRegionSO"s.
+    /// Gameboard is assumed to be 6x9 made out of 3x3 chunks.
+    /// The generation begins from bottom left to top right.
+    /// This method goes each region one by one and creates new tiles.
+    /// This method should be called only once at the begining.
+    /// </summary>
+    private void GenerateRandomLevel()
+    {
+        Queue<TileRegionScriptableObject> tileRegions = SelectRandomTileRegions(); // Get the tiles that will be placed on the gameboard
+
+        TileRegionScriptableObject current;
+
+        float offSetX = 0; // Off sets for generating map one region at the time
+        float offSetZ = 0;
+
+        while(tileRegions.Count > 0) // Go through every region 
+        {
+            current = tileRegions.Dequeue();
+            // Debug.Log(current.name);
+            // Logic of the map generations goes here
+
+            int index = 0; // Used for going over single region at the time
+
+            for (int i = 0; i < current.regionH; i++) // Looping through region
+            {
+                for (int j = 0; j < current.regionW; j++)
+                {
+                    GameObject tileObject = null;
+                    TileScriptableObject tileSO = null;
+
+                    TileType tileType = current.tiles[index];
+
+                    switch (tileType) // Get the current tile type
+                    {
+                        case TileType.Walkable:
+                            tileSO = availableTiles[0];
+                            break;
+                        case TileType.Wall:
+                            tileSO = availableTiles[1];
+                            break;
+                        case TileType.Halfhight:
+                            tileSO = availableTiles[2];
+                            break;
+                        default:
+                            Debug.Log("Error: unknown tile type");
+                            break;
+                    }
+
+                    index++;
+
+                    // Create new tile, change it's type and name it
+                    tileObject = Instantiate(tiles[0]);
+                    tileObject.GetComponent<Tile>().ChangeTileType(tileSO);
+                    tileObject.name = (j + offSetX) + ", " + (i + offSetZ);
+
+                    map[j + (int)offSetX, i + (int)offSetZ] = tileObject; // In the map array, set the newly created tile
+
+                    // Set tile's coordinate
+                    Tile tile = tileObject.GetComponent<Tile>();
+                    tile.xCoord = (j + (int)offSetX);
+                    tile.zCoord = (i + (int)offSetZ);
+
+                    // Place the tile in the game world to it's correct position
+                    tileObject.transform.position = new Vector3((j + (int)offSetX), 0.0f, (i + (int)offSetZ));
+                    tileObject.transform.parent = transform;
+                }
+            }
+
+            // Used for looping through the tile regions
+            // It asumes that the world is 6x9 thus when horizontal off set is not 0, then new go up one region and start over
+            if (offSetX == 0)
+            {
+                offSetX += current.regionW;
+            }
+            else
+            {
+                offSetZ += current.regionH;
+                offSetX = 0;
+            }
+        }
+
+        // Generates abstract graph for pathfinding
+        GenerateGraph();
+    }
+
+
+    /// <summary>
+    /// Generate graph for pathfinding.
+    /// </summary>
+    private void GenerateGraph()
+    {
+        graph.Clear(); // If the map is reset, then we have to clear the original graph.
 
         // Generates abstract graph for pathfinding
         for (int i = 0; i < mapH; i++) // Z
@@ -234,14 +311,15 @@ public class Gameboard : MonoBehaviour
 
 
     /// <summary>
-    /// Generate random level from "TileRegionSO"s.
+    /// Select random tiles for each tile region. 
     /// </summary>
-    private void GenerateRandomLevel()
+    /// <returns>Queue if tile regions from A to F</returns>
+    private Queue<TileRegionScriptableObject> SelectRandomTileRegions()
     {
         Queue<TileRegionScriptableObject> tileRegions = new Queue<TileRegionScriptableObject>();
 
         int listIndex = 0;
-        foreach(List<TileRegionScriptableObject> list in metaList) // Select random tile regions.
+        foreach (List<TileRegionScriptableObject> list in metaList) // Select random tile for regions.
         {
             try
             {
@@ -254,29 +332,42 @@ public class Gameboard : MonoBehaviour
             listIndex++;
         }
 
+        return tileRegions;
+    }
+
+
+    /// <summary>
+    /// Reset the previous map and generate new one. 
+    /// No new gameobjects area created, rather pre existing tiles are changed to new ones.
+    /// </summary>
+    public void ResetGameBoard()
+    {
+        foreach(GameObject tile in map)
+        {
+            tile.GetComponent<Tile>().ResetEdges();
+        }
+
+        Queue<TileRegionScriptableObject> regions = SelectRandomTileRegions();
+
         TileRegionScriptableObject current;
 
-        float offSetX = 0;
-        float offSetZ = 0;
+        int offSetX = 0; // Off sets for generating map one region at the time
+        int offSetZ = 0;
 
-        while(tileRegions.Count > 0)
+        while (regions.Count > 0)
         {
-            current = tileRegions.Dequeue();
-            // Debug.Log(current.name);
-            // Logic of the map generations goes here
+            current = regions.Dequeue();
 
-            int index = 0;
+            int index = 0; // For looping the tile region
 
             for (int i = 0; i < current.regionH; i++)
             {
                 for (int j = 0; j < current.regionW; j++)
                 {
-                    GameObject tileObject = null;
                     TileScriptableObject tileSO = null;
-
                     TileType tileType = current.tiles[index];
 
-                    switch (tileType)
+                    switch (tileType) // Get the current tile type
                     {
                         case TileType.Walkable:
                             tileSO = availableTiles[0];
@@ -292,20 +383,8 @@ public class Gameboard : MonoBehaviour
                             break;
                     }
 
+                    map[j + offSetX, i + offSetZ].GetComponent<Tile>().ChangeTileType(tileSO);
                     index++;
-
-                    tileObject = Instantiate(tiles[0]);
-                    tileObject.GetComponent<Tile>().ChangeTileType(tileSO);
-
-                    tileObject.name = (j + offSetX) + ", " + (i + offSetZ);
-                    map[j + (int)offSetX, i + (int)offSetZ] = tileObject;
-
-                    Tile tile = tileObject.GetComponent<Tile>();
-                    tile.xCoord = (j + (int)offSetX);
-                    tile.zCoord = (i + (int)offSetZ);
-
-                    tileObject.transform.position = new Vector3((j + (int)offSetX), 0.0f, (i + (int)offSetZ));
-                    tileObject.transform.parent = transform;
                 }
             }
 
@@ -320,34 +399,6 @@ public class Gameboard : MonoBehaviour
             }
         }
 
-
-        // Generates abstract graph for pathfinding
-        for (int i = 0; i < mapH; i++) // Z
-        {
-            for (int j = 0; j < mapW; j++) // X
-            {
-                Tile node = map[j, i].GetComponent<Tile>();
-                List<Tile> neighbors = new List<Tile>();
-                int nodeX = node.xCoord;
-                int nodeZ = node.zCoord;
-
-                for (int k = 0; k < directions.Length; k++)
-                {
-                    try
-                    {
-                        Tile potentialNeigbor = map[nodeX + directions[k, 0],
-                                                    nodeZ + directions[k, 1]].GetComponent<Tile>();
-
-                        if (potentialNeigbor.isWalkable)
-                        {
-                            node.edges.Add(potentialNeigbor);
-                            neighbors.Add(potentialNeigbor);
-                        }
-                    }
-                    catch { /* No edge in that direction*/ }
-                }
-                graph.Add(node, neighbors);
-            }
-        }
+        GenerateGraph();
     }
 }
