@@ -31,7 +31,7 @@ public class ActionDoDamage : ActionScriptableObject
 
     /// <summary>
     /// Check if the target is valid for attacking. Requirements are:
-    ///     1) Target tile is empty
+    ///     1) Target tile is not empty
     ///     2) Target's and origin's teams are different
     ///     3) Not targeting self
     ///     4) Target is within line of sight
@@ -43,7 +43,7 @@ public class ActionDoDamage : ActionScriptableObject
     {
         if 
         (
-            target.currentObject != null && // Target tile is empty
+            target.currentObject != null && // Target tile is not empty
             (origin.GetComponentInChildren<IGamePiece>().GetPlayerTeam() != target.GetComponentInChildren<IGamePiece>().GetPlayerTeam()) && // Target's and origin's teams are different
             origin != target && // Not targeting self
             (!needsLineOfSight || new LineOfSight().TileCanBeSeenAndIsInDistance(origin.GetGameboardOfTile(), origin, target, range)) // Target is within line of sight

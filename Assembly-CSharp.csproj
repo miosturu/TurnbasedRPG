@@ -82,6 +82,7 @@
     <Compile Include="Assets\Scripts\Utility\TileRegion.cs" />
     <Compile Include="Assets\Scripts\Scritable Object Scripts\EnemyPartyScriptableObject.cs" />
     <Compile Include="Assets\Scripts\AI\EnemyAI.cs" />
+    <Compile Include="Assets\Scripts\AI\MLAgent.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -308,6 +309,36 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Unsafe">
+      <HintPath>Library\PackageCache\com.unity.burst@1.6.0\Unity.Burst.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf">
+      <HintPath>Library\PackageCache\com.unity.barracuda@2.3.1-preview\Barracuda\Runtime\Plugins\ProtoBuffer\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Interactive.Async">
+      <HintPath>D:\Unity ML\ml-agents-release_19\com.unity.ml-agents\Plugins\ProtoBuffer\System.Interactive.Async.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Cecil">
+      <HintPath>Library\PackageCache\com.unity.burst@1.6.0\Unity.Burst.CodeGen\Unity.Burst.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Cecil.Pdb">
+      <HintPath>Library\PackageCache\com.unity.burst@1.6.0\Unity.Burst.CodeGen\Unity.Burst.Cecil.Pdb.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Abstractions.TestingHelpers">
+      <HintPath>D:\Unity ML\ml-agents-release_19\com.unity.ml-agents\Plugins\System.IO.Abstractions.TestingHelpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Abstractions">
+      <HintPath>D:\Unity ML\ml-agents-release_19\com.unity.ml-agents\Plugins\System.IO.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Grpc.Core">
+      <HintPath>D:\Unity ML\ml-agents-release_19\com.unity.ml-agents\Plugins\ProtoBuffer\Grpc.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Cecil.Mdb">
+      <HintPath>Library\PackageCache\com.unity.burst@1.6.0\Unity.Burst.CodeGen\Unity.Burst.Cecil.Mdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Cecil.Rocks">
+      <HintPath>Library\PackageCache\com.unity.burst@1.6.0\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>D:\Unity Editor\Editors\2020.3.25f1\Editor\Data\NetStandard\ref\2.0.0\netstandard.dll</HintPath>
@@ -684,8 +715,50 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Barracuda.BurstBLAS">
+      <HintPath>Library\ScriptAssemblies\Unity.Barracuda.BurstBLAS.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Barracuda.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Barracuda.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Barracuda.MacBLAS">
+      <HintPath>Library\ScriptAssemblies\Unity.Barracuda.MacBLAS.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics">
+      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Barracuda">
+      <HintPath>Library\ScriptAssemblies\Unity.Barracuda.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst">
+      <HintPath>Library\ScriptAssemblies\Unity.Burst.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Barracuda.ONNX">
+      <HintPath>Library\ScriptAssemblies\Unity.Barracuda.ONNX.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Barracuda.iOSBLAS">
+      <HintPath>Library\ScriptAssemblies\Unity.Barracuda.iOSBLAS.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Unity.ML-Agents.Editor.csproj">
+      <Project>{CDCDAE8C-7E3C-F67C-DEBE-970FC7C7ABE1}</Project>
+      <Name>Unity.ML-Agents.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.ML-Agents.csproj">
+      <Project>{36BC4A65-CEC1-F591-22DA-1FAAC9ED9BF3}</Project>
+      <Name>Unity.ML-Agents</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.ML-Agents.CommunicatorObjects.csproj">
+      <Project>{F95C820F-9FDE-49B5-25E0-1844137201C6}</Project>
+      <Name>Unity.ML-Agents.CommunicatorObjects</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

@@ -18,6 +18,8 @@ public class EnemyAI
     private GameManager gameManager;
     private IGamePiece currentGamePiece;
 
+    [Header("Visual")]
+    [SerializeField] private float aiWaitTime = 0.1f;
 
     [Header("Evaluation")]
     private float[,] evaluation;
@@ -77,9 +79,10 @@ public class EnemyAI
 
         //Debug.Log("Target tile: " + destination.name);
 
-        yield return new WaitForSeconds(.75f);
+        yield return new WaitForSeconds(aiWaitTime);
         MoveToken(destination);
-        yield return new WaitForSeconds(1f);
+        //DoSelectedAction();
+        yield return new WaitForSeconds(aiWaitTime);
         gameManager.EndTurn();
     }
 
@@ -103,6 +106,7 @@ public class EnemyAI
                 catch
                 {
                     Debug.Log("Error: " + tile.name + " has no player");
+                    //throw new Exception("Error: " + tile.name + " has no player");
                 }
             }
         }
@@ -246,5 +250,20 @@ public class EnemyAI
     private float FallOffFucntion(float a)
     {
         return  -0.4f * (float)System.Math.Tanh(0.6f * (a - 5.2f)) + 0.6f;
+    }
+
+
+    // TODO
+    public void DoSelectedAction()
+    {
+        gameManager.selectedAction = currentGamePiece.GetActions()[0];
+        gameManager.GetValidTargets();
+        if (gameManager.validTargets.Count > 0)
+            try
+            {
+                gameManager.DoSelectedAction(gameManager.currentPlayer.GetGameObject().GetComponentInParent<Tile>(), gameManager.validTargets[0]);
+            }
+            catch { }
+            
     }
 }

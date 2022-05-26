@@ -207,4 +207,14 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     {
         return playerType;
     }
+
+
+    /// <summary>
+    /// Set token's team.
+    /// </summary>
+    /// <param name="teamNumber">New team number. For human it's 0, for AI it's 1.</param>
+    public void SetPlayerTeam(int teamNumber)
+    {
+        team = teamNumber;
+    }
 }
