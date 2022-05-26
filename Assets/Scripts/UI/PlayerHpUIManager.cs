@@ -30,9 +30,24 @@ public class PlayerHpUIManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Change the width of the UI element.
+    /// </summary>
+    /// <param name="currentHp"></param>
     public void ChangeStatusBarWidth(int currentHp)
     {
         float width = currentHp * hpBarRatio * hpBarWidth;
+
+        hpStatusBar.rectTransform.sizeDelta = new Vector2(width, hpBarHeight);
+    }
+
+
+    /// <summary>
+    /// Reset the width of the HP-bar
+    /// </summary>
+    public void ResetStatusBarWidth()
+    {
+        float width = totalHP * hpBarRatio * hpBarWidth;
 
         hpStatusBar.rectTransform.sizeDelta = new Vector2(width, hpBarHeight);
     }

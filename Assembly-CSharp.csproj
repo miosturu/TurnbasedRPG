@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{F25FE87B-DFD3-EDDB-2B66-10287145657A}</ProjectGuid>
+    <ProjectGuid>{B7619EBB-7A19-2F85-9653-0AE0ED464F65}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -748,15 +748,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Unity.ML-Agents.csproj">
-      <Project>{BA4B1D97-8B95-9E8E-6373-B34590E78D32}</Project>
+      <Project>{36BC4A65-CEC1-F591-22DA-1FAAC9ED9BF3}</Project>
       <Name>Unity.ML-Agents</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.ML-Agents.CommunicatorObjects.csproj">
-      <Project>{60CA2CDB-A824-A1BC-B025-FE011C96F6B0}</Project>
+      <Project>{F95C820F-9FDE-49B5-25E0-1844137201C6}</Project>
       <Name>Unity.ML-Agents.CommunicatorObjects</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.ML-Agents.Editor.csproj">
-      <Project>{F21BB183-B907-8752-4CCF-CB372D8C9E3F}</Project>
+      <Project>{CDCDAE8C-7E3C-F67C-DEBE-970FC7C7ABE1}</Project>
       <Name>Unity.ML-Agents.Editor</Name>
     </ProjectReference>
   </ItemGroup>

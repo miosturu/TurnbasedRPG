@@ -310,7 +310,10 @@ public class Gameboard : MonoBehaviour
     }
 
 
-
+    /// <summary>
+    /// Select random tiles for each tile region. 
+    /// </summary>
+    /// <returns>Queue if tile regions from A to F</returns>
     private Queue<TileRegionScriptableObject> SelectRandomTileRegions()
     {
         Queue<TileRegionScriptableObject> tileRegions = new Queue<TileRegionScriptableObject>();
@@ -333,6 +336,10 @@ public class Gameboard : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Reset the previous map and generate new one. 
+    /// No new gameobjects area created, rather pre existing tiles are changed to new ones.
+    /// </summary>
     public void ResetGameBoard()
     {
         foreach(GameObject tile in map)
@@ -380,7 +387,6 @@ public class Gameboard : MonoBehaviour
                     index++;
                 }
             }
-
 
             if (offSetX == 0)
             {

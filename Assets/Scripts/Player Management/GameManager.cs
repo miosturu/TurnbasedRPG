@@ -156,6 +156,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
     // TODO: Make sure atleast one token spawns per team
     private void SelectRandomTokens()
     {
@@ -178,6 +179,8 @@ public class GameManager : MonoBehaviour
             {
                 gp.gameObject.SetActive(true);
                 ModifyToken(gp, tokenPool[(int)UnityEngine.Random.Range(0, 3)]);
+                numberOfPieces[gp.GetPlayerTeam()]++;
+                //gp.gameObject.GetComponent<PlayerHpUIManager>().ChangeStatusBarWidth(gp.GetMaxHp()); // TODO: not working as intended
             }
         }
     }
@@ -471,7 +474,7 @@ public class GameManager : MonoBehaviour
     {
         if (playerActionsLeftOnTurn > 0 && selectedAction.Action(origin, target))
         {
-            Debug.Log("Action was done");
+            // Debug.Log("Action was done");
             playerActionsLeftOnTurn -= selectedAction.actionCost;
             selectedAction = null;
             OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, false));
@@ -610,12 +613,21 @@ public class GameManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Reset the entire game as if the game was just started.
+    /// </summary>
     public void ResetGame()
     {
-        gameboard.ResetGameBoard();
+        EndTurn(); // We make sure that the UI will be reset
+
+        gameboard.ResetGameBoard(); // Reset the game board's tiles
 
         // After reset we have to regenerate movement area and show it
         ResetMovementArea();
+
+        // Reset the number of tokens per team
+        numberOfPieces[0] = 0;
+        numberOfPieces[1] = 0;
 
         // Pick new teams and reset the positions
         ResetPlayerTokenPositions();
@@ -626,6 +638,9 @@ public class GameManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Reset all 18 tokens to their original positions.
+    /// </summary>
     private void ResetPlayerTokenPositions()
     {
         foreach(GameObject tile in gameboard.map)

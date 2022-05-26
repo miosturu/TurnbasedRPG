@@ -15,6 +15,6 @@ MonoBehaviour:
   actionName: Attack
   actionIcon: {fileID: 21300000, guid: d659e8bc068404149bd6a2065b83a511, type: 3}
   actionDescription: 'Damage die: {0} $Range: {1}'
-  damageDie: 4
+  damageDie: 6
   range: 1
   needsLineOfSight: 1

@@ -7,6 +7,8 @@ using UnityEngine;
 /// Very basic chase AI. At the movement the AI can't think furter than its own turn. Maybe in the future one could implement Alpha-Beta-pruning.
 /// The AI can't think of a way to get around a corner.
 /// Also one needs to figure out how to take in the account different kinds of units, such as ranged and melee, because it would be silly if ranged player tries to do melee.
+/// 
+/// TODO: Maybe create interface that can accomodate both this and ML agent.
 /// </summary>
 public class EnemyAI
 {
