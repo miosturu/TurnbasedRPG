@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// When the turn ends, this class is used to communicate to the UI to turn on or off some UI elements.
+/// </summary>
 public class OnEndTurnEventArgs : EventArgs
 {
     private bool isPlayerTurn;

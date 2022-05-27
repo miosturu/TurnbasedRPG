@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Healing action. Create a new scriptable object in the editor and change the settings to your liking.
+/// The healer can only heal the tokens on the same team that are in range.
+/// What one can choose in a healing action:
+///     1) How much the action heals.
+///     2) How far one can heal the target.
+///     3) The target needs to be seen.
+/// </summary>
 [CreateAssetMenu(menuName = "Scriptable Objects/HealSingleTarget")]
 public class ActionHealSigleTarget : ActionScriptableObject
 {

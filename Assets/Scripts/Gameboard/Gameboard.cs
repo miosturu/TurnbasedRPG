@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// The whole game is played on 6x9 gameboard.
+/// Each map is made out of 3x3 tile regions when randomly generated but one can choose to make their own.
+/// This class allows resetting the gameboard.
+/// </summary>
 public class Gameboard : MonoBehaviour
 {
     [Header("Map visual options")]
@@ -274,6 +279,7 @@ public class Gameboard : MonoBehaviour
 
     /// <summary>
     /// Generate graph for pathfinding.
+    /// This works by going through all the tiles and checking if the neighbor is walkable.
     /// </summary>
     private void GenerateGraph()
     {
@@ -311,7 +317,10 @@ public class Gameboard : MonoBehaviour
 
 
     /// <summary>
-    /// Select random tiles for each tile region. 
+    /// Select random tiles for each tile region.
+    /// Each map is made out of 3x3 tile regions. This was made bacause the coder or desinger then can create pre made areas.
+    /// This solution also guarantees walkable path from team 0 to team 1 and vice versa IF the tiles regions are made that way.
+    /// One should be mindfull og this when creating different tile regions.
     /// </summary>
     /// <returns>Queue if tile regions from A to F</returns>
     private Queue<TileRegionScriptableObject> SelectRandomTileRegions()
@@ -337,7 +346,7 @@ public class Gameboard : MonoBehaviour
 
 
     /// <summary>
-    /// Reset the previous map and generate new one. 
+    /// Reset the previous map and generate new one randomly. 
     /// No new gameobjects area created, rather pre existing tiles are changed to new ones.
     /// </summary>
     public void ResetGameBoard()

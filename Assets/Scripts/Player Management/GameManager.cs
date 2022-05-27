@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
     public EnemyPartyScriptableObject enemyParty;
     [SerializeField] private bool trainingMode = false;
     [SerializeField] private HeroScriptableObject[] tokenPool; // Used for random selection of tokens
-    [SerializeField] private float tokenProb; // How likely is it to get token
+    [SerializeField][Range(0, 100)] private int tokenProb; // How likely is it to get token in percent
 
     private void Start()
     {
@@ -134,6 +134,7 @@ public class GameManager : MonoBehaviour
 
     /// <summary>
     /// Add dummy tokens that can be modified later.
+    /// Both teams can have up to 9 tokens.
     /// </summary>
     private void AddDummyTokens()
     {
@@ -142,7 +143,7 @@ public class GameManager : MonoBehaviour
         {
             for (int z = 0; z < 3; z++)
             {
-                AddPlayer(0, x, z); // TODO: Add overload to create dummy tokens
+                AddPlayer(0, x, z);
             }
         }
 
@@ -151,7 +152,7 @@ public class GameManager : MonoBehaviour
         {
             for (int z = 0; z < 3; z++)
             {
-                AddPlayer(1, x + 3, z + 6); // TODO: Add overload to create dummy tokens
+                AddPlayer(1, x + 3, z + 6);
             }
         }
     }
@@ -164,6 +165,7 @@ public class GameManager : MonoBehaviour
 
         bool[] teamsHaveOne = new bool[] { false, false };
 
+        // Remove all players from tiles so the tiles are made free
         foreach (PlayerGamePiece gp in playerTokenPositions.Keys)
         {
             gp.gameObject.SetActive(false);
@@ -173,9 +175,26 @@ public class GameManager : MonoBehaviour
             gameboard.map[x, z].GetComponent<Tile>().currentObject = null;
         }
 
+        // Go through each token and have a %-chance to add it. Both teams will get atleast one token
         foreach (PlayerGamePiece gp in playerTokenPositions.Keys)
         {
-            if (new DiceRoller().RollDice(1, 20) < 15)
+            if (!teamsHaveOne[0] && gp.team != 1) // Team 0 doesn't have a player we add it 
+            {
+                gp.gameObject.SetActive(true);
+                ModifyToken(gp, tokenPool[(int)UnityEngine.Random.Range(0, tokenPool.Length)]);
+                numberOfPieces[gp.GetPlayerTeam()]++;
+                teamsHaveOne[0] = true;
+                // Debug.Log("Added player to team 0");
+            }
+            else if (!teamsHaveOne[1] && gp.team != 0) // Team 1 doesn't have a player we add it 
+            {
+                gp.gameObject.SetActive(true);
+                ModifyToken(gp, tokenPool[(int)UnityEngine.Random.Range(0, tokenPool.Length)]);
+                numberOfPieces[gp.GetPlayerTeam()]++;
+                teamsHaveOne[1] = true;
+                // Debug.Log("Added player to team 1");
+            }
+            else if (new DiceRoller().RollDice(1, 100) <= tokenProb) // If atleast both teams have atleast one then we can add a player to both teams
             {
                 gp.gameObject.SetActive(true);
                 ModifyToken(gp, tokenPool[(int)UnityEngine.Random.Range(0, 3)]);
@@ -210,6 +229,7 @@ public class GameManager : MonoBehaviour
 
     /// <summary>
     /// Set enemy players on gameboard from pre defined party.
+    /// This is a seperate function because one could forget to add enemy party at the editor.
     /// </summary>
     public void SetEnemyTokens()
     {

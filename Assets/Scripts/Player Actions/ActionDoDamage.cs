@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Attack action. Create a new scriptable object in the editor and change the settings to your liking.
+/// The attacker can only attack tokens on the enemy team that are in range.
+/// What one can choose in a attack action:
+///     1) How much the action heals.
+///     2) How far one can heal the target.
+///     3) The target needs to be seen.
+/// </summary>
 [CreateAssetMenu(menuName = "Scriptable Objects/DoDamage")]
 public class ActionDoDamage : ActionScriptableObject
 {

@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Each toke has its own HP bar to communicate to the player the token's current health status.
+/// This is made with seperate UI elements over the token.
+/// </summary>
 public class PlayerHpUIManager : MonoBehaviour
 {
     [SerializeField] private Canvas canvas;

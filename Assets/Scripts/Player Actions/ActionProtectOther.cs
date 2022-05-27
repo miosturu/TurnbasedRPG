@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Not implemented. Idea was to make this action function like the protect action from 'Darkest Dungeon'.
+/// </summary>
 [CreateAssetMenu(menuName = "Scriptable Objects/ActionProtectOther")]
 public class ActionProtectOther : ActionScriptableObject
 {

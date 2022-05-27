@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// One can define enemy party if one chooses so.
+/// </summary>
 [CreateAssetMenu(fileName = "EnemyParty", menuName = "Scriptable Objects/EnemyPartyScriptableObject", order = 3)]
 public class EnemyPartyScriptableObject : ScriptableObject
 {

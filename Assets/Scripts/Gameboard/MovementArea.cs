@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Generate the movement area the token can take on its turn. Uses breadth first search.
+/// </summary>
 public class MovementArea
 {
     public Dictionary<Tile, int> GenerateMovementArea(Tile origin, int maxDistance)

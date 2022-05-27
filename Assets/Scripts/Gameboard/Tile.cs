@@ -3,6 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The gameboard is made out of these tiles. The tiles are square tiles with at maximum of 8 neighbors.
+/// Each tile has fallowing information:
+///     1) What the game manager is.
+///     2) What is the tile's coordinate.
+///     3) What are the tile's neighbors or 'edges'.
+///     4) What is the current token on the tile.
+///     5) Is the tile walkable.
+///     6) Can the tile be attacked over.
+/// Tiles also have a highlight game object, that can be turned on and off as wanted.
+/// </summary>
 public class Tile : MonoBehaviour
 {
     private GameManager gameManager;
