@@ -8,7 +8,7 @@ using UnityEngine;
 /// This takes care of player actions, movement, adding and removing players, telling the UI to update, set players to the gameboard, and end turns.
 /// Human player uses number 0 to indicate it, AI player uses 1.
 /// 
-/// TODO: Add way to reset the gameboard
+/// TODO: Add way to reset the gameboard DONE
 /// TODO: Add terminal state detection i.e. the winner detection DONE
 /// </summary>
 public class GameManager : MonoBehaviour
@@ -486,7 +486,8 @@ public class GameManager : MonoBehaviour
 
 
     /// <summary>
-    /// Do selected action.
+    /// Do selected action. This method checks if the player can do omore actions and the action target is valid.
+    /// For example, attacking friendly tokens is not allowed, thus making this making this method do nothing.
     /// </summary>
     /// <param name="origin">Origin tile</param>
     /// <param name="target">Target tile</param>
@@ -675,5 +676,16 @@ public class GameManager : MonoBehaviour
 
             PlacePlayer(gp.gameObject, x, z);
         }
+    }
+
+
+    /// <summary>
+    /// Return current gameboard.
+    /// This method is planned to be used by the AI, as it needs a way to see the gamestate.
+    /// </summary>
+    /// <returns>Returns current gmaboard</returns>
+    public Gameboard GetGameboard()
+    {
+        return gameboard;
     }
 }
