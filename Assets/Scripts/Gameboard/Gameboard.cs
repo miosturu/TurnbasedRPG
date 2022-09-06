@@ -22,6 +22,8 @@ public class Gameboard : MonoBehaviour
 
     private readonly int[,] directions = new int[,] { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 }, { -1, 1 }, { 1, 1 }, { 1, -1 }, { -1, -1 } }; // Used to generate the graph. This is looped to check adjacent tiles.
 
+    private List<float> tileTypeMap; // Used for AI. It requires float array if several elements are wanted. Uses enum's help.
+
     // The tile regions' tiles
     [Header("A")]
     [SerializeField] private List<TileRegionScriptableObject> tilesA = new List<TileRegionScriptableObject>();
@@ -51,6 +53,7 @@ public class Gameboard : MonoBehaviour
     {
         metaList = new List<List<TileRegionScriptableObject>> { tilesA, tilesB, tilesC, tilesD, tilesE, tilesF };
         map = new GameObject[mapW, mapH];
+        tileTypeMap = new List<float>(); // Used for AI
         graph = new Dictionary<Tile, List<Tile>>();
 
         string[,] tiles = { { "_", "_", "_", "#", "#", "#" },
@@ -239,6 +242,8 @@ public class Gameboard : MonoBehaviour
                             break;
                     }
 
+                    tileTypeMap.Add((float)tileType); // Create tile type array that will be used for AI
+
                     index++;
 
                     // Create new tile, change it's type and name it
@@ -392,6 +397,7 @@ public class Gameboard : MonoBehaviour
                             break;
                     }
 
+                    tileTypeMap.Add((float)tileType); // Create tile type array that will be used for AI
                     map[j + offSetX, i + offSetZ].GetComponent<Tile>().ChangeTileType(tileSO);
                     index++;
                 }
@@ -409,5 +415,16 @@ public class Gameboard : MonoBehaviour
         }
 
         GenerateGraph();
+    }
+
+
+    /// <summary>
+    /// Return the map as 2D array of tile types. 
+    /// This method is planned to be used for AI as a part of a vector of observations.
+    /// </summary>
+    /// <returns>2D array of tiles as tile type</returns>
+    public List<float> GetTileTypeMap()
+    {
+        return tileTypeMap;
     }
 }

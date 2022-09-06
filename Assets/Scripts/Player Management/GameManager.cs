@@ -16,7 +16,11 @@ public class GameManager : MonoBehaviour
     // Controlls visuals of the game.
     [Header("Visual")]
     [SerializeField] private Color movementAreaColor;
-    [SerializeField] private int movementAreaColorFallOff; // Further away the tiles are from the origin, lighter the color is. Used for better visualization.
+
+    /// <summary>
+    /// Further away the tiles are from the origin, lighter the color is. Used for better visualization.
+    /// </summary>
+    [SerializeField] private int movementAreaColorFallOff; 
     [SerializeField] private Color validTargetColor; // Color of the valid target when action is selected.
     [SerializeField] private Color[] teamColors;
     [SerializeField] private float playerVisualMovementDelay = 0.25f;
@@ -39,7 +43,11 @@ public class GameManager : MonoBehaviour
     public int playerActionsLeftOnTurn;
     [SerializeField] private PartyManager partyManager;
     [SerializeField] private int[] numberOfPieces = new int[] { 0, 0 }; // Store how many game pieces each team has. First element is for the human player, second one is for the AI
-    public int winnerTeamNumber = -1; // Stores which team is the winner. -1 is no one is, 0 is the player, 1 is the AI.
+
+    /// <summary>
+    /// Stores which team is the winner. -1 is no one is, 0 is the player, 1 is the AI.
+    /// </summary>
+    public int winnerTeamNumber = -1; // 
 
     private Dictionary<PlayerGamePiece, int[]> playerTokenPositions = new Dictionary<PlayerGamePiece, int[]>();
 
@@ -409,7 +417,9 @@ public class GameManager : MonoBehaviour
 
 
     /// <summary>
-    /// Move player to new tile
+    /// Move player to new tile.
+    /// If the tile is not empty, then the token won't move.
+    /// After the token is moved, this function checks if there are other tile that can be moved to.
     /// </summary>
     /// <param name="tile">New tile</param>
     public void MovePlayer(GameObject tile)
@@ -687,5 +697,16 @@ public class GameManager : MonoBehaviour
     public Gameboard GetGameboard()
     {
         return gameboard;
+    }
+
+
+    /// <summary>
+    /// Returns reference to turn manager.
+    /// This function is planned to be used by AI.
+    /// </summary>
+    /// <returns>Reference to turn manager.</returns>
+    public TurnManager GetTurnManager()
+    {
+        return turnManager;
     }
 }
