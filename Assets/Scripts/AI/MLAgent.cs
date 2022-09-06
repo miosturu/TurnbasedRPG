@@ -65,6 +65,7 @@ public class MLAgent : Agent
     private GameManager gameManager;
     private PlayerGamePiece playerGamePiece;
     EnvironmentParameters environmentParameters;
+    private PlayerGamePiece currentGamePiece;
 
     /// <summary>
     /// This is used to interpret the action for movement. 
@@ -113,7 +114,31 @@ public class MLAgent : Agent
     {
         int movementDirection = actions.DiscreteActions[0];
         int actionNumber = actions.DiscreteActions[1];
-        int endTurn = actions.DiscreteActions[2];
+        int actionCoordX = actions.DiscreteActions[2];
+        int actionCoordZ = actions.DiscreteActions[3];
+        int endTurn = actions.DiscreteActions[4];
+
+        // TODO Move token, if failed, set reward as negative value
+        if (movementDirection != -1)
+        {
+            // MOVE PLAYER TO THAT DIRECTION
+                // Get current game piece's location and move it from that location to new one
+
+            
+
+            // IF FAIL THEN NEGATIVE REWARD
+        }
+
+        // TODO Do one of the token's actions, if failed, set reward as negative
+        if (actionNumber != -1)
+        {
+            // DO SELECTED ACTION
+                // Get current game piece's location abd action's target location
+
+            // IF FAIL
+                // NEGATIVE REWARD
+        }
+
 
         if (gameManager.winnerTeamNumber != -1)
         {

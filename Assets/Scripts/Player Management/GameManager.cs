@@ -422,13 +422,16 @@ public class GameManager : MonoBehaviour
     /// After the token is moved, this function checks if there are other tile that can be moved to.
     /// </summary>
     /// <param name="tile">New tile</param>
-    public void MovePlayer(GameObject tile)
+    /// <return>Returns if the token moved</return>
+    public bool MovePlayer(GameObject tile)
     {
         //Debug.Log(tile.name + " " + movementArea.Contains(tile.GetComponent<Tile>()));
 
         // If wanted tile has no other object on it and is in range
         if (!movementArea.ContainsKey(tile.GetComponent<Tile>()) || tile.GetComponent<Tile>().currentObject != null)
-            return;
+        {
+            return false;
+        }
 
         ResetMovementArea();
 
@@ -451,6 +454,8 @@ public class GameManager : MonoBehaviour
         currentPlayer.ReduceMovement(distance);
 
         GenerateMovementArea(); // Generate new movement area
+
+        return true;
     }
 
 
@@ -501,7 +506,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="origin">Origin tile</param>
     /// <param name="target">Target tile</param>
-    public void DoSelectedAction(Tile origin, Tile target)
+    /// <return>Returns if the action succeeded</return>
+    public bool DoSelectedAction(Tile origin, Tile target)
     {
         if (playerActionsLeftOnTurn > 0 && selectedAction.Action(origin, target))
         {
@@ -517,6 +523,7 @@ public class GameManager : MonoBehaviour
                 Debug.Log("Not enough actions left");
             selectedAction = null;
             OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, false));
+            return false;
         }
 
         ResetValidTargets();
@@ -525,6 +532,8 @@ public class GameManager : MonoBehaviour
 
         GenerateMovementArea();
         ShowMovementArea();
+
+        return true;
     }
 
 
@@ -708,5 +717,17 @@ public class GameManager : MonoBehaviour
     public TurnManager GetTurnManager()
     {
         return turnManager;
+    }
+
+
+    /// <summary>
+    /// Return current token's position as Vector2.
+    /// Mainly used by the AI.
+    /// </summary>
+    /// <returns>Current token's position as vector2</returns>
+    public Vector2 GetCurrentTokenCoordinates()
+    {
+        Tile parentTile = currentPlayer.GetGameObject().GetComponentInParent<Tile>();
+        return new Vector2(parentTile.xCoord, parentTile.zCoord);
     }
 }
