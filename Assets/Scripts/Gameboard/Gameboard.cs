@@ -324,8 +324,8 @@ public class Gameboard : MonoBehaviour
     /// <summary>
     /// Select random tiles for each tile region.
     /// Each map is made out of 3x3 tile regions. This was made bacause the coder or desinger then can create pre made areas.
-    /// This solution also guarantees walkable path from team 0 to team 1 and vice versa IF the tiles regions are made that way.
-    /// One should be mindfull og this when creating different tile regions.
+    /// This solution also guarantees walkable path from team 0 to team 1 and vice versa IF the tile regions are made that way.
+    /// One should be mindfull of this when creating different tile regions.
     /// </summary>
     /// <returns>Queue if tile regions from A to F</returns>
     private Queue<TileRegionScriptableObject> SelectRandomTileRegions()

@@ -460,6 +460,35 @@ public class GameManager : MonoBehaviour
 
 
     /// <summary>
+    /// Move player in relative manner.
+    /// Same functionality as MovePlayer(GameObject), thus it checks if the tile is valid.
+    /// The plan is to use this function for AI's decisions.
+    /// </summary>
+    /// <param name="x">Relative movement on X-axis</param>
+    /// <param name="z">Relative movement on Z-axis</param>
+    /// <returns>Did the movement work. Used for AI's rewards.</returns>
+    public bool MovePlayer(int x, int z)
+    {
+        GameObject tile = null;
+        Tile currentTile = currentPlayer.GetGameObject().GetComponentInParent<Tile>();
+        int currentX = currentTile.xCoord;
+        int currentZ = currentTile.zCoord;
+
+        try
+        {
+            tile = gameboard.map[currentX + x, currentZ + z]; // The try-catch is in the case of the AI tries to go to invalid tile
+        }
+        catch
+        {
+            return false;
+        }
+        
+
+        return MovePlayer(tile.gameObject);
+    }
+
+
+    /// <summary>
     /// Move player on gameboard one tile at the time.
     /// If this method is not used, then the player will just teleport to the destination.
     /// </summary>
@@ -534,6 +563,35 @@ public class GameManager : MonoBehaviour
         ShowMovementArea();
 
         return true;
+    }
+
+
+    /// <summary>
+    /// Do selected action relative to the origin tile.
+    /// Same functionality as DoSelectedAction(Tile, Tile), thus it checks if the tile is valid.
+    /// The plan is to use this function for AI's decisions.
+    /// </summary>
+    /// <param name="x">Target tile relative to X-axis</param>
+    /// <param name="z">Target tile relative to Z-axis</param>
+    /// <returns>Was the action done</returns>
+    public bool DoSelectedAction(int x, int z)
+    {
+        Tile tile = null;
+        Tile currentTile = currentPlayer.GetGameObject().GetComponentInParent<Tile>();
+        int currentX = currentTile.xCoord;
+        int currentZ = currentTile.zCoord;
+
+        try
+        {
+            tile = gameboard.map[currentX + x, currentZ + z].GetComponent<Tile>(); // The try-catch is in the case of the AI tries to go to invalid tile
+        }
+        catch
+        {
+            return false;
+        }
+
+
+        return DoSelectedAction(currentTile, tile);
     }
 
 
@@ -658,8 +716,6 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ResetGame()
     {
-        EndTurn(); // We make sure that the UI will be reset
-
         gameboard.ResetGameBoard(); // Reset the game board's tiles
 
         // After reset we have to regenerate movement area and show it
@@ -675,6 +731,7 @@ public class GameManager : MonoBehaviour
 
         // Initialize new game as if it's first
         InitializeFirstTurn();
+        EndTurn(); // We make sure that the UI will be reset
     }
 
 
@@ -730,4 +787,8 @@ public class GameManager : MonoBehaviour
         Tile parentTile = currentPlayer.GetGameObject().GetComponentInParent<Tile>();
         return new Vector2(parentTile.xCoord, parentTile.zCoord);
     }
+
+
+    // TODO method to get certain team's tokens' positions
+    // TODO get how many tiles the token can be moved on this turn
 }

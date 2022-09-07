@@ -19,7 +19,7 @@ MonoBehaviour:
   initiativeBonus: 0
   movementSpeed: 2
   heroActions:
-  - {fileID: 11400000, guid: ace9936096d3e74458672a4dec079c98, type: 2}
+  - {fileID: 11400000, guid: eec94e45f33f83c489227377631d5366, type: 2}
   - {fileID: 11400000, guid: eec94e45f33f83c489227377631d5366, type: 2}
   - {fileID: 11400000, guid: ace9936096d3e74458672a4dec079c98, type: 2}
   - {fileID: 11400000, guid: ace9936096d3e74458672a4dec079c98, type: 2}

@@ -27,22 +27,27 @@ using Unity.MLAgents.Actuators;
 ///             > Doesn't work, list of floats used instead
 ///         > Where the token can be moved to.
 ///         > Can token use action over certain obsticles.
+///     > What is the current token
+///         > Determines what the AI can do on turn
+///     > How much movement is left
+///         > Data type: bool.
+///         > If there's nothing to do, then turn should end.
+///     > Can the player make actions
+///         > Data type: bool.
+///         > If there's nothing to do, then turn should end.
 ///     > Where other tokens are.
-///         > Data type: Enum.
+///         > Data type: List of floats.
 ///         > Can potentially create strategy with using all the tokens.
 ///     > How healthy the tokens are.
 ///         > Data type: Array of all health values.
 ///         > Could learn to prioritize hurt tokens on enemy team.
 ///     > What actions tokes can make.
-///         > Data type: Enum.
+///         > Data type: int for index.
 ///         > Can make a decision on what to do.
 ///         > Human can't see what tokens can do but they know it by playing the game.
 ///     > Valid targets at current position.
 ///         > Data type: List of tokens.
 ///         > Can make a decision on what to do.
-///     > Agent can make actions/move on turn.
-///         > Data type: bool.
-///         > If there's nothing to do, then turn should end.
 ///     > Enemy team is eliminated
 ///         > Allows end of the episode
 /// 
@@ -98,8 +103,22 @@ public class MLAgent : Agent
     public override void CollectObservations(VectorSensor sensor)
     {
         // Get the layout of the map as float list. Originally tried to use 2D array of enums but the library requires list of floats in this case
-        sensor.AddObservation(gameManager.GetGameboard().GetTileTypeMap()); 
-        // TODO
+        // For example, 0.0f is walkable, 1.0f is a wall.
+        sensor.AddObservation(gameManager.GetGameboard().GetTileTypeMap());
+
+        sensor.AddObservation(gameManager.GetCurrentTokenCoordinates());
+
+        sensor.AddObservation(gameManager.playerActionsLeftOnTurn);
+
+        // What is the layout of the map                DONE
+        // What kind of token is currently
+        // Where the current token is located           DONE
+        // Where are own team's tokens located
+        // Where are oponent's tokens located
+        // What targets are possible for each action
+        // How many tiles can token be moved
+        // How many actions can token make on turn      DONE
+        // Is the enemy team eliminated
     }
 
 
@@ -107,38 +126,53 @@ public class MLAgent : Agent
     /// Called when the agent has to do an action.
     /// Also include the reward, which is in this case total damage done or negated.
     /// 
+    /// The plan is forthe AI to move one tile at the time.
+    /// 
     /// TODO: Parse actions and execute them
     /// </summary>
     /// <param name="actions"></param>
     public override void OnActionReceived(ActionBuffers actions)
     {
-        int movementDirection = actions.DiscreteActions[0];
-        int actionNumber = actions.DiscreteActions[1];
-        int actionCoordX = actions.DiscreteActions[2];
-        int actionCoordZ = actions.DiscreteActions[3];
+        int movementDirection = actions.DiscreteActions[0]; // -1, 0, 1, ..., 8
+        int actionNumber = actions.DiscreteActions[1]; // -1, 0, 1, 2, 3
+        int actionCoordX = actions.DiscreteActions[2]; // 0...6
+        int actionCoordZ = actions.DiscreteActions[3]; // 0...9
         int endTurn = actions.DiscreteActions[4];
 
-        // TODO Move token, if failed, set reward as negative value
+        // Move token, if failed, set reward as negative value
         if (movementDirection != -1)
         {
-            // MOVE PLAYER TO THAT DIRECTION
-                // Get current game piece's location and move it from that location to new one
+            // Moving player to certain direction
+            // Get current game piece's location and move it from that location to new one
+            // Seperated this here so the code could be more readable
+            int relativeXmove = directions[movementDirection, 0];
+            int relativeZmove = directions[movementDirection, 1];
 
-            
-
-            // IF FAIL THEN NEGATIVE REWARD
+            // If the move is a success
+            if (gameManager.MovePlayer(relativeXmove, relativeZmove))
+            {
+                AddReward(0.5f);
+            }
+            else // if fail
+            {
+                SetReward(-1f);
+            }
         }
 
-        // TODO Do one of the token's actions, if failed, set reward as negative
+        // Do one of the token's actions, if failed, set reward as negative
         if (actionNumber != -1)
         {
-            // DO SELECTED ACTION
-                // Get current game piece's location abd action's target location
-
-            // IF FAIL
-                // NEGATIVE REWARD
+            // Do selected action
+            // Get current game piece's location abd action's target location
+            if(gameManager.DoSelectedAction(actionCoordX, actionCoordZ))
+            {
+                AddReward(0.5f);
+            }
+            else
+            {
+                SetReward(-1f);
+            }
         }
-
 
         if (gameManager.winnerTeamNumber != -1)
         {
