@@ -68,9 +68,8 @@ using Unity.MLAgents.Actuators;
 public class MLAgent : Agent
 {
     private GameManager gameManager;
-    private PlayerGamePiece playerGamePiece;
     EnvironmentParameters environmentParameters;
-    private PlayerGamePiece currentGamePiece;
+    // private PlayerGamePiece currentGamePiece;
 
     /// <summary>
     /// This is used to interpret the action for movement. 
@@ -105,20 +104,35 @@ public class MLAgent : Agent
         // Get the layout of the map as float list. Originally tried to use 2D array of enums but the library requires list of floats in this case
         // For example, 0.0f is walkable, 1.0f is a wall.
         sensor.AddObservation(gameManager.GetGameboard().GetTileTypeMap());
-
+        sensor.AddObservation(gameManager.GetCurrentTokenType());
         sensor.AddObservation(gameManager.GetCurrentTokenCoordinates());
+        sensor.AddObservation(gameManager.GetTokenLocations(gameManager.currentPlayer.GetPlayerTeam()));
 
+        int enemyTeamNumber = -1;
+        if (gameManager.currentPlayer.GetPlayerTeam() == 0)
+        {
+            enemyTeamNumber = 1;
+        }
+        else
+        {
+            enemyTeamNumber = 0;
+        }
+
+        sensor.AddObservation(gameManager.GetTokenLocations(enemyTeamNumber));
+        sensor.AddObservation(gameManager.GetValidTargetForEachAction());
+        // Where token can be moved
         sensor.AddObservation(gameManager.playerActionsLeftOnTurn);
 
+
         // What is the layout of the map                DONE
-        // What kind of token is currently
+        // What kind of token is currently              DONE
         // Where the current token is located           DONE
-        // Where are own team's tokens located
-        // Where are oponent's tokens located
-        // What targets are possible for each action
-        // How many tiles can token be moved
+        // Where are own team's tokens located          DONE
+        // Where are oponent's tokens located           DONE
+        // What targets are possible for each action    DONE
+        // Where token can be moved
         // How many actions can token make on turn      DONE
-        // Is the enemy team eliminated
+        // Is the enemy team eliminated                 NO NEED
     }
 
 

@@ -26,6 +26,7 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     public SpriteRenderer sprite;
     public int team;
     public PlayerType playerType;
+    public Tokens tokenType;
 
 
     /// <summary>
@@ -216,5 +217,15 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     public void SetPlayerTeam(int teamNumber)
     {
         team = teamNumber;
+    }
+
+
+    /// <summary>
+    /// Get this token's type i.e. 'class'.
+    /// </summary>
+    /// <returns>Token's type.</returns>
+    public Tokens GetTokenType()
+    {
+        return tokenType;
     }
 }

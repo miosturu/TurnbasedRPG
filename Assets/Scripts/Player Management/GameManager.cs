@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        gameboard.GenerateLevel(MapType.Random);
+        gameboard.GenerateLevel(MapType.Blank);
         StartCoroutine(SetUpCombat());
     }
 
@@ -70,6 +70,12 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             ResetGame();
+        }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            foreach (float f in GetMovementAreaAsFloats())
+                Debug.Log(f);
         }
     }
 
@@ -789,6 +795,144 @@ public class GameManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// TODO 
+    /// 6 rows * 9 columns * 2 coordinates - current tile coordinates = 106 floats
+    /// Fill in the float in order then fill it with -1s.
+    /// Remove the tile where the current token is
+    /// </summary>
+    /// <returns></returns>
+    public List<float> GetMovementAreaAsFloats()
+    {
+        List<float> movementTiles = new List<float>();
+
+        foreach(Tile tile in movementArea.Keys)
+        {
+            movementTiles.Add(tile.xCoord);
+            movementTiles.Add(tile.zCoord);
+        }
+
+        Debug.Log(108 - movementTiles.Count);
+
+        if (movementTiles.Count <= 108)
+        {
+            for (int i = 0; i < 108 - movementTiles.Count; i++)
+            {
+                movementTiles.Add(-1f);
+            }
+        }
+
+        return movementTiles;
+    }
+
+
+    /// <summary>
+    /// Get current token's type as integer.
+    /// Used by the AI to make disicions.
+    /// </summary>
+    /// <returns>Tokens type as int</returns>
+    public int GetCurrentTokenType()
+    {
+        return (int)currentPlayer.GetTokenType();
+    }
+
+
+    /// <summary>
+    /// Return every available target for every single action.
+    /// This function is desined to be used by ML agent.
+    /// The outout is following:
+    ///     [action's index][target X cooridnates][-1 * n if there's less valid targets than there're players]
+    /// Outout will always be 37 * 4 floats long, because:
+    ///     One float represents the action's index.
+    ///     18 tokens at max * 2 coordinates/token = 36 floats represent coodinates.
+    ///     There are four actions that the token can make.
+    /// The coordinates are filled with -1, because then we preserve the length of the input thus possibly making the training faster and more stable.
+    /// </summary>
+    /// <returns>List of all possible targets for each action</returns>
+    public List<float> GetValidTargetForEachAction()
+    {
+        // Loop over every action and store the in list
+        List<float> actionsAndTargets = new List<float>();
+
+        float actionIndex = 0.0f;
+
+        foreach(ActionScriptableObject action in heroActions)
+        {
+            List<float> oneActionAndTargets = new List<float>();
+            oneActionAndTargets.Add(actionIndex);
+
+            validTargets = new List<Tile>();
+            Tile playerTile = currentPlayer.GetGameObject().GetComponentInParent<Tile>();
+
+            foreach (GameObject tileObject in gameboard.map)
+            {
+                Tile tile = tileObject.GetComponent<Tile>();
+                if (action.TargetIsValid(playerTile, tile))
+                {
+                    validTargets.Add(tile);
+                }
+            }
+
+            foreach (Tile tile in validTargets)
+            {
+                float x = tile.xCoord;
+                float z = tile.zCoord;
+                oneActionAndTargets.Add(x);
+                oneActionAndTargets.Add(z);
+            }
+
+            if (oneActionAndTargets.Count < 37)
+            {
+                // Fill the list with -1 till it is 37 numbers long
+                for (int i = 0; i < 37 - oneActionAndTargets.Count; i++)
+                 oneActionAndTargets.Add(-1f);
+            }
+
+            actionsAndTargets.AddRange(oneActionAndTargets);
+            actionIndex++;
+        }
+
+        return actionsAndTargets;
+    }
+
+
+    /// <summary>
+    /// Get team's tokens' locations as a list of floats.
+    /// This method is planned to be used by ML agent.
+    /// The return list is always 18 floats long, because each team can have up to 9 tokens with 2 coordinates each.
+    /// </summary>
+    /// <param name="teamNumber">Which team is being investigated</param>
+    /// <returns>List of coordinates</returns>
+    public List<float> GetTokenLocations(int teamNumber)
+    {
+        List<float> tokenLocations = new List<float>();
+
+        foreach(GameObject tileObject in gameboard.map)
+        {
+            PlayerGamePiece playerToken = tileObject.GetComponentInChildren<PlayerGamePiece>();
+            Tile tile = tileObject.GetComponent<Tile>();
+
+            if (playerToken != null && playerToken.team == teamNumber)
+            {
+                tokenLocations.Add(tile.xCoord);
+                tokenLocations.Add(tile.zCoord);
+            }
+        }
+
+        // Fill the list to be 2 coords * max 9 tokens = 18 floats long
+        if (tokenLocations.Count <= 18)
+        {
+            for (int i = 0; i <= 18 - tokenLocations.Count; i++)
+            {
+                tokenLocations.Add(-1f);
+            }
+        }
+
+        return tokenLocations;
+    }
+
+
     // TODO method to get certain team's tokens' positions
     // TODO get how many tiles the token can be moved on this turn
+    // TODO get movement area as list of floats
 }

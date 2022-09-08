@@ -422,7 +422,7 @@ public class Gameboard : MonoBehaviour
     /// Return the map as 2D array of tile types. 
     /// This method is planned to be used for AI as a part of a vector of observations.
     /// </summary>
-    /// <returns>2D array of tiles as tile type</returns>
+    /// <returns>List of tiles as tile type</returns>
     public List<float> GetTileTypeMap()
     {
         return tileTypeMap;
