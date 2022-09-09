@@ -48,8 +48,6 @@ using Unity.MLAgents.Actuators;
 ///     > Valid targets at current position.
 ///         > Data type: List of tokens.
 ///         > Can make a decision on what to do.
-///     > Enemy team is eliminated
-///         > Allows end of the episode
 /// 
 /// Agent could observe the environment by getting the gamebaord from the GameManager.
 /// Reward function could be:
@@ -120,7 +118,7 @@ public class MLAgent : Agent
 
         sensor.AddObservation(gameManager.GetTokenLocations(enemyTeamNumber));
         sensor.AddObservation(gameManager.GetValidTargetForEachAction());
-        // Where token can be moved
+        sensor.AddObservation(gameManager.GetMovementAreaAsFloats());
         sensor.AddObservation(gameManager.playerActionsLeftOnTurn);
 
 
@@ -130,9 +128,8 @@ public class MLAgent : Agent
         // Where are own team's tokens located          DONE
         // Where are oponent's tokens located           DONE
         // What targets are possible for each action    DONE
-        // Where token can be moved
+        // Where token can be moved                     DONE
         // How many actions can token make on turn      DONE
-        // Is the enemy team eliminated                 NO NEED
     }
 
 

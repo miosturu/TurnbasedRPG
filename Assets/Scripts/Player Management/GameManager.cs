@@ -14,23 +14,25 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     // Controlls visuals of the game.
+    #region eye candy
     [Header("Visual")]
     [SerializeField] private Color movementAreaColor;
 
     /// <summary>
     /// Further away the tiles are from the origin, lighter the color is. Used for better visualization.
-    /// </summary>
+    /// </summary>  
     [SerializeField] private int movementAreaColorFallOff; 
     [SerializeField] private Color validTargetColor; // Color of the valid target when action is selected.
     [SerializeField] private Color[] teamColors;
     [SerializeField] private float playerVisualMovementDelay = 0.25f;
     [SerializeField] private float combatStartDelay = 1.5f;
+    #endregion
 
     [Header("Actual variables")]
     [SerializeField] private int initiativeDie = 20; // When the combat starts the player roll d20 to see who goes first. Lifted directly from D&D 5E.
     private TurnManager turnManager; // Keeps trak of who is next and who are in the game.
 
-    public IGamePiece currentPlayer;
+    public IGamePiece currentPlayer { get; private set; }
     [SerializeField] private GameObject playerToken; // Player prefab
     [SerializeField] private Gameboard gameboard;
     public event EventHandler<OnEndTurnEventArgs> OnEndTurn; // Event for updating UI
@@ -74,8 +76,9 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.T))
         {
-            foreach (float f in GetMovementAreaAsFloats())
-                Debug.Log(f);
+            // GetMovementAreaAsFloats(); WORKS
+            // GetValidTargetForEachAction();
+            GetTokenLocations(currentPlayer.GetPlayerTeam());
         }
     }
 
@@ -805,6 +808,7 @@ public class GameManager : MonoBehaviour
     public List<float> GetMovementAreaAsFloats()
     {
         List<float> movementTiles = new List<float>();
+        Tile currentTile = currentPlayer.GetGameObject().GetComponentInParent<Tile>();
 
         foreach(Tile tile in movementArea.Keys)
         {
@@ -812,15 +816,19 @@ public class GameManager : MonoBehaviour
             movementTiles.Add(tile.zCoord);
         }
 
-        Debug.Log(108 - movementTiles.Count);
+        // Debug.Log("Movement area is " + movementTiles.Count / 2 + " tiles\nSize of vector: " + movementTiles.Count);
+        // Debug.Log("How many -1s has to be added: " + (108 - movementTiles.Count));
 
-        if (movementTiles.Count <= 108)
+        if (movementTiles.Count < 108)
         {
-            for (int i = 0; i < 108 - movementTiles.Count; i++)
+            for (int i = 0; movementTiles.Count < 108; i++)
             {
+                Debug.Log(i);
                 movementTiles.Add(-1f);
             }
         }
+
+        // Debug.Log("Size of the movement area vector: " + movementTiles.Count);
 
         return movementTiles;
     }
@@ -881,16 +889,25 @@ public class GameManager : MonoBehaviour
                 oneActionAndTargets.Add(z);
             }
 
+            // Debug.Log("Number of coordinates before the fill: " + oneActionAndTargets.Count);
+
             if (oneActionAndTargets.Count < 37)
             {
                 // Fill the list with -1 till it is 37 numbers long
-                for (int i = 0; i < 37 - oneActionAndTargets.Count; i++)
+                for (int i = 0; oneActionAndTargets.Count < 37; i++)
                  oneActionAndTargets.Add(-1f);
             }
 
+            // Debug.Log("Number of coordinates after the fill: " + oneActionAndTargets.Count);
+
             actionsAndTargets.AddRange(oneActionAndTargets);
+
+            // Debug.Log("Length of the all actions and targets vector: " + actionsAndTargets.Count);
+
             actionIndex++;
         }
+
+        // Debug.Log("Size of valid target vector: " + actionsAndTargets.Count);
 
         return actionsAndTargets;
     }
@@ -922,17 +939,17 @@ public class GameManager : MonoBehaviour
         // Fill the list to be 2 coords * max 9 tokens = 18 floats long
         if (tokenLocations.Count <= 18)
         {
-            for (int i = 0; i <= 18 - tokenLocations.Count; i++)
+            for (int i = 0; tokenLocations.Count < 18; i++)
             {
                 tokenLocations.Add(-1f);
             }
         }
 
+        // Debug.Log("Size of the token location vector: " + tokenLocations.Count);
+
+        foreach (float f in tokenLocations)
+            Debug.Log(f);
+
         return tokenLocations;
     }
-
-
-    // TODO method to get certain team's tokens' positions
-    // TODO get how many tiles the token can be moved on this turn
-    // TODO get movement area as list of floats
 }

@@ -886,7 +886,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 49cfa4cf33c5ab045a289060bb8bb613, type: 2}
   - {fileID: 11400000, guid: 1de5b355d7b60984286f5a0699e3e4be, type: 2}
   - {fileID: 11400000, guid: 28061709d247c5a4f88baa222325508e, type: 2}
-  tokenProb: 0
+  tokenProb: 40
 --- !u!4 &417176095
 Transform:
   m_ObjectHideFlags: 0
