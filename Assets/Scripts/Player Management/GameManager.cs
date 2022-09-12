@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
     /// <returns>Nothing</returns>
     public IEnumerator SetUpCombat()
     {
-        ai = new EnemyAI(gameboard, this);
+        //ai = new EnemyAI(gameboard, this);
         heroActions = new ActionScriptableObject[4];
 
         if (!trainingMode)
@@ -299,7 +299,7 @@ public class GameManager : MonoBehaviour
         }
         else // If the first player is AI, then start the coroutine to make the action
         {
-            StartCoroutine(ai.AITurn(currentPlayer));
+            // StartCoroutine(ai.AITurn(currentPlayer));
         }
 
         OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(isPlayerTurn, isPlayerTurn)); // Fire event to update UI and the the turn
@@ -397,7 +397,7 @@ public class GameManager : MonoBehaviour
         else // It's AI's turn
         {
             OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(false, true));
-            StartCoroutine(ai.AITurn(currentPlayer));
+            //StartCoroutine(ai.AITurn(currentPlayer));
         }
     }
 
@@ -799,8 +799,7 @@ public class GameManager : MonoBehaviour
 
 
     /// <summary>
-    /// TODO 
-    /// 6 rows * 9 columns * 2 coordinates - current tile coordinates = 106 floats
+    /// 6 rows * 9 columns * 2 coordinates = 108 floats
     /// Fill in the float in order then fill it with -1s.
     /// Remove the tile where the current token is
     /// </summary>

@@ -67,7 +67,7 @@ public class MLAgent : Agent
 {
     private GameManager gameManager;
     EnvironmentParameters environmentParameters;
-    // private PlayerGamePiece currentGamePiece;
+    [SerializeField] private UIManager ui;
 
     /// <summary>
     /// This is used to interpret the action for movement. 
@@ -134,12 +134,22 @@ public class MLAgent : Agent
 
 
     /// <summary>
+    /// Used to test heurestics of the agent. Turns user's inputs to agent's inupts.
+    /// </summary>
+    /// <param name="actionsOut"></param>
+    public override void Heuristic(in ActionBuffers actionsOut)
+    {
+        ActionSegment<int> discreteActions = actionsOut.DiscreteActions;
+        if (Input.GetKeyUp(KeyCode.Keypad8))
+            discreteActions[0] = 1;
+    }
+
+
+    /// <summary>
     /// Called when the agent has to do an action.
     /// Also include the reward, which is in this case total damage done or negated.
     /// 
     /// The plan is forthe AI to move one tile at the time.
-    /// 
-    /// TODO: Parse actions and execute them
     /// </summary>
     /// <param name="actions"></param>
     public override void OnActionReceived(ActionBuffers actions)

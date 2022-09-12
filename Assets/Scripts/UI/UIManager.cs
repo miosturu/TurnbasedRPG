@@ -28,6 +28,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private ActionScriptableObject[] actions;
     [SerializeField] private RawImage[] selectionHighlights;
 
+    [Header("Agent Testing")]
+    [SerializeField] private InputField textInput;
+    [SerializeField] private Button submitAgentAction;
 
     // Start is called before the first frame update
     void Start()
@@ -177,5 +180,12 @@ public class UIManager : MonoBehaviour
     public void EnableOrDisableEndTurnButton(bool state)
     {
         endTurnButton.enabled = state;
+    }
+
+
+    public void SubmitAgentActions()
+    {
+        
+        Debug.Log("Submitting actions");
     }
 }

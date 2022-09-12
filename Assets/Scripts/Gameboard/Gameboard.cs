@@ -421,6 +421,8 @@ public class Gameboard : MonoBehaviour
     /// <summary>
     /// Return the map as 2D array of tile types. 
     /// This method is planned to be used for AI as a part of a vector of observations.
+    /// For each tile there's one number that represents it. 1 is for regular ground, 2 is  wall and 3 is 'moat'.
+    /// Because there's 6 rows * 9 columns = 54 tiles per map, thus this function outputs 54 floats long list.
     /// </summary>
     /// <returns>List of tiles as tile type</returns>
     public List<float> GetTileTypeMap()
