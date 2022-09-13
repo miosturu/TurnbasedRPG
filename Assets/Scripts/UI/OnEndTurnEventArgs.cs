@@ -18,6 +18,11 @@ public class OnEndTurnEventArgs : EventArgs
     }
 
 
+    /// <summary>
+    /// WARNING!: PlayerCanMakeActions is misnamed, if true, then player can't make actions.
+    /// </summary>
+    /// <param name="isPlayerTurn"></param>
+    /// <param name="playerCanMakeActions"></param>
     public OnEndTurnEventArgs(bool isPlayerTurn, bool playerCanMakeActions)
     {
         this.isPlayerTurn = isPlayerTurn;

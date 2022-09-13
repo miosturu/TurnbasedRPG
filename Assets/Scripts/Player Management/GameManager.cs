@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(SetUpCombat());
     }
 
-    // TODO: This is for testing the reset function. Should be remove when the testing is done
+    /*// TODO: This is for testing the reset function. Should be remove when the testing is done
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
             // GetValidTargetForEachAction();
             GetTokenLocations(currentPlayer.GetPlayerTeam());
         }
-    }
+    }*/
 
 
     /// <summary>
@@ -108,14 +108,16 @@ public class GameManager : MonoBehaviour
         InitializeFirstTurn();
         // Call function from UIManager to get the actions
 
-        bool isPlayerTurnFirst = false;
+        /*bool isPlayerTurnFirst = false;
         if (turnManager.firstPlayer.teamNumber == 0)
         {
             isPlayerTurnFirst = true;
         }
 
         //turnManager.PrintPlayers();
-        OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(isPlayerTurnFirst, !isPlayerTurnFirst));
+        OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(isPlayerTurnFirst, !isPlayerTurnFirst));*/
+
+        OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, false));
     }
 
 
@@ -175,7 +177,10 @@ public class GameManager : MonoBehaviour
     }
 
 
-    // TODO: Make sure atleast one token spawns per team
+    /// <summary>
+    /// Select random tokens for both team.
+    /// This method guarantees that both teams get atleast one token if token spawn propability is grater than zero.
+    /// </summary>
     private void SelectRandomTokens()
     {
         turnManager = new TurnManager();
@@ -289,7 +294,7 @@ public class GameManager : MonoBehaviour
         heroActions = currentPlayer.GetActions(); // Get the player's actions
         GenerateMovementArea(); // Get the players movement area. Based on movement speed and obsticles.
         playerActionsLeftOnTurn = currentPlayer.GetMaxActionsPerTurn(); // Get the player's actions per turn. It's usually only one, but added option to increase it just in case if one actions isn't enough.
-        currentPlayer.HighlightSetActive(true); // Highlight the first player by switching on the highligh gameobject
+        /*currentPlayer.HighlightSetActive(true); // Highlight the first player by switching on the highligh gameobject
 
         bool isPlayerTurn = false;
         if (turnManager.currentPlayer.teamNumber == 0)
@@ -300,9 +305,16 @@ public class GameManager : MonoBehaviour
         else // If the first player is AI, then start the coroutine to make the action
         {
             // StartCoroutine(ai.AITurn(currentPlayer));
+            ShowMovementArea();
         }
 
-        OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(isPlayerTurn, isPlayerTurn)); // Fire event to update UI and the the turn
+        OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(isPlayerTurn, isPlayerTurn)); // Fire event to update UI and the the turn*/
+
+        OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, false));
+        ResetMovementArea();
+        GenerateMovementArea(); // Get the players movement area. Based on movement speed and obsticles.
+        ShowMovementArea();
+        currentPlayer.HighlightSetActive(true); // Highlight the first player by switching on the highligh gameobject
     }
 
 
@@ -376,6 +388,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void EndTurn()
     {
+        //Debug.Log("Called end turn" + Environment.StackTrace);
+
         selectedAction = null;
         ResetMovementArea(); // Disable previous player's movent area
         currentPlayer.ResetMovement();
@@ -388,7 +402,7 @@ public class GameManager : MonoBehaviour
 
         GenerateMovementArea();
 
-        if (turnManager.currentPlayer.teamNumber == 0) // Set up player's turn. TODO: Maybe ML agent could play here also
+        /*if (turnManager.currentPlayer.teamNumber == 0) // Set up player's turn. TODO: Maybe ML agent could play here also
         {
             ShowMovementArea();
             heroActions = currentPlayer.GetActions();
@@ -398,7 +412,13 @@ public class GameManager : MonoBehaviour
         {
             OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(false, true));
             //StartCoroutine(ai.AITurn(currentPlayer));
-        }
+            //ResetMovementArea();
+            //ShowMovementArea();
+        }*/
+
+        ShowMovementArea();
+        heroActions = currentPlayer.GetActions();
+        OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, !true));
     }
 
 
@@ -500,6 +520,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Move player on gameboard one tile at the time.
     /// If this method is not used, then the player will just teleport to the destination.
+    /// At the moment so many things are tied to this so making the delay zero just teleports the token.
     /// </summary>
     /// <param name="player">Moved player</param>
     /// <param name="path">Path of the player</param>
@@ -525,14 +546,20 @@ public class GameManager : MonoBehaviour
         GenerateMovementArea();
         ShowMovementArea();
 
-        if (playerTeam == 0) // If the player is real then show actions of allowed to take some
+        /*if (playerTeam == 0) // If the player is real then show actions of allowed to take some
         {
             bool canMakeActions = false;
             if (playerActionsLeftOnTurn > 0)
                 canMakeActions = true;
 
             OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, !canMakeActions));
-        }
+        }*/
+
+        bool canMakeActions = false;
+        if (playerActionsLeftOnTurn > 0)
+            canMakeActions = true;
+
+        OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, !canMakeActions));
 
         yield return null;
     }
@@ -634,9 +661,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ResetMovementArea()
     {
-        foreach (Tile t in movementArea.Keys)
+        foreach (GameObject t in gameboard.map)
         {
-            t.highlight.SetActive(false);
+            t.GetComponent<Tile>().highlight.SetActive(false);
         }
     }
 
@@ -703,7 +730,7 @@ public class GameManager : MonoBehaviour
 
 
     /// <summary>
-    /// Check the winnig team.
+    /// Check the winnig team i.e. which side has eliminated the other side.
     /// </summary>
     private void CheckWinnerTeam()
     {
@@ -822,7 +849,7 @@ public class GameManager : MonoBehaviour
         {
             for (int i = 0; movementTiles.Count < 108; i++)
             {
-                Debug.Log(i);
+                //Debug.Log(i);
                 movementTiles.Add(-1f);
             }
         }
@@ -946,8 +973,8 @@ public class GameManager : MonoBehaviour
 
         // Debug.Log("Size of the token location vector: " + tokenLocations.Count);
 
-        foreach (float f in tokenLocations)
-            Debug.Log(f);
+        /*foreach (float f in tokenLocations)
+            Debug.Log(f);*/
 
         return tokenLocations;
     }

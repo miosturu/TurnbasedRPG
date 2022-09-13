@@ -86,6 +86,7 @@ public class MLAgent : Agent
     /// </summary>
     public override void OnEpisodeBegin()
     {
+        Debug.Log("Starting new episode");
         gameManager.ResetGame(); // reset whole gameboard again
     }
 
@@ -99,6 +100,8 @@ public class MLAgent : Agent
     /// <param name="sensor"></param>
     public override void CollectObservations(VectorSensor sensor)
     {
+        Debug.Log("AI is observing");
+
         // Get the layout of the map as float list. Originally tried to use 2D array of enums but the library requires list of floats in this case
         // For example, 0.0f is walkable, 1.0f is a wall.
         sensor.AddObservation(gameManager.GetGameboard().GetTileTypeMap());
@@ -130,6 +133,16 @@ public class MLAgent : Agent
         // What targets are possible for each action    DONE
         // Where token can be moved                     DONE
         // How many actions can token make on turn      DONE
+
+        /*Debug.Log("TileType size: " + gameManager.GetGameboard().GetTileTypeMap().Count);
+        Debug.Log("CurrentTokenType: " + gameManager.GetCurrentTokenType());
+        Debug.Log("Curr.coor. size: " + gameManager.GetCurrentTokenCoordinates().ToString());
+        Debug.Log("Current team: " + gameManager.GetTokenLocations(gameManager.currentPlayer.GetPlayerTeam()).Count);
+
+        Debug.Log("Token locations size: " + gameManager.GetTokenLocations(enemyTeamNumber).Count);
+        Debug.Log("Valid targets size: " + gameManager.GetValidTargetForEachAction().Count);
+        Debug.Log("Move area size: " + gameManager.GetMovementAreaAsFloats().Count);
+        Debug.Log("Actions left: " + gameManager.playerActionsLeftOnTurn);*/
     }
 
 
@@ -139,9 +152,23 @@ public class MLAgent : Agent
     /// <param name="actionsOut"></param>
     public override void Heuristic(in ActionBuffers actionsOut)
     {
+        Debug.Log("Writing to action buffers");
+
         ActionSegment<int> discreteActions = actionsOut.DiscreteActions;
         if (Input.GetKeyUp(KeyCode.Keypad8))
             discreteActions[0] = 1;
+        if (Input.GetKeyUp(KeyCode.Keypad9))
+            discreteActions[0] = 2;
+        if (Input.GetKeyUp(KeyCode.Keypad6))
+            discreteActions[0] = 3;
+        if (Input.GetKeyUp(KeyCode.Keypad3))
+            discreteActions[0] = 4;
+        if (Input.GetKeyUp(KeyCode.Keypad2))
+            discreteActions[0] = 5;
+        if (Input.GetKeyUp(KeyCode.Keypad1))
+            discreteActions[0] = 6;
+        if (Input.GetKeyUp(KeyCode.Keypad4))
+            discreteActions[0] = 7;
     }
 
 
@@ -150,12 +177,15 @@ public class MLAgent : Agent
     /// Also include the reward, which is in this case total damage done or negated.
     /// 
     /// The plan is forthe AI to move one tile at the time.
+    /// Actions can get values starting from 0, so we need to rethink this a bit
     /// </summary>
     /// <param name="actions"></param>
     public override void OnActionReceived(ActionBuffers actions)
     {
-        int movementDirection = actions.DiscreteActions[0]; // -1, 0, 1, ..., 8
-        int actionNumber = actions.DiscreteActions[1]; // -1, 0, 1, 2, 3
+        Debug.Log("AI is trying to do something");
+
+        int movementDirection = actions.DiscreteActions[0] - 1; // -1, 0, 1, ..., 8
+        int actionNumber = actions.DiscreteActions[1] - 1; // -1, 0, 1, 2, 3
         int actionCoordX = actions.DiscreteActions[2]; // 0...6
         int actionCoordZ = actions.DiscreteActions[3]; // 0...9
         int endTurn = actions.DiscreteActions[4];

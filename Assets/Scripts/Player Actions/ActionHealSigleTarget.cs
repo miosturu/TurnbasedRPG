@@ -54,6 +54,7 @@ public class ActionHealSigleTarget : ActionScriptableObject
             target.currentObject != null && // Target tile is not empty
             (origin.GetComponentInChildren<IGamePiece>().GetPlayerTeam() == target.GetComponentInChildren<IGamePiece>().GetPlayerTeam()) && // Target's and origin's teams are same
             (!needsLineOfSight || new LineOfSight().TileCanBeSeenAndIsInDistance(origin.GetGameboardOfTile(), origin, target, range)) // Line of sight is ok
+            || target  == origin // Heal is being cast to self
         )
             return true;
 
