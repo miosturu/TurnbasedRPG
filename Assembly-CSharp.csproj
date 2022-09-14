@@ -747,9 +747,29 @@
       <Name>Unity.ML-Agents</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="Unity.ML-Agents.Extensions.Editor.Input.csproj">
+      <Project>{918D4C65-51BA-A33D-EA3E-09A16F7C2676}</Project>
+      <Name>Unity.ML-Agents.Extensions.Editor.Input</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="Unity.ML-Agents.Extensions.Input.csproj">
+      <Project>{17FE6513-6EE7-49E3-D810-288B9231F7C2}</Project>
+      <Name>Unity.ML-Agents.Extensions.Input</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
     <ProjectReference Include="Unity.ML-Agents.CommunicatorObjects.csproj">
       <Project>{F95C820F-9FDE-49B5-25E0-1844137201C6}</Project>
       <Name>Unity.ML-Agents.CommunicatorObjects</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="Unity.ML-Agents.Extensions.csproj">
+      <Project>{65F10D12-0595-E09A-548A-4AA1D1DC8A2D}</Project>
+      <Name>Unity.ML-Agents.Extensions</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="Unity.ML-Agents.Extensions.Editor.csproj">
+      <Project>{B0A0FE49-0BEC-27D4-0C02-A9CA9EA79863}</Project>
+      <Name>Unity.ML-Agents.Extensions.Editor</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="Unity.ML-Agents.Editor.csproj">

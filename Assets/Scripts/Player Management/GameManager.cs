@@ -7,9 +7,6 @@ using UnityEngine;
 /// Class used for managing the whole game.
 /// This takes care of player actions, movement, adding and removing players, telling the UI to update, set players to the gameboard, and end turns.
 /// Human player uses number 0 to indicate it, AI player uses 1.
-/// 
-/// TODO: Add way to reset the gameboard DONE
-/// TODO: Add terminal state detection i.e. the winner detection DONE
 /// </summary>
 public class GameManager : MonoBehaviour
 {
@@ -66,7 +63,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(SetUpCombat());
     }
 
-    /*// TODO: This is for testing the reset function. Should be remove when the testing is done
+    // TODO: This is for testing the reset function. Should be remove when the testing is done
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
@@ -74,13 +71,34 @@ public class GameManager : MonoBehaviour
             ResetGame();
         }
 
-        if (Input.GetKeyDown(KeyCode.T))
+        /*if (Input.GetKeyDown(KeyCode.T))
         {
             // GetMovementAreaAsFloats(); WORKS
             // GetValidTargetForEachAction();
             GetTokenLocations(currentPlayer.GetPlayerTeam());
         }
-    }*/
+        
+        if (Input.GetKeyUp(KeyCode.Keypad8))
+            MovePlayer(0, 1);
+        if (Input.GetKeyUp(KeyCode.Keypad9))
+            MovePlayer(1, 1);
+        if (Input.GetKeyUp(KeyCode.Keypad6))
+            MovePlayer(1, 0);
+        if (Input.GetKeyUp(KeyCode.Keypad3))
+            MovePlayer(1, -1);
+        if (Input.GetKeyUp(KeyCode.Keypad2))
+            MovePlayer(0, -1);
+        if (Input.GetKeyUp(KeyCode.Keypad1))
+            MovePlayer(-1, -1);
+        if (Input.GetKeyUp(KeyCode.Keypad4))
+            MovePlayer(-1, 0);
+        if (Input.GetKeyUp(KeyCode.Keypad4))
+            MovePlayer(-1, 1);
+        if (Input.GetKeyUp(KeyCode.Keypad5))
+            MovePlayer(0, 0);
+        if (Input.GetKeyUp(KeyCode.KeypadEnter))
+            EndTurn();*/
+    }
 
 
     /// <summary>
@@ -106,16 +124,6 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(combatStartDelay); // Wait before the actual combat starts
         InitializeFirstTurn();
-        // Call function from UIManager to get the actions
-
-        /*bool isPlayerTurnFirst = false;
-        if (turnManager.firstPlayer.teamNumber == 0)
-        {
-            isPlayerTurnFirst = true;
-        }
-
-        //turnManager.PrintPlayers();
-        OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(isPlayerTurnFirst, !isPlayerTurnFirst));*/
 
         OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, false));
     }
@@ -180,6 +188,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Select random tokens for both team.
     /// This method guarantees that both teams get atleast one token if token spawn propability is grater than zero.
+    /// Token's spawn propability can be changed in the editor.
     /// </summary>
     private void SelectRandomTokens()
     {
@@ -294,27 +303,63 @@ public class GameManager : MonoBehaviour
         heroActions = currentPlayer.GetActions(); // Get the player's actions
         GenerateMovementArea(); // Get the players movement area. Based on movement speed and obsticles.
         playerActionsLeftOnTurn = currentPlayer.GetMaxActionsPerTurn(); // Get the player's actions per turn. It's usually only one, but added option to increase it just in case if one actions isn't enough.
-        /*currentPlayer.HighlightSetActive(true); // Highlight the first player by switching on the highligh gameobject
-
-        bool isPlayerTurn = false;
-        if (turnManager.currentPlayer.teamNumber == 0)
-        {
-            isPlayerTurn = true;
-            ShowMovementArea();
-        }
-        else // If the first player is AI, then start the coroutine to make the action
-        {
-            // StartCoroutine(ai.AITurn(currentPlayer));
-            ShowMovementArea();
-        }
-
-        OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(isPlayerTurn, isPlayerTurn)); // Fire event to update UI and the the turn*/
 
         OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, false));
+
+        // Reset, get and show player's movement
         ResetMovementArea();
-        GenerateMovementArea(); // Get the players movement area. Based on movement speed and obsticles.
+        GenerateMovementArea();
         ShowMovementArea();
+
         currentPlayer.HighlightSetActive(true); // Highlight the first player by switching on the highligh gameobject
+    }
+
+
+    /// <summary>
+    /// End player's turn. Reset movement area and set next player's turn.
+    /// </summary>
+    public void EndTurn()
+    {
+        selectedAction = null;
+        ResetMovementArea(); // Disable previous player's movent area
+        currentPlayer.ResetMovement(); // Add movement for the next turn so the turn engin token can move.
+
+        // Highlight new current player and dehighlight previous player
+        currentPlayer.HighlightSetActive(false);
+        currentPlayer = turnManager.NextTurn();
+        currentPlayer.HighlightSetActive(true);
+
+        playerActionsLeftOnTurn = currentPlayer.GetMaxActionsPerTurn();
+
+        GenerateMovementArea();
+
+        ShowMovementArea();
+        heroActions = currentPlayer.GetActions();
+        OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, !true));
+    }
+
+
+    /// <summary>
+    /// Reset the entire game as if the game was just started.
+    /// </summary>
+    public void ResetGame()
+    {
+        gameboard.ResetGameBoard(); // Reset the game board's tiles
+
+        // After reset we have to regenerate movement area and show it
+        ResetMovementArea();
+
+        // Reset the number of tokens per team
+        numberOfPieces[0] = 0;
+        numberOfPieces[1] = 0;
+
+        // Pick new teams and reset the positions
+        ResetPlayerTokenPositions();
+        SelectRandomTokens();
+
+        // Initialize new game as if it's first
+        InitializeFirstTurn();
+        EndTurn(); // We make sure that the UI will be reset
     }
 
 
@@ -384,45 +429,6 @@ public class GameManager : MonoBehaviour
 
 
     /// <summary>
-    /// End player's turn. Reset movement area and set next player's turn. Also play AI's turn if there's one.
-    /// </summary>
-    public void EndTurn()
-    {
-        //Debug.Log("Called end turn" + Environment.StackTrace);
-
-        selectedAction = null;
-        ResetMovementArea(); // Disable previous player's movent area
-        currentPlayer.ResetMovement();
-
-        currentPlayer.HighlightSetActive(false); // Highlight current player and dehighlight previous player
-        currentPlayer = turnManager.NextTurn();
-        currentPlayer.HighlightSetActive(true);
-
-        playerActionsLeftOnTurn = currentPlayer.GetMaxActionsPerTurn();
-
-        GenerateMovementArea();
-
-        /*if (turnManager.currentPlayer.teamNumber == 0) // Set up player's turn. TODO: Maybe ML agent could play here also
-        {
-            ShowMovementArea();
-            heroActions = currentPlayer.GetActions();
-            OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, false));
-        }
-        else // It's AI's turn
-        {
-            OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(false, true));
-            //StartCoroutine(ai.AITurn(currentPlayer));
-            //ResetMovementArea();
-            //ShowMovementArea();
-        }*/
-
-        ShowMovementArea();
-        heroActions = currentPlayer.GetActions();
-        OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, !true));
-    }
-
-
-    /// <summary>
     /// Remove current player from rotation.
     /// </summary>
     public void RemovePlayer()
@@ -439,7 +445,7 @@ public class GameManager : MonoBehaviour
     {
         //Get player's position and set CurrentObject = null then remove from the game
         player.GetGameObject().GetComponentInParent<Tile>().currentObject = null;
-        numberOfPieces[player.GetPlayerTeam()]--; // The pieces was captured, decrease the number of pieces in that team.
+        numberOfPieces[player.GetPlayerTeam()]--; // The pieces was eliminated, decrease the number of pieces in that team.
         turnManager.RemovePlayer(player);
         CheckWinnerTeam(); // Check if one of the teams won.
     }
@@ -464,9 +470,9 @@ public class GameManager : MonoBehaviour
 
         ResetMovementArea();
 
-        // Generate the path the player will take. TODO: actually show the player the path when hovering ovet the tile
-        List<Tile> path = new BreadthFirstSearch().GeneratePath(currentPlayer.GetGameObject().GetComponentInParent<Tile>(), 
-                                                                                                 tile.GetComponent<Tile>());
+        // Generate the path the player will take.
+        List<Tile> path = new BreadthFirstSearch().GeneratePath(currentPlayer.GetGameObject().GetComponentInParent<Tile>(),
+                                                                                                tile.GetComponent<Tile>());
 
         // Set the tile to have a player
         GameObject playerObject = currentPlayer.GetGameObject(); // Player game object
@@ -510,8 +516,7 @@ public class GameManager : MonoBehaviour
         catch
         {
             return false;
-        }
-        
+        }        
 
         return MovePlayer(tile.gameObject);
     }
@@ -546,15 +551,6 @@ public class GameManager : MonoBehaviour
         GenerateMovementArea();
         ShowMovementArea();
 
-        /*if (playerTeam == 0) // If the player is real then show actions of allowed to take some
-        {
-            bool canMakeActions = false;
-            if (playerActionsLeftOnTurn > 0)
-                canMakeActions = true;
-
-            OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, !canMakeActions));
-        }*/
-
         bool canMakeActions = false;
         if (playerActionsLeftOnTurn > 0)
             canMakeActions = true;
@@ -585,7 +581,17 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Action failed");
             if (playerActionsLeftOnTurn <= 0)
+            {
                 Debug.Log("Not enough actions left");
+            }
+            if (selectedAction.Action(origin, target))
+            {
+                String originString = "(" + origin.xCoord + ", " + origin.zCoord + ")";
+                String targetString = "(" + target.xCoord + ", " + target.zCoord + ")";
+
+                Debug.Log("Target is invalid relative to current position: " + originString + " vs. " + targetString);
+            }
+
             selectedAction = null;
             OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, false));
             return false;
@@ -603,9 +609,10 @@ public class GameManager : MonoBehaviour
 
 
     /// <summary>
-    /// Do selected action relative to the origin tile.
+    /// Do selected action targeting tile at (x, z).
     /// Same functionality as DoSelectedAction(Tile, Tile), thus it checks if the tile is valid.
     /// The plan is to use this function for AI's decisions.
+    /// As of 2022/9/14 all the actions orginate from current player's position thus only target's coordinates are needed to do actions.
     /// </summary>
     /// <param name="x">Target tile relative to X-axis</param>
     /// <param name="z">Target tile relative to Z-axis</param>
@@ -614,15 +621,14 @@ public class GameManager : MonoBehaviour
     {
         Tile tile = null;
         Tile currentTile = currentPlayer.GetGameObject().GetComponentInParent<Tile>();
-        int currentX = currentTile.xCoord;
-        int currentZ = currentTile.zCoord;
 
         try
         {
-            tile = gameboard.map[currentX + x, currentZ + z].GetComponent<Tile>(); // The try-catch is in the case of the AI tries to go to invalid tile
+            tile = gameboard.map[x, z].GetComponent<Tile>(); // The try-catch is in the case of the AI tries to go to invalid tile
         }
         catch
         {
+            Debug.LogError("Failed to do action with DoSelectedAction(x, z)");
             return false;
         }
 
@@ -643,6 +649,8 @@ public class GameManager : MonoBehaviour
 
     /// <summary>
     /// Show player's movement area.
+    /// This is done by going through the list of token's movement area and then coloring the tiles' higlights accrodingly.
+    /// Also further the tile is, more it costs to move.
     /// </summary>
     public void ShowMovementArea()
     {
@@ -657,7 +665,8 @@ public class GameManager : MonoBehaviour
 
 
     /// <summary>
-    /// Don't show player's movement area
+    /// Don't show player's movement area.
+    /// Disables all the highlight tiles just in case.
     /// </summary>
     public void ResetMovementArea()
     {
@@ -670,6 +679,8 @@ public class GameManager : MonoBehaviour
 
     /// <summary>
     /// Check if the players on tiles a and b are on the same team.
+    /// This is done by getting tiles' tokens and then checking their team numbers.
+    /// When this was created it was used to debug the code, but now it's not used for anything.
     /// </summary>
     /// <param name="a">Tile a</param>
     /// <param name="b">Tile b</param>
@@ -687,7 +698,7 @@ public class GameManager : MonoBehaviour
         }
         catch
         {
-            Debug.Log("Failed to check teams for tiles " + a.name + " and " + b.name);
+            Debug.LogError("Failed to check teams for tiles " + a.name + " and " + b.name);
             return false;
         }
     }
@@ -695,6 +706,9 @@ public class GameManager : MonoBehaviour
 
     /// <summary>
     /// Get valid targets for the selected action.
+    /// This goes through every single tile on the map and them checks through action's 'TargetIsValid(origin, target)'-function.
+    /// The valid targets are stored in 'validTargets'-variable.
+    /// This also shows all the valid targets when the function is used by enabling tiles' highlights.
     /// </summary>
     /// <returns>All the valid targets for selected action.</returns>
     public void GetValidTargets()
@@ -717,7 +731,8 @@ public class GameManager : MonoBehaviour
 
 
     /// <summary>
-    /// Show valid targets for selected action.
+    /// Hide all the targets for the action.
+    /// This is done by going through 'validTargets'-list and disableing tiles' highlights.
     /// </summary>
     public void ResetValidTargets()
     {
@@ -731,6 +746,7 @@ public class GameManager : MonoBehaviour
 
     /// <summary>
     /// Check the winnig team i.e. which side has eliminated the other side.
+    /// This is used to create a terminal state for the AI.
     /// </summary>
     private void CheckWinnerTeam()
     {
@@ -744,30 +760,6 @@ public class GameManager : MonoBehaviour
         }
         Debug.Log("Winning team: " + winnerTeamNumber);
         // If no team has been wiped down, then we don't have to do anything
-    }
-
-
-    /// <summary>
-    /// Reset the entire game as if the game was just started.
-    /// </summary>
-    public void ResetGame()
-    {
-        gameboard.ResetGameBoard(); // Reset the game board's tiles
-
-        // After reset we have to regenerate movement area and show it
-        ResetMovementArea();
-
-        // Reset the number of tokens per team
-        numberOfPieces[0] = 0;
-        numberOfPieces[1] = 0;
-
-        // Pick new teams and reset the positions
-        ResetPlayerTokenPositions();
-        SelectRandomTokens();
-
-        // Initialize new game as if it's first
-        InitializeFirstTurn();
-        EndTurn(); // We make sure that the UI will be reset
     }
 
 
@@ -842,9 +834,6 @@ public class GameManager : MonoBehaviour
             movementTiles.Add(tile.zCoord);
         }
 
-        // Debug.Log("Movement area is " + movementTiles.Count / 2 + " tiles\nSize of vector: " + movementTiles.Count);
-        // Debug.Log("How many -1s has to be added: " + (108 - movementTiles.Count));
-
         if (movementTiles.Count < 108)
         {
             for (int i = 0; movementTiles.Count < 108; i++)
@@ -915,8 +904,6 @@ public class GameManager : MonoBehaviour
                 oneActionAndTargets.Add(z);
             }
 
-            // Debug.Log("Number of coordinates before the fill: " + oneActionAndTargets.Count);
-
             if (oneActionAndTargets.Count < 37)
             {
                 // Fill the list with -1 till it is 37 numbers long
@@ -924,16 +911,9 @@ public class GameManager : MonoBehaviour
                  oneActionAndTargets.Add(-1f);
             }
 
-            // Debug.Log("Number of coordinates after the fill: " + oneActionAndTargets.Count);
-
             actionsAndTargets.AddRange(oneActionAndTargets);
-
-            // Debug.Log("Length of the all actions and targets vector: " + actionsAndTargets.Count);
-
             actionIndex++;
         }
-
-        // Debug.Log("Size of valid target vector: " + actionsAndTargets.Count);
 
         return actionsAndTargets;
     }
@@ -970,11 +950,6 @@ public class GameManager : MonoBehaviour
                 tokenLocations.Add(-1f);
             }
         }
-
-        // Debug.Log("Size of the token location vector: " + tokenLocations.Count);
-
-        /*foreach (float f in tokenLocations)
-            Debug.Log(f);*/
 
         return tokenLocations;
     }

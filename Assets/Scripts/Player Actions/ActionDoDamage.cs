@@ -49,7 +49,7 @@ public class ActionDoDamage : ActionScriptableObject
     /// <returns>Attack is valid</returns>
     public override bool TargetIsValid(Tile origin, Tile target)
     {
-        if 
+        if
         (
             target.currentObject != null && // Target tile is not empty
             (origin.GetComponentInChildren<IGamePiece>().GetPlayerTeam() != target.GetComponentInChildren<IGamePiece>().GetPlayerTeam()) && // Target's and origin's teams are different

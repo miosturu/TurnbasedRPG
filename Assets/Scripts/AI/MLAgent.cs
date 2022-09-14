@@ -65,9 +65,8 @@ using Unity.MLAgents.Actuators;
 /// </summary>
 public class MLAgent : Agent
 {
-    private GameManager gameManager;
+    [SerializeField] private GameManager gameManager;
     EnvironmentParameters environmentParameters;
-    [SerializeField] private UIManager ui;
 
     /// <summary>
     /// This is used to interpret the action for movement. 
@@ -88,6 +87,7 @@ public class MLAgent : Agent
     {
         Debug.Log("Starting new episode");
         gameManager.ResetGame(); // reset whole gameboard again
+        RequestDecision();
     }
 
 
@@ -143,6 +143,8 @@ public class MLAgent : Agent
         Debug.Log("Valid targets size: " + gameManager.GetValidTargetForEachAction().Count);
         Debug.Log("Move area size: " + gameManager.GetMovementAreaAsFloats().Count);
         Debug.Log("Actions left: " + gameManager.playerActionsLeftOnTurn);*/
+
+        RequestDecision();
     }
 
 
@@ -155,6 +157,7 @@ public class MLAgent : Agent
         Debug.Log("Writing to action buffers");
 
         ActionSegment<int> discreteActions = actionsOut.DiscreteActions;
+
         if (Input.GetKeyUp(KeyCode.Keypad8))
             discreteActions[0] = 1;
         if (Input.GetKeyUp(KeyCode.Keypad9))
@@ -179,13 +182,13 @@ public class MLAgent : Agent
     /// The plan is forthe AI to move one tile at the time.
     /// Actions can get values starting from 0, so we need to rethink this a bit
     /// </summary>
-    /// <param name="actions"></param>
+    /// <param name="actions">List of inputs that will determine actions</param>
     public override void OnActionReceived(ActionBuffers actions)
     {
         Debug.Log("AI is trying to do something");
 
-        int movementDirection = actions.DiscreteActions[0] - 1; // -1, 0, 1, ..., 8
-        int actionNumber = actions.DiscreteActions[1] - 1; // -1, 0, 1, 2, 3
+        int movementDirection = actions.DiscreteActions[0]; // -1, 0, 1, ..., 8
+        int actionNumber = actions.DiscreteActions[1]; // -1, 0, 1, 2, 3
         int actionCoordX = actions.DiscreteActions[2]; // 0...6
         int actionCoordZ = actions.DiscreteActions[3]; // 0...9
         int endTurn = actions.DiscreteActions[4];
@@ -199,10 +202,12 @@ public class MLAgent : Agent
             int relativeXmove = directions[movementDirection, 0];
             int relativeZmove = directions[movementDirection, 1];
 
+            // Debug.Log("AI relative move: (" + relativeXmove + ", " + relativeZmove + ")");
+
             // If the move is a success
             if (gameManager.MovePlayer(relativeXmove, relativeZmove))
             {
-                AddReward(0.5f);
+                AddReward(0.05f);
             }
             else // if fail
             {
@@ -225,14 +230,17 @@ public class MLAgent : Agent
             }
         }
 
+        if (endTurn == 1)
+        {
+            gameManager.EndTurn();
+        }
+
         if (gameManager.winnerTeamNumber != -1)
         {
             EndEpisode();
         }
+
     }
-
-
-
 }
 /// Other notes AI:
 ///     > As per https://github.com/Unity-Technologies/ml-agents/blob/main/docs/Learning-Environment-Design-Agents.md#decisions, function Agent.RequestDecision() should be done manually

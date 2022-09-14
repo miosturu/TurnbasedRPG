@@ -9,7 +9,7 @@ using UnityEngine;
 public class OnEndTurnEventArgs : EventArgs
 {
     private bool isPlayerTurn;
-    private bool playerCanMakeActions;
+    private bool canMakeActionsBlock;
 
 
     public OnEndTurnEventArgs(bool isPlayerTurn)
@@ -19,14 +19,14 @@ public class OnEndTurnEventArgs : EventArgs
 
 
     /// <summary>
-    /// WARNING!: PlayerCanMakeActions is misnamed, if true, then player can't make actions.
+    /// OnEndTurnEvent was named when it was only used when ending turn but at the moment it's used to update the UI.
     /// </summary>
     /// <param name="isPlayerTurn"></param>
-    /// <param name="playerCanMakeActions"></param>
-    public OnEndTurnEventArgs(bool isPlayerTurn, bool playerCanMakeActions)
+    /// <param name="canMakeActionsBlock"></param>
+    public OnEndTurnEventArgs(bool isPlayerTurn, bool canMakeActionsBlock)
     {
         this.isPlayerTurn = isPlayerTurn;
-        this.playerCanMakeActions = playerCanMakeActions;
+        this.canMakeActionsBlock = canMakeActionsBlock;
     }
 
 
@@ -36,8 +36,8 @@ public class OnEndTurnEventArgs : EventArgs
     }
 
 
-    public bool GetPlayerCanMakeActions()
+    public bool GetcanMakeActionsBlock()
     {
-        return playerCanMakeActions;
+        return canMakeActionsBlock;
     }
 }

@@ -1279,7 +1279,7 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
-  ui: {fileID: 1148860396}
+  gameManager: {fileID: 0}
 --- !u!114 &511959292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1304,8 +1304,8 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 1
-  m_BehaviorName: DungoenMaster
+  m_BehaviorType: 0
+  m_BehaviorName: DungeonMasters
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -3458,7 +3458,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 1
+  m_BehaviorType: 0
   m_BehaviorName: DungoenMaster
   TeamId: 1
   m_UseChildSensors: 1
@@ -3480,8 +3480,8 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
-  ui: {fileID: 1148860396}
+  MaxStep: 50
+  gameManager: {fileID: 0}
 --- !u!4 &1669681934
 Transform:
   m_ObjectHideFlags: 0

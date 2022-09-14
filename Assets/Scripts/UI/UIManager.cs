@@ -57,20 +57,20 @@ public class UIManager : MonoBehaviour
     /// <param name="e">Arguments. Not needed as of 2021/08/08</param>
     private void UpdateUI(object sender, OnEndTurnEventArgs e)
     {
-        UpdateUI(e.GetIsPlayerTurn(), e.GetPlayerCanMakeActions());
+        UpdateUI(e.GetIsPlayerTurn(), e.GetcanMakeActionsBlock());
     }
 
 
     /// <summary>
-    /// Update UI.
+    /// Update UI. Is player turn enables or disables buttons, canMakeActionsBlock enables or disables black rectagnle that indicates if actions can be made.
     /// </summary>
-    private void UpdateUI(bool isPlayerTurn, bool playerCanMakeActions)
+    private void UpdateUI(bool isPlayerTurn, bool canMakeActionsBlock)
     {
         UpdateHeroInfo();
         UpdateActions();
         ResetSelectionHighlight();
         EnableOrDisableButtons(isPlayerTurn);
-        EnableOrDisableSelectionIndicator(playerCanMakeActions);
+        EnableOrDisableSelectionIndicator(canMakeActionsBlock);
         actionInformationText.text = "";
     }
 
@@ -183,9 +183,29 @@ public class UIManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Used to test targetting
+    /// </summary>
     public void SubmitAgentActions()
     {
-        
-        Debug.Log("Submitting actions");
+        try
+        {
+            String input = textInput.text;
+            String[] splitInput = input.Split(',');
+            int[] actionAndCoords = new int[3];
+
+            actionAndCoords[0] = Int32.Parse(splitInput[0]);
+            actionAndCoords[1] = Int32.Parse(splitInput[1]);
+            actionAndCoords[2] = Int32.Parse(splitInput[2]);
+
+            GetClickedAction(actionAndCoords[0]);
+            gameManager.DoSelectedAction(actionAndCoords[1], actionAndCoords[2]);
+            Debug.Log("Submitting actions");
+        }
+        catch
+        {
+            Debug.Log("Error: Either coordinates were not seperated by ',', they're out of range or there's in recognised characters in the input.");
+        }
+
     }
 }
