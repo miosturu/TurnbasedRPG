@@ -7,9 +7,7 @@ using UnityEngine;
 /// </summary>
 public class AIManager : MonoBehaviour
 {
-    public GameObject[] agentGameObjects { get; private set; }
     [SerializeField] private MLAgent[] agents;
-
     [SerializeField] private GameManager gameManager;
 
     private int playerTurn;
@@ -21,6 +19,7 @@ public class AIManager : MonoBehaviour
 
     public void MakeAIPlayTurn(int teamNumber)
     {
-        agents[teamNumber].GetObservations();
+        // Debug.Log("MakeAIPlayTurn() was called");
+        agents[teamNumber].RequestAction();
     }
 }

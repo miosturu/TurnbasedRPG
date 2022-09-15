@@ -72,37 +72,9 @@ public class GameManager : MonoBehaviour
             ResetGame();
         }
 
-        /*if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            // GetMovementAreaAsFloats(); WORKS
-            // GetValidTargetForEachAction();
-            GetTokenLocations(currentPlayer.GetPlayerTeam());
-        }
-        
-        if (Input.GetKeyUp(KeyCode.Keypad8))
-            MovePlayer(0, 1);
-        if (Input.GetKeyUp(KeyCode.Keypad9))
-            MovePlayer(1, 1);
-        if (Input.GetKeyUp(KeyCode.Keypad6))
-            MovePlayer(1, 0);
-        if (Input.GetKeyUp(KeyCode.Keypad3))
-            MovePlayer(1, -1);
-        if (Input.GetKeyUp(KeyCode.Keypad2))
-            MovePlayer(0, -1);
-        if (Input.GetKeyUp(KeyCode.Keypad1))
-            MovePlayer(-1, -1);
-        if (Input.GetKeyUp(KeyCode.Keypad4))
-            MovePlayer(-1, 0);
-        if (Input.GetKeyUp(KeyCode.Keypad4))
-            MovePlayer(-1, 1);
-        if (Input.GetKeyUp(KeyCode.Keypad5))
-            MovePlayer(0, 0);
-        if (Input.GetKeyUp(KeyCode.KeypadEnter))
-            EndTurn();*/
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Debug.Log(GetTeamHP(0) + " vs. " + GetTeamHP(1));
+            aIManager.MakeAIPlayTurn(currentPlayer.GetPlayerTeam());
         }
     }
 
@@ -342,6 +314,7 @@ public class GameManager : MonoBehaviour
         ShowMovementArea();
         heroActions = currentPlayer.GetActions();
         OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, !true));
+        aIManager.MakeAIPlayTurn(currentPlayer.GetPlayerTeam());
     }
 
 

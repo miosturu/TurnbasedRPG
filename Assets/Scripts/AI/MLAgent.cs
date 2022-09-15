@@ -122,16 +122,17 @@ public class MLAgent : Agent
         {
             // Get the layout of the map as float list. Originally tried to use 2D array of enums but the library requires list of floats in this case
             // For example, 0.0f is walkable, 1.0f is a wall.
-            sensor.AddObservation(gameManager.GetGameboard().GetTileTypeMap());
+            sensor.AddObservation( Offsetter( gameManager.GetGameboard().GetTileTypeMap(), 1f) );
             sensor.AddObservation(gameManager.GetCurrentTokenType());
-            sensor.AddObservation(gameManager.GetCurrentTokenCoordinates());
-            sensor.AddObservation(gameManager.GetTokenLocations(gameManager.currentPlayer.GetPlayerTeam()));
-            sensor.AddObservation(gameManager.GetTokenLocations(enemyTeamNumber));
-            sensor.AddObservation(gameManager.GetValidTargetForEachAction());
-            sensor.AddObservation(gameManager.GetMovementAreaAsFloats());
+            sensor.AddObservation(Offsetter(gameManager.GetCurrentTokenCoordinates(), 1f));
+            sensor.AddObservation(Offsetter(gameManager.GetTokenLocations(gameManager.currentPlayer.GetPlayerTeam()), 1f));
+            sensor.AddObservation(Offsetter(gameManager.GetTokenLocations(enemyTeamNumber), 1f));
+            sensor.AddObservation(Offsetter(gameManager.GetValidTargetForEachAction(), 1f));
+            sensor.AddObservation(Offsetter(gameManager.GetMovementAreaAsFloats(), 1f));
             sensor.AddObservation(gameManager.playerActionsLeftOnTurn);
 
             RequestDecision();
+            //RequestAction();
         }
     }
 
@@ -222,6 +223,25 @@ public class MLAgent : Agent
         }
 
     }
+
+
+    private List<float> Offsetter(List<float> originalList, float offsetAmount)
+    {
+        List<float> offsettedList = new List<float>();
+
+        foreach(float f in originalList)
+        {
+            offsettedList.Add(f + offsetAmount);
+        }
+
+        return offsettedList;
+    }
+
+    private Vector2 Offsetter(Vector2 originalVector2, float offsetAmount)
+    {
+        return new Vector2(originalVector2.x + offsetAmount, originalVector2.y + offsetAmount);
+    }
+
 }
 /// Other notes AI:
 ///     > As per https://github.com/Unity-Technologies/ml-agents/blob/main/docs/Learning-Environment-Design-Agents.md#decisions, function Agent.RequestDecision() should be done manually
