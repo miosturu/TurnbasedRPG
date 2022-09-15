@@ -958,6 +958,7 @@ MonoBehaviour:
   partyManager: {fileID: 417176096}
   numberOfPieces: 0000000000000000
   winnerTeamNumber: -1
+  aIManager: {fileID: 960972420}
   enemyParty: {fileID: 11400000, guid: cd66e2c7a578a6948a40e9c3e07eb317, type: 2}
   trainingMode: 1
   tokenPool:
@@ -1261,7 +1262,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &511959291
 MonoBehaviour:
@@ -1297,15 +1298,15 @@ MonoBehaviour:
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
-      BranchSizes: 0a00000005000000070000000a00000002000000
-    VectorActionSize: 0a00000005000000070000000a00000002000000
+      BranchSizes: 0900000005000000070000000a00000002000000
+    VectorActionSize: 0900000005000000070000000a00000002000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 0
-  m_BehaviorName: DungeonMasters
+  m_BehaviorType: 1
+  m_BehaviorName: DungeonMaster
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -2353,6 +2354,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 957466682}
   m_CullTransparentMesh: 1
+--- !u!1 &960972419
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 960972421}
+  - component: {fileID: 960972420}
+  m_Layer: 0
+  m_Name: AIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &960972420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 960972419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69f2dfe23475ad147980b6225c63c43c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agents:
+  - {fileID: 511959291}
+  - {fileID: 1669681933}
+  gameManager: {fileID: 417176094}
+--- !u!4 &960972421
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 960972419}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -3433,7 +3481,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1669681932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3451,15 +3499,15 @@ MonoBehaviour:
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
-      BranchSizes: 0a00000005000000070000000a00000002000000
-    VectorActionSize: 0a00000005000000070000000a00000002000000
+      BranchSizes: 0900000005000000070000000a00000002000000
+    VectorActionSize: 0900000005000000070000000a00000002000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 0
-  m_BehaviorName: DungoenMaster
+  m_BehaviorType: 1
+  m_BehaviorName: DungeonMaster
   TeamId: 1
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -3480,7 +3528,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 50
+  MaxStep: 0
   gameManager: {fileID: 0}
 --- !u!4 &1669681934
 Transform:
@@ -3494,7 +3542,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1687913111
 GameObject:

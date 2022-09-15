@@ -5,6 +5,13 @@ using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
 
+public enum AIState
+{
+    error = -1,
+    waitingTurn = 0,
+    playingTurn = 1
+}
+
 /// <summary>
 /// AI agent that uses Unity's machine learning library. 
 /// Thus we have to define, what the agent can do and how can we encourage it to do what is wanted.
@@ -67,6 +74,7 @@ public class MLAgent : Agent
 {
     [SerializeField] private GameManager gameManager;
     EnvironmentParameters environmentParameters;
+    public AIState aIState { get; private set; }
 
     /// <summary>
     /// This is used to interpret the action for movement. 
@@ -87,7 +95,6 @@ public class MLAgent : Agent
     {
         Debug.Log("Starting new episode");
         gameManager.ResetGame(); // reset whole gameboard again
-        RequestDecision();
     }
 
 
@@ -101,14 +108,6 @@ public class MLAgent : Agent
     public override void CollectObservations(VectorSensor sensor)
     {
         Debug.Log("AI is observing");
-
-        // Get the layout of the map as float list. Originally tried to use 2D array of enums but the library requires list of floats in this case
-        // For example, 0.0f is walkable, 1.0f is a wall.
-        sensor.AddObservation(gameManager.GetGameboard().GetTileTypeMap());
-        sensor.AddObservation(gameManager.GetCurrentTokenType());
-        sensor.AddObservation(gameManager.GetCurrentTokenCoordinates());
-        sensor.AddObservation(gameManager.GetTokenLocations(gameManager.currentPlayer.GetPlayerTeam()));
-
         int enemyTeamNumber = -1;
         if (gameManager.currentPlayer.GetPlayerTeam() == 0)
         {
@@ -119,32 +118,21 @@ public class MLAgent : Agent
             enemyTeamNumber = 0;
         }
 
-        sensor.AddObservation(gameManager.GetTokenLocations(enemyTeamNumber));
-        sensor.AddObservation(gameManager.GetValidTargetForEachAction());
-        sensor.AddObservation(gameManager.GetMovementAreaAsFloats());
-        sensor.AddObservation(gameManager.playerActionsLeftOnTurn);
+        if (gameManager.currentPlayer.GetPlayerTeam() != enemyTeamNumber)
+        {
+            // Get the layout of the map as float list. Originally tried to use 2D array of enums but the library requires list of floats in this case
+            // For example, 0.0f is walkable, 1.0f is a wall.
+            sensor.AddObservation(gameManager.GetGameboard().GetTileTypeMap());
+            sensor.AddObservation(gameManager.GetCurrentTokenType());
+            sensor.AddObservation(gameManager.GetCurrentTokenCoordinates());
+            sensor.AddObservation(gameManager.GetTokenLocations(gameManager.currentPlayer.GetPlayerTeam()));
+            sensor.AddObservation(gameManager.GetTokenLocations(enemyTeamNumber));
+            sensor.AddObservation(gameManager.GetValidTargetForEachAction());
+            sensor.AddObservation(gameManager.GetMovementAreaAsFloats());
+            sensor.AddObservation(gameManager.playerActionsLeftOnTurn);
 
-
-        // What is the layout of the map                DONE
-        // What kind of token is currently              DONE
-        // Where the current token is located           DONE
-        // Where are own team's tokens located          DONE
-        // Where are oponent's tokens located           DONE
-        // What targets are possible for each action    DONE
-        // Where token can be moved                     DONE
-        // How many actions can token make on turn      DONE
-
-        /*Debug.Log("TileType size: " + gameManager.GetGameboard().GetTileTypeMap().Count);
-        Debug.Log("CurrentTokenType: " + gameManager.GetCurrentTokenType());
-        Debug.Log("Curr.coor. size: " + gameManager.GetCurrentTokenCoordinates().ToString());
-        Debug.Log("Current team: " + gameManager.GetTokenLocations(gameManager.currentPlayer.GetPlayerTeam()).Count);
-
-        Debug.Log("Token locations size: " + gameManager.GetTokenLocations(enemyTeamNumber).Count);
-        Debug.Log("Valid targets size: " + gameManager.GetValidTargetForEachAction().Count);
-        Debug.Log("Move area size: " + gameManager.GetMovementAreaAsFloats().Count);
-        Debug.Log("Actions left: " + gameManager.playerActionsLeftOnTurn);*/
-
-        RequestDecision();
+            RequestDecision();
+        }
     }
 
 
@@ -158,20 +146,6 @@ public class MLAgent : Agent
 
         ActionSegment<int> discreteActions = actionsOut.DiscreteActions;
 
-        if (Input.GetKeyUp(KeyCode.Keypad8))
-            discreteActions[0] = 1;
-        if (Input.GetKeyUp(KeyCode.Keypad9))
-            discreteActions[0] = 2;
-        if (Input.GetKeyUp(KeyCode.Keypad6))
-            discreteActions[0] = 3;
-        if (Input.GetKeyUp(KeyCode.Keypad3))
-            discreteActions[0] = 4;
-        if (Input.GetKeyUp(KeyCode.Keypad2))
-            discreteActions[0] = 5;
-        if (Input.GetKeyUp(KeyCode.Keypad1))
-            discreteActions[0] = 6;
-        if (Input.GetKeyUp(KeyCode.Keypad4))
-            discreteActions[0] = 7;
     }
 
 
@@ -185,12 +159,19 @@ public class MLAgent : Agent
     /// <param name="actions">List of inputs that will determine actions</param>
     public override void OnActionReceived(ActionBuffers actions)
     {
-        Debug.Log("AI is trying to do something");
+        // Debug.Log("AI is trying to do something");
 
-        int movementDirection = actions.DiscreteActions[0]; // -1, 0, 1, ..., 8
-        int actionNumber = actions.DiscreteActions[1]; // -1, 0, 1, 2, 3
-        int actionCoordX = actions.DiscreteActions[2]; // 0...6
-        int actionCoordZ = actions.DiscreteActions[3]; // 0...9
+        Debug.Log("Move dir.: "   + actions.DiscreteActions[0]  
+                + "\nAction index: " + actions.DiscreteActions[1] 
+                + "\nAction x: " + actions.DiscreteActions[2] 
+                + "\nAction z: " + actions.DiscreteActions[3] 
+                + "\nEnd turn: " + actions.DiscreteActions[4]
+            );
+
+        int movementDirection = actions.DiscreteActions[0] - 1; // -1, 0, 1, ..., 7
+        int actionNumber = actions.DiscreteActions[1] - 1; // -1, 0, 1, 2, 3
+        int actionCoordX = actions.DiscreteActions[2] - 1; // 0...6
+        int actionCoordZ = actions.DiscreteActions[3] - 1; // 0...9
         int endTurn = actions.DiscreteActions[4];
 
         // Move token, if failed, set reward as negative value
@@ -222,7 +203,7 @@ public class MLAgent : Agent
             // Get current game piece's location abd action's target location
             if(gameManager.DoSelectedAction(actionCoordX, actionCoordZ))
             {
-                AddReward(0.5f);
+                AddReward(0.05f);
             }
             else
             {

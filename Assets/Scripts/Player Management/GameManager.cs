@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
     private Dictionary<PlayerGamePiece, int[]> playerTokenPositions = new Dictionary<PlayerGamePiece, int[]>();
 
     [Header("AI")]
+    [SerializeField] private AIManager aIManager;
     [SerializeField] private EnemyAI ai;
     public EnemyPartyScriptableObject enemyParty;
     [SerializeField] private bool trainingMode = false;
@@ -98,6 +99,11 @@ public class GameManager : MonoBehaviour
             MovePlayer(0, 0);
         if (Input.GetKeyUp(KeyCode.KeypadEnter))
             EndTurn();*/
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Debug.Log(GetTeamHP(0) + " vs. " + GetTeamHP(1));
+        }
     }
 
 
@@ -953,4 +959,26 @@ public class GameManager : MonoBehaviour
 
         return tokenLocations;
     }
+
+
+    /// <summary>
+    /// Get team's total HP as int value.
+    /// This goes through all the tokens from 'playerTokenPositions'-dictionary and then checks if the token is in current game and then adds their current hp to total value.
+    /// This method is planned for rewarding AI.
+    /// </summary>
+    /// <param name="teamNumber"></param>
+    /// <returns></returns>
+    public int GetTeamHP(int teamNumber)
+    {
+        int totalHP = 0;
+
+        foreach(PlayerGamePiece piece in playerTokenPositions.Keys)
+        {
+            if (piece.isActiveAndEnabled && piece.GetComponent<PlayerGamePiece>().team == teamNumber)
+                totalHP += piece.GetComponent<PlayerGamePiece>().currentHp;
+        }
+
+        return totalHP;
+    }
 }
+/// TODO: A way to choose which side(s) have an AI.

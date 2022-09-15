@@ -49,14 +49,22 @@ public class ActionDoDamage : ActionScriptableObject
     /// <returns>Attack is valid</returns>
     public override bool TargetIsValid(Tile origin, Tile target)
     {
-        if
-        (
-            target.currentObject != null && // Target tile is not empty
-            (origin.GetComponentInChildren<IGamePiece>().GetPlayerTeam() != target.GetComponentInChildren<IGamePiece>().GetPlayerTeam()) && // Target's and origin's teams are different
-            origin != target && // Not targeting self
-            (!needsLineOfSight || new LineOfSight().TileCanBeSeenAndIsInDistance(origin.GetGameboardOfTile(), origin, target, range)) // Target is within line of sight
-        ) return true;
+        try
+        {
+            if
+            (
+                target.currentObject != null && // Target tile is not empty
+                (origin.GetComponentInChildren<IGamePiece>().GetPlayerTeam() != target.GetComponentInChildren<IGamePiece>().GetPlayerTeam()) && // Target's and origin's teams are different
+                origin != target && // Not targeting self
+                (!needsLineOfSight || new LineOfSight().TileCanBeSeenAndIsInDistance(origin.GetGameboardOfTile(), origin, target, range)) // Target is within line of sight
+            ) return true;
 
-        return false;
+            return false;
+        }
+        catch
+        {
+            Debug.LogError("Tried to target invalid tile");
+            return false;
+        }
     }
 }
