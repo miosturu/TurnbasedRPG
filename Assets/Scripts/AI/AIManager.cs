@@ -10,16 +10,19 @@ public class AIManager : MonoBehaviour
     [SerializeField] private MLAgent[] agents;
     [SerializeField] private GameManager gameManager;
 
-    private int playerTurn;
-
     private void Start()
     {
-        playerTurn = gameManager.currentPlayer.GetPlayerTeam();
+        agents[0].ownTeamNumber = 0;
+        agents[1].ownTeamNumber = 1;
+
+        agents[0].enemyTeamNumber = 1;
+        agents[1].enemyTeamNumber = 0;
     }
 
     public void MakeAIPlayTurn(int teamNumber)
     {
         // Debug.Log("MakeAIPlayTurn() was called");
-        agents[teamNumber].RequestAction();
+        agents[teamNumber].currentAIState = AIState.playingTurn;
+        agents[teamNumber].RequestDecision();
     }
 }

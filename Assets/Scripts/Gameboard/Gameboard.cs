@@ -420,6 +420,12 @@ public class Gameboard : MonoBehaviour
     }
 
 
+    public void ResetGameBoard(MapType mapType)
+    {
+        GenerateBlankLevel();
+    }
+
+
     /// <summary>
     /// Return the map as List of floats. 
     /// This method is planned to be used for AI as a part of a vector of observations.

@@ -74,7 +74,19 @@ public class MLAgent : Agent
 {
     [SerializeField] private GameManager gameManager;
     EnvironmentParameters environmentParameters;
-    public AIState aIState { get; private set; }
+    public AIState currentAIState { get; set; }
+
+    private int invalidMoveCount = 0;
+    private int maxInvalidMoves = 10;
+
+    private int teamTotalHP;
+    private float ownHPPercentage;
+
+    private int enemyTotalHP;
+    private float enemyHPPercentage;
+
+    public int ownTeamNumber { get; set; }
+    public int enemyTeamNumber { get; set; }
 
     /// <summary>
     /// This is used to interpret the action for movement. 
@@ -95,6 +107,14 @@ public class MLAgent : Agent
     {
         Debug.Log("Starting new episode");
         gameManager.ResetGame(); // reset whole gameboard again
+        currentAIState = AIState.waitingTurn;
+
+        teamTotalHP = gameManager.GetTeamHP(ownTeamNumber);
+        ownHPPercentage = 1 / teamTotalHP;
+
+        enemyTotalHP = gameManager.GetTeamHP(enemyTeamNumber);
+        enemyHPPercentage = 1 / enemyTotalHP;
+
     }
 
 
@@ -107,33 +127,19 @@ public class MLAgent : Agent
     /// <param name="sensor"></param>
     public override void CollectObservations(VectorSensor sensor)
     {
-        Debug.Log("AI is observing");
-        int enemyTeamNumber = -1;
-        if (gameManager.currentPlayer.GetPlayerTeam() == 0)
-        {
-            enemyTeamNumber = 1;
-        }
-        else
-        {
-            enemyTeamNumber = 0;
-        }
+        // Debug.Log("AI is observing");
 
-        if (gameManager.currentPlayer.GetPlayerTeam() != enemyTeamNumber)
-        {
-            // Get the layout of the map as float list. Originally tried to use 2D array of enums but the library requires list of floats in this case
-            // For example, 0.0f is walkable, 1.0f is a wall.
-            sensor.AddObservation( Offsetter( gameManager.GetGameboard().GetTileTypeMap(), 1f) );
-            sensor.AddObservation(gameManager.GetCurrentTokenType());
-            sensor.AddObservation(Offsetter(gameManager.GetCurrentTokenCoordinates(), 1f));
-            sensor.AddObservation(Offsetter(gameManager.GetTokenLocations(gameManager.currentPlayer.GetPlayerTeam()), 1f));
-            sensor.AddObservation(Offsetter(gameManager.GetTokenLocations(enemyTeamNumber), 1f));
-            sensor.AddObservation(Offsetter(gameManager.GetValidTargetForEachAction(), 1f));
-            sensor.AddObservation(Offsetter(gameManager.GetMovementAreaAsFloats(), 1f));
-            sensor.AddObservation(gameManager.playerActionsLeftOnTurn);
+        // Get the layout of the map as float list. Originally tried to use 2D array of enums but the library requires list of floats in this case
+        // For example, 0.0f is walkable, 1.0f is a wall.
+        sensor.AddObservation(Offsetter(gameManager.GetGameboard().GetTileTypeMap(), 1f));
+        sensor.AddObservation(gameManager.GetCurrentTokenType());
+        sensor.AddObservation(Offsetter(gameManager.GetCurrentTokenCoordinates(), 1f));
+        sensor.AddObservation(Offsetter(gameManager.GetTokenLocations(gameManager.currentPlayer.GetPlayerTeam()), 1f));
 
-            RequestDecision();
-            //RequestAction();
-        }
+        sensor.AddObservation(Offsetter(gameManager.GetTokenLocations(enemyTeamNumber), 1f));
+        sensor.AddObservation(Offsetter(gameManager.GetValidTargetForEachAction(), 1f));
+        sensor.AddObservation(Offsetter(gameManager.GetMovementAreaAsFloats(), 1f));
+        sensor.AddObservation(gameManager.playerActionsLeftOnTurn);
     }
 
 
@@ -141,13 +147,13 @@ public class MLAgent : Agent
     /// Used to test heurestics of the agent. Turns user's inputs to agent's inupts.
     /// </summary>
     /// <param name="actionsOut"></param>
-    public override void Heuristic(in ActionBuffers actionsOut)
+    /*public override void Heuristic(in ActionBuffers actionsOut)
     {
         Debug.Log("Writing to action buffers");
 
         ActionSegment<int> discreteActions = actionsOut.DiscreteActions;
 
-    }
+    }*/
 
 
     /// <summary>
@@ -162,12 +168,13 @@ public class MLAgent : Agent
     {
         // Debug.Log("AI is trying to do something");
 
-        Debug.Log("Move dir.: "   + actions.DiscreteActions[0]  
-                + "\nAction index: " + actions.DiscreteActions[1] 
-                + "\nAction x: " + actions.DiscreteActions[2] 
-                + "\nAction z: " + actions.DiscreteActions[3] 
+        /*Debug.Log("Token type: " + gameManager.currentPlayer.GetGameObject().name
+                + "\nMove dir.: "   + (actions.DiscreteActions[0] - 1)  
+                + "\nAction index: " + (actions.DiscreteActions[1] - 1)
+                + "\nAction x: " + (actions.DiscreteActions[2] - 1) 
+                + "\nAction z: " + (actions.DiscreteActions[3] - 1)
                 + "\nEnd turn: " + actions.DiscreteActions[4]
-            );
+            );*/
 
         int movementDirection = actions.DiscreteActions[0] - 1; // -1, 0, 1, ..., 7
         int actionNumber = actions.DiscreteActions[1] - 1; // -1, 0, 1, 2, 3
@@ -175,8 +182,26 @@ public class MLAgent : Agent
         int actionCoordZ = actions.DiscreteActions[3] - 1; // 0...9
         int endTurn = actions.DiscreteActions[4];
 
+        // Do one of the token's actions, if failed, set reward as negative
+        if (actionNumber != -1 || actionCoordX != -1 || actionCoordZ != -1)
+        {
+            // Do selected action
+            // Get current game piece's location abd action's target location
+            if (gameManager.DoSelectedAction(actionCoordX, actionCoordZ))
+            {
+                /*AddReward((gameManager.GetTeamHP(enemyTeamNumber) - enemyTotalHP) * enemyHPPercentage);
+                enemyTotalHP = gameManager.GetTeamHP(enemyTeamNumber);*/
+                AddReward(0.25f);
+            }
+            else
+            {
+                AddReward(-0.1f);
+                invalidMoveCount++;
+            }
+        }
+
         // Move token, if failed, set reward as negative value
-        if (movementDirection != -1)
+        if (movementDirection != -1 && gameManager.movementArea.Keys.Count >= 1)
         {
             // Moving player to certain direction
             // Get current game piece's location and move it from that location to new one
@@ -189,32 +214,19 @@ public class MLAgent : Agent
             // If the move is a success
             if (gameManager.MovePlayer(relativeXmove, relativeZmove))
             {
-                AddReward(0.05f);
+                AddReward(0.1f);
             }
             else // if fail
             {
-                SetReward(-1f);
+                AddReward(-0.1f);
+                invalidMoveCount++;
             }
         }
 
-        // Do one of the token's actions, if failed, set reward as negative
-        if (actionNumber != -1)
-        {
-            // Do selected action
-            // Get current game piece's location abd action's target location
-            if(gameManager.DoSelectedAction(actionCoordX, actionCoordZ))
-            {
-                AddReward(0.05f);
-            }
-            else
-            {
-                SetReward(-1f);
-            }
-        }
-
-        if (endTurn == 1)
+        else if (endTurn == 1 || (movementDirection == -1 && actionNumber == -1 && actionCoordX == -1 && actionCoordZ == -1))
         {
             gameManager.EndTurn();
+            currentAIState = AIState.waitingTurn;
         }
 
         if (gameManager.winnerTeamNumber != -1)
@@ -222,9 +234,22 @@ public class MLAgent : Agent
             EndEpisode();
         }
 
+        if (invalidMoveCount >= maxInvalidMoves)
+        {
+            invalidMoveCount = 0;
+            SetReward(-1);
+        }
+
     }
 
 
+    /// <summary>
+    /// Offset all the values in a float list by some amount.
+    /// This is used for the AI because it only can get values from zero and up.
+    /// </summary>
+    /// <param name="originalList">Original list of floats</param>
+    /// <param name="offsetAmount">Amount of offset</param>
+    /// <returns>New offset list</returns>
     private List<float> Offsetter(List<float> originalList, float offsetAmount)
     {
         List<float> offsettedList = new List<float>();
@@ -237,6 +262,14 @@ public class MLAgent : Agent
         return offsettedList;
     }
 
+
+    /// <summary>
+    /// Offset all the values in a Vector2 by some amount.
+    /// This is used for the AI because it only can get values from zero and up.
+    /// </summary>
+    /// <param name="originalVector2">Original Vector2</param>
+    /// <param name="offsetAmount">Offset amount</param>
+    /// <returns>New offset Vector2</returns>
     private Vector2 Offsetter(Vector2 originalVector2, float offsetAmount)
     {
         return new Vector2(originalVector2.x + offsetAmount, originalVector2.y + offsetAmount);

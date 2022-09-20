@@ -966,7 +966,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 49cfa4cf33c5ab045a289060bb8bb613, type: 2}
   - {fileID: 11400000, guid: 1de5b355d7b60984286f5a0699e3e4be, type: 2}
   - {fileID: 11400000, guid: 28061709d247c5a4f88baa222325508e, type: 2}
-  tokenProb: 40
+  tokenProb: 20
+  aIOnTeamX: 0101
+  trainingMapType: 0
 --- !u!4 &417176095
 Transform:
   m_ObjectHideFlags: 0
@@ -1279,8 +1281,8 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 50
-  gameManager: {fileID: 0}
+  MaxStep: 100
+  gameManager: {fileID: 417176094}
 --- !u!114 &511959292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1305,7 +1307,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 1
+  m_BehaviorType: 0
   m_BehaviorName: DungeonMaster
   TeamId: 0
   m_UseChildSensors: 1
@@ -3506,7 +3508,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 1
+  m_BehaviorType: 0
   m_BehaviorName: DungeonMaster
   TeamId: 1
   m_UseChildSensors: 1
@@ -3528,8 +3530,8 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 50
-  gameManager: {fileID: 0}
+  MaxStep: 100
+  gameManager: {fileID: 417176094}
 --- !u!4 &1669681934
 Transform:
   m_ObjectHideFlags: 0

@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float combatStartDelay = 1.5f;
     #endregion
 
-    [Header("Actual variables")]
+    [Header("Gameplay variables")]
     [SerializeField] private int initiativeDie = 20; // When the combat starts the player roll d20 to see who goes first. Lifted directly from D&D 5E.
     private TurnManager turnManager; // Keeps trak of who is next and who are in the game.
 
@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Gameboard gameboard;
     public event EventHandler<OnEndTurnEventArgs> OnEndTurn; // Event for updating UI
 
-    [Header("Player variables")]
+    [Header("Player/token variables")]
     public ActionScriptableObject[] heroActions;
     public ActionScriptableObject selectedAction;
     public Dictionary<Tile, int> movementArea = new Dictionary<Tile, int>(); // Stores all the tiles where current player can go
@@ -56,7 +56,9 @@ public class GameManager : MonoBehaviour
     public EnemyPartyScriptableObject enemyParty;
     [SerializeField] private bool trainingMode = false;
     [SerializeField] private HeroScriptableObject[] tokenPool; // Used for random selection of tokens
-    [SerializeField][Range(0, 100)] private int tokenProb; // How likely is it to get token in percent
+    [SerializeField] [Range(0, 100)] private int tokenProb; // How likely is it to get token in percent
+    [SerializeField] private bool[] aIOnTeamX = new bool[2] { true, true };
+    [SerializeField] MapType trainingMapType;
 
     private void Start()
     {
@@ -290,6 +292,12 @@ public class GameManager : MonoBehaviour
         ShowMovementArea();
 
         currentPlayer.HighlightSetActive(true); // Highlight the first player by switching on the highligh gameobject
+
+        int currentPlayerTeam = currentPlayer.GetPlayerTeam();
+        if (aIOnTeamX[currentPlayerTeam])
+        {
+            aIManager.MakeAIPlayTurn(currentPlayerTeam);
+        }
     }
 
 
@@ -314,7 +322,12 @@ public class GameManager : MonoBehaviour
         ShowMovementArea();
         heroActions = currentPlayer.GetActions();
         OnEndTurn?.Invoke(this, new OnEndTurnEventArgs(true, !true));
-        aIManager.MakeAIPlayTurn(currentPlayer.GetPlayerTeam());
+
+        int currentPlayerTeam = currentPlayer.GetPlayerTeam();
+        if (aIOnTeamX[currentPlayerTeam])
+        {
+            aIManager.MakeAIPlayTurn(currentPlayerTeam);
+        }
     }
 
 
