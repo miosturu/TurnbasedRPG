@@ -97,7 +97,7 @@ public class MLAgent : Agent
     private void Start()
     {
         // Get game manager reference so we can use it later
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        // gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     /// <summary>
@@ -183,7 +183,7 @@ public class MLAgent : Agent
         int endTurn = actions.DiscreteActions[4];
 
         // Do one of the token's actions, if failed, set reward as negative
-        if (actionNumber != -1 || actionCoordX != -1 || actionCoordZ != -1)
+        if (actionNumber != -1 && actionCoordX != -1 && actionCoordZ != -1)
         {
             // Do selected action
             // Get current game piece's location abd action's target location
@@ -195,9 +195,13 @@ public class MLAgent : Agent
             }
             else
             {
-                AddReward(-0.1f);
+                AddReward(-0.25f);
                 invalidMoveCount++;
             }
+        }
+        else
+        {
+            AddReward(-0.010f);
         }
 
         // Move token, if failed, set reward as negative value
@@ -218,26 +222,34 @@ public class MLAgent : Agent
             }
             else // if fail
             {
-                AddReward(-0.1f);
+                AddReward(-0.25f);
                 invalidMoveCount++;
             }
         }
+        else
+        {
+            AddReward(-0.010f);
+        }
 
-        else if (endTurn == 1 || (movementDirection == -1 && actionNumber == -1 && actionCoordX == -1 && actionCoordZ == -1))
+        // If turn is ended or cant move and do anything
+        if (endTurn == 1 || (movementDirection == -1 && actionNumber == -1 && actionCoordX == -1 && actionCoordZ == -1))
         {
             gameManager.EndTurn();
             currentAIState = AIState.waitingTurn;
         }
 
+        // If one team is eliminated
         if (gameManager.winnerTeamNumber != -1)
         {
             EndEpisode();
         }
 
+        // If AI does too many invalid moves in a row
         if (invalidMoveCount >= maxInvalidMoves)
         {
             invalidMoveCount = 0;
             SetReward(-1);
+            gameManager.EndTurn();
         }
 
     }

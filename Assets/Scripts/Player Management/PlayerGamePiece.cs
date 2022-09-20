@@ -70,7 +70,8 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
         {
             // Player's character dies
             Debug.Log(name + " took " + amount + " damage and died");
-            GameObject.Find("GameManager").GetComponent<GameManager>().RemovePlayer(this);
+            //GameObject.Find("GameManager").GetComponent<GameManager>().RemovePlayer(this);
+            GetComponentInParent<GameManager>().RemovePlayer(this);
             gameObject.SetActive(false);
             enabled = false;
         }

@@ -27,7 +27,8 @@ public class Tile : MonoBehaviour
 
     private void Start()
     {
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        //gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        gameManager = GetComponentInParent<GameManager>();
     }
 
 
