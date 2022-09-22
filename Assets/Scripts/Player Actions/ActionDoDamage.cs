@@ -63,7 +63,7 @@ public class ActionDoDamage : ActionScriptableObject
         }
         catch
         {
-            Debug.LogError("Tried to target invalid tile: " + origin.name + " vs. " + target.name);
+            //Debug.LogError("Tried to target invalid tile: " + origin.name + " vs. " + target.name);
             return false;
         }
     }

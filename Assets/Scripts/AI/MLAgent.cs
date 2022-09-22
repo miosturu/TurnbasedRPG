@@ -105,7 +105,7 @@ public class MLAgent : Agent
     /// </summary>
     public override void OnEpisodeBegin()
     {
-        Debug.Log("Starting new episode");
+        // Debug.Log("Starting new episode");
         gameManager.ResetGame(); // reset whole gameboard again
         currentAIState = AIState.waitingTurn;
 
@@ -166,17 +166,7 @@ public class MLAgent : Agent
     /// <param name="actions">List of inputs that will determine actions</param>
     public override void OnActionReceived(ActionBuffers actions)
     {
-        // Debug.Log("AI is trying to do something");
-
-        /*Debug.Log("Token type: " + gameManager.currentPlayer.GetGameObject().name
-                + "\nMove dir.: "   + (actions.DiscreteActions[0] - 1)  
-                + "\nAction index: " + (actions.DiscreteActions[1] - 1)
-                + "\nAction x: " + (actions.DiscreteActions[2] - 1) 
-                + "\nAction z: " + (actions.DiscreteActions[3] - 1)
-                + "\nEnd turn: " + actions.DiscreteActions[4]
-            );*/
-
-        int movementDirection = actions.DiscreteActions[0] - 1; // -1, 0, 1, ..., 7
+        int movementDirection = actions.DiscreteActions[0] - 1;
         int actionNumber = actions.DiscreteActions[1] - 1; // -1, 0, 1, 2, 3
         int actionCoordX = actions.DiscreteActions[2] - 1; // 0...6
         int actionCoordZ = actions.DiscreteActions[3] - 1; // 0...9
@@ -191,64 +181,56 @@ public class MLAgent : Agent
             {
                 /*AddReward((gameManager.GetTeamHP(enemyTeamNumber) - enemyTotalHP) * enemyHPPercentage);
                 enemyTotalHP = gameManager.GetTeamHP(enemyTeamNumber);*/
-                AddReward(0.25f);
+                AddReward(0.5f);
+                gameManager.EndTurn();
             }
             else
             {
-                AddReward(-0.25f);
+                AddReward(-0.05f);
                 invalidMoveCount++;
             }
         }
-        else
-        {
-            AddReward(-0.010f);
-        }
 
-        // Move token, if failed, set reward as negative value
         if (movementDirection != -1 && gameManager.movementArea.Keys.Count >= 1)
         {
-            // Moving player to certain direction
-            // Get current game piece's location and move it from that location to new one
-            // Seperated this here so the code could be more readable
+            float previousDistance = gameManager.AverageDistanceToTeam(enemyTeamNumber);
+
             int relativeXmove = directions[movementDirection, 0];
             int relativeZmove = directions[movementDirection, 1];
-
-            // Debug.Log("AI relative move: (" + relativeXmove + ", " + relativeZmove + ")");
 
             // If the move is a success
             if (gameManager.MovePlayer(relativeXmove, relativeZmove))
             {
-                AddReward(0.1f);
+                float dDistance = Mathf.Abs(previousDistance - gameManager.AverageDistanceToTeam(enemyTeamNumber));
+                if (dDistance == 0)
+                {
+                    AddReward(0.25f);
+                }
+                else
+                {
+                    AddReward(1f / (dDistance * 9f));
+                }
             }
             else // if fail
             {
-                AddReward(-0.25f);
+                AddReward(-0.05f);
                 invalidMoveCount++;
             }
-        }
-        else
-        {
-            AddReward(-0.010f);
-        }
 
-        // If turn is ended or cant move and do anything
-        if (endTurn == 1 || (movementDirection == -1 && actionNumber == -1 && actionCoordX == -1 && actionCoordZ == -1))
-        {
             gameManager.EndTurn();
-            currentAIState = AIState.waitingTurn;
         }
 
-        // If one team is eliminated
-        if (gameManager.winnerTeamNumber != -1)
+        if (gameManager.movementArea.Keys.Count <= 0 && endTurn == 1)
         {
-            EndEpisode();
+            AddReward(0.1f);
+            gameManager.EndTurn();
         }
 
         // If AI does too many invalid moves in a row
         if (invalidMoveCount >= maxInvalidMoves)
         {
             invalidMoveCount = 0;
-            SetReward(-1);
+            SetReward(-1f);
             gameManager.EndTurn();
         }
 

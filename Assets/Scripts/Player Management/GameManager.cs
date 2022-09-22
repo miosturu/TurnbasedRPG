@@ -76,7 +76,22 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            aIManager.MakeAIPlayTurn(currentPlayer.GetPlayerTeam());
+            int tm = -1;
+            if (currentPlayer.GetPlayerTeam() == 0)
+            {
+                tm = 1;
+            } else {
+                tm = 0;
+            }
+
+            float reward = 1f / AverageDistanceToTeam(tm);
+
+            if (reward == (1f / 0))
+            {
+                reward = 1;
+            }
+
+            Debug.Log(reward);           
         }
     }
 
@@ -966,5 +981,31 @@ public class GameManager : MonoBehaviour
 
         return totalHP;
     }
+
+
+    public float AverageDistanceToTeam(int teamNumber)
+    {
+        float teamX = 0;
+        float teamZ = 0;
+
+        foreach(PlayerGamePiece token in playerTokenPositions.Keys)
+        {
+            if (token.isActiveAndEnabled && token.GetPlayerTeam() == teamNumber)
+            {
+                Tile tile = token.GetComponentInParent<Tile>();
+                teamX += tile.xCoord;
+                teamZ += tile.zCoord;
+            }
+        }
+
+        teamX = teamX / numberOfPieces[teamNumber];
+        teamZ = teamZ / numberOfPieces[teamNumber];
+
+        Tile currentTile = currentPlayer.GetGameObject().GetComponentInParent<Tile>();
+
+        float dx = currentTile.xCoord - teamX;
+        float dz = currentTile.zCoord - teamZ;
+
+        return new Vector2(dx, dz).magnitude;
+    }
 }
-/// TODO: A way to choose which side(s) have an AI.

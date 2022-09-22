@@ -830,6 +830,14 @@ PrefabInstance:
       propertyPath: aIOnTeamX.Array.data[0]
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1886964060356906170, guid: 8902e1b0acd974243b2575e7a3e1046c, type: 3}
+      propertyPath: aIOnTeamX.Array.data[1]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1886964060463756895, guid: 8902e1b0acd974243b2575e7a3e1046c, type: 3}
+      propertyPath: MaxStep
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 1886964060483528456, guid: 8902e1b0acd974243b2575e7a3e1046c, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -881,6 +889,10 @@ PrefabInstance:
     - target: {fileID: 1886964060513650088, guid: 8902e1b0acd974243b2575e7a3e1046c, type: 3}
       propertyPath: m_Model
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1886964060513650089, guid: 8902e1b0acd974243b2575e7a3e1046c, type: 3}
+      propertyPath: MaxStep
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 1886964060562822195, guid: 8902e1b0acd974243b2575e7a3e1046c, type: 3}
       propertyPath: m_IsActive
