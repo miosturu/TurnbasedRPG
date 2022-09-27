@@ -77,7 +77,7 @@ public class MLAgent : Agent
     public AIState currentAIState { get; set; }
 
     private int invalidMoveCount = 0;
-    private int maxInvalidMoves = 10;
+    private int maxInvalidMoves = 5;
 
     private int teamTotalHP;
     private float ownHPPercentage;
@@ -109,11 +109,10 @@ public class MLAgent : Agent
         gameManager.ResetGame(); // reset whole gameboard again
         currentAIState = AIState.waitingTurn;
 
-        teamTotalHP = gameManager.GetTeamHP(ownTeamNumber);
+        /*teamTotalHP = gameManager.GetTeamHP(ownTeamNumber);
         ownHPPercentage = 1 / teamTotalHP;
-
         enemyTotalHP = gameManager.GetTeamHP(enemyTeamNumber);
-        enemyHPPercentage = 1 / enemyTotalHP;
+        enemyHPPercentage = 1 / enemyTotalHP;*/
 
     }
 
@@ -127,19 +126,148 @@ public class MLAgent : Agent
     /// <param name="sensor"></param>
     public override void CollectObservations(VectorSensor sensor)
     {
-        // Debug.Log("AI is observing");
+        // Input map layout
+        // 54 bools
+        foreach(bool b in gameManager.GetGameboard().GetTileWalkabilityMap())
+        {
+            sensor.AddObservation(b);
+        }
 
-        // Get the layout of the map as float list. Originally tried to use 2D array of enums but the library requires list of floats in this case
-        // For example, 0.0f is walkable, 1.0f is a wall.
-        sensor.AddObservation(Offsetter(gameManager.GetGameboard().GetTileTypeMap(), 1f));
+        // Current token type
+        // 1 int
         sensor.AddObservation(gameManager.GetCurrentTokenType());
-        sensor.AddObservation(Offsetter(gameManager.GetCurrentTokenCoordinates(), 1f));
-        sensor.AddObservation(Offsetter(gameManager.GetTokenLocations(gameManager.currentPlayer.GetPlayerTeam()), 1f));
 
-        sensor.AddObservation(Offsetter(gameManager.GetTokenLocations(enemyTeamNumber), 1f));
-        sensor.AddObservation(Offsetter(gameManager.GetValidTargetForEachAction(), 1f));
-        sensor.AddObservation(Offsetter(gameManager.GetMovementAreaAsFloats(), 1f));
+        // Current position
+        // 54 bools
+        foreach (bool b in gameManager.GetCurrentLocationAsBoolList())
+        {
+            sensor.AddObservation(b);
+        }
+
+        // Current movement area
+        // 54 bool
+        foreach (bool b in gameManager.GetMovementAreaAsBools())
+        {
+            sensor.AddObservation(b);
+        }
+
+        // Locations of own team tokens
+        // 54 bools
+        foreach (bool b in gameManager.GetTokenLocationsBool(ownTeamNumber))
+        {
+            sensor.AddObservation(b);
+        }
+
+        // Locations of enemy team tokens
+        // 54 bools
+        foreach (bool b in gameManager.GetTokenLocationsBool(enemyTeamNumber))
+        {
+            sensor.AddObservation(b);
+        }
+
+        // Valid targets
+        // 216 bools
+        foreach (bool b in gameManager.GetValidTargetForEachActionBool())
+        {
+            sensor.AddObservation(b);
+        }
+
+        // How many actions token can make
+        // 1 int
         sensor.AddObservation(gameManager.playerActionsLeftOnTurn);
+    }
+
+
+    /// <summary>
+    /// Called when the agent has to do an action.
+    /// Also include the reward, which is in this case total damage done or negated.
+    /// 
+    /// The plan is forthe AI to move one tile at the time.
+    /// Actions can get values starting from 0, so we need to rethink this a bit
+    /// </summary>
+    /// <param name="actions">List of inputs that will determine actions</param>
+    public override void OnActionReceived(ActionBuffers actions)
+    {
+        // If it's not current AI's turn.
+        if (currentAIState != AIState.playingTurn)
+            return;
+
+        int movementDirection = actions.DiscreteActions[0] - 1;
+        int actionNumber = actions.DiscreteActions[1] - 1; // -1, 0, 1, 2, 3
+        int actionCoordX = actions.DiscreteActions[2] - 1; // 0...6
+        int actionCoordZ = actions.DiscreteActions[3] - 1; // 0...9
+        int endTurn = actions.DiscreteActions[4];
+
+        // Do one of the token's actions, if failed, set reward as negative
+        if (actionNumber != -1 && actionCoordX != -1 && actionCoordZ != -1)
+        {
+            // Do selected action
+            // Get current game piece's location abd action's target location
+            gameManager.selectedAction = gameManager.heroActions[actionNumber];
+            if (gameManager.DoSelectedAction(actionCoordX, actionCoordZ))
+            {
+                /*AddReward((gameManager.GetTeamHP(enemyTeamNumber) - enemyTotalHP) * enemyHPPercentage);
+                enemyTotalHP = gameManager.GetTeamHP(enemyTeamNumber);
+
+                AddReward((gameManager.GetTeamHP(ownTeamNumber) - teamTotalHP) * ownHPPercentage);
+                teamTotalHP = gameManager.GetTeamHP(ownTeamNumber);*/
+
+                AddReward(0.05f);
+            }
+            else
+            {
+                invalidMoveCount++;
+                AddReward(-0.05f);
+            }
+        }
+
+        if (movementDirection != -1 && gameManager.movementArea.Keys.Count >= 1)
+        {
+            float previousDistance = gameManager.AverageDistanceToTeam(enemyTeamNumber);
+
+            int relativeXmove = directions[movementDirection, 0];
+            int relativeZmove = directions[movementDirection, 1];
+
+            // If the move is a success
+            if (gameManager.MovePlayer(relativeXmove, relativeZmove))
+            {
+                if (gameManager.AverageDistanceToTeam(enemyTeamNumber) < previousDistance)
+                {
+                    AddReward(0.5f);
+                }
+            }
+            else // if fail
+            {
+                invalidMoveCount++;
+                AddReward(-0.05f);
+            }
+        }
+
+        if ((gameManager.movementArea.Keys.Count <= 0 && endTurn == 1) || gameManager.playerActionsLeftOnTurn <= 0 && endTurn == 1)
+        {
+            AddReward(0.25f);
+            currentAIState = AIState.waitingTurn;
+            gameManager.EndTurn();
+        }
+
+        if (endTurn == 1)
+        {
+            AddReward(0.15f);
+        }
+
+        // If AI does too many invalid moves in a row
+        if (invalidMoveCount >= maxInvalidMoves)
+        {
+            invalidMoveCount = 0;
+            AddReward(-0.75f);
+            currentAIState = AIState.waitingTurn;
+            gameManager.EndTurn();
+        }
+
+        if (gameManager.winnerTeamNumber != -1)
+        {
+            EndEpisode();
+        }
     }
 
 
@@ -154,87 +282,6 @@ public class MLAgent : Agent
         ActionSegment<int> discreteActions = actionsOut.DiscreteActions;
 
     }*/
-
-
-    /// <summary>
-    /// Called when the agent has to do an action.
-    /// Also include the reward, which is in this case total damage done or negated.
-    /// 
-    /// The plan is forthe AI to move one tile at the time.
-    /// Actions can get values starting from 0, so we need to rethink this a bit
-    /// </summary>
-    /// <param name="actions">List of inputs that will determine actions</param>
-    public override void OnActionReceived(ActionBuffers actions)
-    {
-        int movementDirection = actions.DiscreteActions[0] - 1;
-        int actionNumber = actions.DiscreteActions[1] - 1; // -1, 0, 1, 2, 3
-        int actionCoordX = actions.DiscreteActions[2] - 1; // 0...6
-        int actionCoordZ = actions.DiscreteActions[3] - 1; // 0...9
-        int endTurn = actions.DiscreteActions[4];
-
-        // Do one of the token's actions, if failed, set reward as negative
-        if (actionNumber != -1 && actionCoordX != -1 && actionCoordZ != -1)
-        {
-            // Do selected action
-            // Get current game piece's location abd action's target location
-            if (gameManager.DoSelectedAction(actionCoordX, actionCoordZ))
-            {
-                /*AddReward((gameManager.GetTeamHP(enemyTeamNumber) - enemyTotalHP) * enemyHPPercentage);
-                enemyTotalHP = gameManager.GetTeamHP(enemyTeamNumber);*/
-                AddReward(0.5f);
-                gameManager.EndTurn();
-            }
-            else
-            {
-                AddReward(-0.05f);
-                invalidMoveCount++;
-            }
-        }
-
-        if (movementDirection != -1 && gameManager.movementArea.Keys.Count >= 1)
-        {
-            float previousDistance = gameManager.AverageDistanceToTeam(enemyTeamNumber);
-
-            int relativeXmove = directions[movementDirection, 0];
-            int relativeZmove = directions[movementDirection, 1];
-
-            // If the move is a success
-            if (gameManager.MovePlayer(relativeXmove, relativeZmove))
-            {
-                float dDistance = Mathf.Abs(previousDistance - gameManager.AverageDistanceToTeam(enemyTeamNumber));
-                if (dDistance == 0)
-                {
-                    AddReward(0.25f);
-                }
-                else
-                {
-                    AddReward(1f / (dDistance * 9f));
-                }
-            }
-            else // if fail
-            {
-                AddReward(-0.05f);
-                invalidMoveCount++;
-            }
-
-            gameManager.EndTurn();
-        }
-
-        if (gameManager.movementArea.Keys.Count <= 0 && endTurn == 1)
-        {
-            AddReward(0.1f);
-            gameManager.EndTurn();
-        }
-
-        // If AI does too many invalid moves in a row
-        if (invalidMoveCount >= maxInvalidMoves)
-        {
-            invalidMoveCount = 0;
-            SetReward(-1f);
-            gameManager.EndTurn();
-        }
-
-    }
 
 
     /// <summary>
@@ -267,6 +314,24 @@ public class MLAgent : Agent
     private Vector2 Offsetter(Vector2 originalVector2, float offsetAmount)
     {
         return new Vector2(originalVector2.x + offsetAmount, originalVector2.y + offsetAmount);
+    }
+
+
+    /// <summary>
+    /// This method exists because I tried to implement list of bools as observations but the AI only supports float lists
+    /// </summary>
+    /// <param name="boolList"></param>
+    /// <returns></returns>
+    private List<float> BoolListToFloatList(List<bool> boolList)
+    {
+        List<float> floatList = new List<float>();
+
+        foreach(bool b in boolList)
+        {
+            floatList.Add(System.Convert.ToSingle(b));
+        }
+
+        return floatList;
     }
 
 }

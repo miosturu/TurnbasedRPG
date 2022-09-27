@@ -23,6 +23,7 @@ public class Gameboard : MonoBehaviour
     private readonly int[,] directions = new int[,] { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 }, { -1, 1 }, { 1, 1 }, { 1, -1 }, { -1, -1 } }; // Used to generate the graph. This is looped to check adjacent tiles.
 
     private List<float> tileTypeMap; // Used for AI. It requires float array if several elements are wanted. Uses enum's help.
+    private List<bool> tileWalkabilityMap;
 
     // The tile regions' tiles
     [Header("A")]
@@ -206,6 +207,7 @@ public class Gameboard : MonoBehaviour
         TileRegionScriptableObject current;
 
         tileTypeMap = new List<float>();
+        tileWalkabilityMap = new List<bool>();
 
         float offSetX = 0; // Off sets for generating map one region at the time
         float offSetZ = 0;
@@ -231,12 +233,15 @@ public class Gameboard : MonoBehaviour
                     {
                         case TileType.Walkable:
                             tileSO = availableTiles[0];
+                            tileWalkabilityMap.Add(true);
                             break;
                         case TileType.Wall:
                             tileSO = availableTiles[1];
+                            tileWalkabilityMap.Add(false);
                             break;
                         case TileType.Halfhight:
                             tileSO = availableTiles[2];
+                            tileWalkabilityMap.Add(false);
                             break;
                         default:
                             Debug.Log("Error: unknown tile type");
@@ -363,6 +368,7 @@ public class Gameboard : MonoBehaviour
         }
 
         tileTypeMap = new List<float>();
+        tileWalkabilityMap = new List<bool>();
 
         Queue<TileRegionScriptableObject> regions = SelectRandomTileRegions();
         TileRegionScriptableObject current;
@@ -387,12 +393,15 @@ public class Gameboard : MonoBehaviour
                     {
                         case TileType.Walkable:
                             tileSO = availableTiles[0];
+                            tileWalkabilityMap.Add(true);
                             break;
                         case TileType.Wall:
                             tileSO = availableTiles[1];
+                            tileWalkabilityMap.Add(false);
                             break;
                         case TileType.Halfhight:
                             tileSO = availableTiles[2];
+                            tileWalkabilityMap.Add(false);
                             break;
                         default:
                             Debug.Log("Error: unknown tile type");
@@ -437,5 +446,11 @@ public class Gameboard : MonoBehaviour
     {
         // Debug.Log("GetTileTypeMap output size: " + tileTypeMap.Count);
         return tileTypeMap;
+    }
+
+
+    public List<bool> GetTileWalkabilityMap()
+    {
+        return tileWalkabilityMap;
     }
 }

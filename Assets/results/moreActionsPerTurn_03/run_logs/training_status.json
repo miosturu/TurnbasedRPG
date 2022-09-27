@@ -1,0 +1,66 @@
+{
+    "DungeonMaster": {
+        "checkpoints": [
+            {
+                "steps": 999900,
+                "file_path": "results\\moreActionsPerTurn_03\\DungeonMaster\\DungeonMaster-999900.onnx",
+                "reward": -5.534883439078811,
+                "creation_time": 1664188046.8282413,
+                "auxillary_file_paths": [
+                    "results\\moreActionsPerTurn_03\\DungeonMaster\\DungeonMaster-999900.pt"
+                ]
+            },
+            {
+                "steps": 1499900,
+                "file_path": "results\\moreActionsPerTurn_03\\DungeonMaster\\DungeonMaster-1499900.onnx",
+                "reward": -5.696067143022344,
+                "creation_time": 1664189870.0549889,
+                "auxillary_file_paths": [
+                    "results\\moreActionsPerTurn_03\\DungeonMaster\\DungeonMaster-1499900.pt"
+                ]
+            },
+            {
+                "steps": 1999900,
+                "file_path": "results\\moreActionsPerTurn_03\\DungeonMaster\\DungeonMaster-1999900.onnx",
+                "reward": -4.31530579559657,
+                "creation_time": 1664191715.9036334,
+                "auxillary_file_paths": [
+                    "results\\moreActionsPerTurn_03\\DungeonMaster\\DungeonMaster-1999900.pt"
+                ]
+            },
+            {
+                "steps": 2499900,
+                "file_path": "results\\moreActionsPerTurn_03\\DungeonMaster\\DungeonMaster-2499900.onnx",
+                "reward": -4.4999997350904675,
+                "creation_time": 1664193428.2093136,
+                "auxillary_file_paths": [
+                    "results\\moreActionsPerTurn_03\\DungeonMaster\\DungeonMaster-2499900.pt"
+                ]
+            },
+            {
+                "steps": 2501000,
+                "file_path": "results\\moreActionsPerTurn_03\\DungeonMaster\\DungeonMaster-2501000.onnx",
+                "reward": -4.967499697208405,
+                "creation_time": 1664193431.675936,
+                "auxillary_file_paths": [
+                    "results\\moreActionsPerTurn_03\\DungeonMaster\\DungeonMaster-2501000.pt"
+                ]
+            }
+        ],
+        "elo": 1200.0,
+        "final_checkpoint": {
+            "steps": 2501000,
+            "file_path": "results\\moreActionsPerTurn_03\\DungeonMaster.onnx",
+            "reward": -4.967499697208405,
+            "creation_time": 1664193431.675936,
+            "auxillary_file_paths": [
+                "results\\moreActionsPerTurn_03\\DungeonMaster\\DungeonMaster-2501000.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.11.0+cpu"
+    }
+}

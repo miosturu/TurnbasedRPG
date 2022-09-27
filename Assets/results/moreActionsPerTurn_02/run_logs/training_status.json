@@ -1,0 +1,39 @@
+{
+    "DungeonMaster": {
+        "checkpoints": [
+            {
+                "steps": 499940,
+                "file_path": "results\\moreActionsPerTurn_02\\DungeonMaster\\DungeonMaster-499940.onnx",
+                "reward": 0.356713756269086,
+                "creation_time": 1664179688.7688198,
+                "auxillary_file_paths": [
+                    "results\\moreActionsPerTurn_02\\DungeonMaster\\DungeonMaster-499940.pt"
+                ]
+            },
+            {
+                "steps": 502056,
+                "file_path": "results\\moreActionsPerTurn_02\\DungeonMaster\\DungeonMaster-502056.onnx",
+                "reward": null,
+                "creation_time": 1664179703.507632,
+                "auxillary_file_paths": [
+                    "results\\moreActionsPerTurn_02\\DungeonMaster\\DungeonMaster-502056.pt"
+                ]
+            }
+        ],
+        "elo": 1719.4979948068014,
+        "final_checkpoint": {
+            "steps": 502056,
+            "file_path": "results\\moreActionsPerTurn_02\\DungeonMaster.onnx",
+            "reward": null,
+            "creation_time": 1664179703.507632,
+            "auxillary_file_paths": [
+                "results\\moreActionsPerTurn_02\\DungeonMaster\\DungeonMaster-502056.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.11.0+cpu"
+    }
+}

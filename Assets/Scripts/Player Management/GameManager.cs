@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Stores which team is the winner. -1 is no one is, 0 is the player, 1 is the AI.
     /// </summary>
-    public int winnerTeamNumber = -1; // 
+    public int winnerTeamNumber = -1;
 
     private Dictionary<PlayerGamePiece, int[]> playerTokenPositions = new Dictionary<PlayerGamePiece, int[]>();
 
@@ -72,26 +72,6 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             ResetGame();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            int tm = -1;
-            if (currentPlayer.GetPlayerTeam() == 0)
-            {
-                tm = 1;
-            } else {
-                tm = 0;
-            }
-
-            float reward = 1f / AverageDistanceToTeam(tm);
-
-            if (reward == (1f / 0))
-            {
-                reward = 1;
-            }
-
-            Debug.Log(reward);           
         }
     }
 
@@ -353,6 +333,8 @@ public class GameManager : MonoBehaviour
     {
         gameboard.ResetGameBoard(); // Reset the game board's tiles
 
+        winnerTeamNumber = -1;
+
         // After reset we have to regenerate movement area and show it
         ResetMovementArea();
 
@@ -367,6 +349,14 @@ public class GameManager : MonoBehaviour
         // Initialize new game as if it's first
         InitializeFirstTurn();
         EndTurn(); // We make sure that the UI will be reset
+
+        foreach (GameObject tileObj in gameboard.map)
+        {
+            if (tileObj.GetComponent<Tile>().currentObject != null)
+            {
+                tileObj.GetComponent<Tile>().currentObject.SetActive(true);
+            }
+        }
     }
 
 
@@ -586,17 +576,17 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Action failed");
+            //Debug.Log("Action failed");
             if (playerActionsLeftOnTurn <= 0)
             {
-                Debug.Log("Not enough actions left");
+                //Debug.Log("Not enough actions left");
             }
             if (selectedAction.Action(origin, target))
             {
                 String originString = "(" + origin.xCoord + ", " + origin.zCoord + ")";
                 String targetString = "(" + target.xCoord + ", " + target.zCoord + ")";
 
-                Debug.Log("Target is invalid relative to current position: " + originString + " vs. " + targetString);
+                //Debug.Log("Target is invalid relative to current position: " + originString + " vs. " + targetString);
             }
 
             selectedAction = null;
@@ -857,6 +847,30 @@ public class GameManager : MonoBehaviour
 
 
     /// <summary>
+    /// Get the current token's movement area as a list of bools.
+    /// </summary>
+    /// <returns></returns>
+    public List<bool> GetMovementAreaAsBools()
+    {
+        List<bool> movementAreaBool = new List<bool>();
+
+        foreach(GameObject tileObject in gameboard.map)
+        {
+            if (movementArea.ContainsKey(tileObject.GetComponent<Tile>()))
+            {
+                movementAreaBool.Add(true);
+            }
+            else
+            {
+                movementAreaBool.Add(false);
+            }
+        }
+
+        return movementAreaBool;
+    }
+
+
+    /// <summary>
     /// Get current token's type as integer.
     /// Used by the AI to make disicions.
     /// </summary>
@@ -927,6 +941,36 @@ public class GameManager : MonoBehaviour
 
 
     /// <summary>
+    /// Get all the valid targets as list of bools
+    /// For each action there's 54 bool for the total of 54 * 4 = 216 bools.
+    /// </summary>
+    /// <returns></returns>
+    public List<bool> GetValidTargetForEachActionBool()
+    {
+        List<bool> validTargetsBool = new List<bool>();
+        Tile playerTile = currentPlayer.GetGameObject().GetComponentInParent<Tile>();
+
+        foreach (ActionScriptableObject action in heroActions)
+        {
+            foreach (GameObject tileObject in gameboard.map)
+            {
+                Tile tile = tileObject.GetComponent<Tile>();
+                if (action.TargetIsValid(playerTile, tile))
+                {
+                    validTargetsBool.Add(true);
+                }
+                else
+                {
+                    validTargetsBool.Add(false);
+                }
+            }
+        }
+
+        return validTargetsBool;
+    }
+
+
+    /// <summary>
     /// Get team's tokens' locations as a list of floats.
     /// This method is planned to be used by ML agent.
     /// The return list is always 18 floats long, because each team can have up to 9 tokens with 2 coordinates each.
@@ -963,6 +1007,61 @@ public class GameManager : MonoBehaviour
 
 
     /// <summary>
+    /// Get team's locations as list of bools.
+    /// </summary>
+    /// <param name="teamNumber"></param>
+    /// <returns></returns>
+    public List<bool> GetTokenLocationsBool(int teamNumber)
+    {
+        List<bool> tokenLocations = new List<bool>();
+
+        foreach(GameObject tileObject in gameboard.map)
+        {
+            Tile tile = tileObject.GetComponent<Tile>();
+            
+            if (tile.currentObject != null && tile.currentObject.GetComponentInChildren<PlayerGamePiece>().GetPlayerTeam() == teamNumber)
+            {
+                tokenLocations.Add(true);
+            }
+            else
+            {
+                tokenLocations.Add(false);
+            }
+        }
+
+        return tokenLocations;
+    }
+
+
+    /// <summary>
+    /// Get current locations as list of bools.
+    /// This should get a list of 54 bools where there's only one true.
+    /// This mehtod is planned to be used by the AI.
+    /// </summary>
+    /// <returns>Get current token's location as list of bools</returns>
+    public List<bool> GetCurrentLocationAsBoolList()
+    {
+        List<bool> tokenLocation = new List<bool>();
+
+        foreach (GameObject tileObject in gameboard.map)
+        {
+            Tile tile = tileObject.GetComponent<Tile>();
+
+            if (tile.currentObject != null && tile.currentObject == currentPlayer.GetGameObject())
+            {
+                tokenLocation.Add(true);
+            }
+            else
+            {
+                tokenLocation.Add(false);
+            }
+        }
+
+        return tokenLocation;
+    }
+
+
+    /// <summary>
     /// Get team's total HP as int value.
     /// This goes through all the tokens from 'playerTokenPositions'-dictionary and then checks if the token is in current game and then adds their current hp to total value.
     /// This method is planned for rewarding AI.
@@ -983,6 +1082,12 @@ public class GameManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Calculate mean distance to team.
+    /// This goes through all the tiles and takes wanted team's coordinates then averages it.
+    /// </summary>
+    /// <param name="teamNumber">Wanted team's number</param>
+    /// <returns>Average distance to team</returns>
     public float AverageDistanceToTeam(int teamNumber)
     {
         float teamX = 0;

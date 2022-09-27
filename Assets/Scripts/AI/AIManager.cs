@@ -21,8 +21,6 @@ public class AIManager : MonoBehaviour
 
     public void MakeAIPlayTurn(int teamNumber)
     {
-        // Debug.Log("MakeAIPlayTurn() was called");
         agents[teamNumber].currentAIState = AIState.playingTurn;
-        agents[teamNumber].RequestDecision();
     }
 }
