@@ -79,12 +79,6 @@ public class MLAgent : Agent
     private int invalidMoveCount = 0;
     private int maxInvalidMoves = 5;
 
-    private int teamTotalHP;
-    private float ownHPPercentage;
-
-    private int enemyTotalHP;
-    private float enemyHPPercentage;
-
     public int ownTeamNumber { get; set; }
     public int enemyTeamNumber { get; set; }
 
@@ -175,6 +169,10 @@ public class MLAgent : Agent
         // How many actions token can make
         // 1 int
         sensor.AddObservation(gameManager.playerActionsLeftOnTurn);
+
+        // HP on each tile
+        // 54 float
+        sensor.AddObservation(gameManager.GetHPonTiles());
     }
 
 
@@ -188,7 +186,7 @@ public class MLAgent : Agent
     /// <param name="actions">List of inputs that will determine actions</param>
     public override void OnActionReceived(ActionBuffers actions)
     {
-        // If it's not current AI's turn.
+        // If it's not current AI's turn, then don't do anything
         if (currentAIState != AIState.playingTurn)
             return;
 
@@ -198,30 +196,33 @@ public class MLAgent : Agent
         int actionCoordZ = actions.DiscreteActions[3] - 1; // 0...9
         int endTurn = actions.DiscreteActions[4];
 
+        int moveOrAction = actions.DiscreteActions[5]; // 0 = move, 1 = action
+
+        int ownTeamHP = gameManager.GetTeamHP(ownTeamNumber);
+        int enemyTeamHP = gameManager.GetTeamHP(enemyTeamNumber);
+
         // Do one of the token's actions, if failed, set reward as negative
-        if (actionNumber != -1 && actionCoordX != -1 && actionCoordZ != -1)
+        if (moveOrAction == 1 && actionNumber != -1 && actionCoordX != -1 && actionCoordZ != -1)
         {
-            // Do selected action
-            // Get current game piece's location abd action's target location
+            // Select new action and the do it
             gameManager.selectedAction = gameManager.heroActions[actionNumber];
             if (gameManager.DoSelectedAction(actionCoordX, actionCoordZ))
             {
-                /*AddReward((gameManager.GetTeamHP(enemyTeamNumber) - enemyTotalHP) * enemyHPPercentage);
-                enemyTotalHP = gameManager.GetTeamHP(enemyTeamNumber);
-
-                AddReward((gameManager.GetTeamHP(ownTeamNumber) - teamTotalHP) * ownHPPercentage);
-                teamTotalHP = gameManager.GetTeamHP(ownTeamNumber);*/
-
-                AddReward(0.05f);
+                // Reward by doing damage and negating damage
+                int ownTeamHPDelta = ownTeamHP - gameManager.GetTeamHP(ownTeamNumber);
+                int enemyTeamHPDelta = enemyTeamHP - gameManager.GetTeamHP(enemyTeamNumber);
+                AddReward(enemyTeamHPDelta);
+                AddReward(ownTeamHPDelta);
             }
             else
             {
+                // If the AI tries to do bad action
                 invalidMoveCount++;
-                AddReward(-0.05f);
             }
         }
 
-        if (movementDirection != -1 && gameManager.movementArea.Keys.Count >= 1)
+        // If the ai tries to move and can move
+        if (moveOrAction == 0 && movementDirection != -1 && gameManager.movementArea.Keys.Count >= 1)
         {
             float previousDistance = gameManager.AverageDistanceToTeam(enemyTeamNumber);
 
@@ -231,39 +232,33 @@ public class MLAgent : Agent
             // If the move is a success
             if (gameManager.MovePlayer(relativeXmove, relativeZmove))
             {
-                if (gameManager.AverageDistanceToTeam(enemyTeamNumber) < previousDistance)
+                /*if (gameManager.AverageDistanceToTeam(enemyTeamNumber) < previousDistance)
                 {
                     AddReward(0.5f);
-                }
+                }*/
             }
             else // if fail
             {
                 invalidMoveCount++;
-                AddReward(-0.05f);
             }
         }
 
-        if ((gameManager.movementArea.Keys.Count <= 0 && endTurn == 1) || gameManager.playerActionsLeftOnTurn <= 0 && endTurn == 1)
-        {
-            AddReward(0.25f);
-            currentAIState = AIState.waitingTurn;
-            gameManager.EndTurn();
-        }
-
+        // End turn
         if (endTurn == 1)
         {
-            AddReward(0.15f);
+            currentAIState = AIState.waitingTurn;
+            gameManager.EndTurn();
         }
 
         // If AI does too many invalid moves in a row
         if (invalidMoveCount >= maxInvalidMoves)
         {
             invalidMoveCount = 0;
-            AddReward(-0.75f);
             currentAIState = AIState.waitingTurn;
             gameManager.EndTurn();
         }
 
+        // If one of the teams is eliminated
         if (gameManager.winnerTeamNumber != -1)
         {
             EndEpisode();

@@ -1,0 +1,66 @@
+{
+    "DungeonMaster": {
+        "checkpoints": [
+            {
+                "steps": 499915,
+                "file_path": "results\\exp1_reward_dmg\\DungeonMaster\\DungeonMaster-499915.onnx",
+                "reward": 0.0,
+                "creation_time": 1664362663.1723032,
+                "auxillary_file_paths": [
+                    "results\\exp1_reward_dmg\\DungeonMaster\\DungeonMaster-499915.pt"
+                ]
+            },
+            {
+                "steps": 999986,
+                "file_path": "results\\exp1_reward_dmg\\DungeonMaster\\DungeonMaster-999986.onnx",
+                "reward": 0.023622047244094488,
+                "creation_time": 1664364745.6880653,
+                "auxillary_file_paths": [
+                    "results\\exp1_reward_dmg\\DungeonMaster\\DungeonMaster-999986.pt"
+                ]
+            },
+            {
+                "steps": 1499986,
+                "file_path": "results\\exp1_reward_dmg\\DungeonMaster\\DungeonMaster-1499986.onnx",
+                "reward": 0.04597701149425287,
+                "creation_time": 1664366793.1207266,
+                "auxillary_file_paths": [
+                    "results\\exp1_reward_dmg\\DungeonMaster\\DungeonMaster-1499986.pt"
+                ]
+            },
+            {
+                "steps": 1999952,
+                "file_path": "results\\exp1_reward_dmg\\DungeonMaster\\DungeonMaster-1999952.onnx",
+                "reward": 0.0,
+                "creation_time": 1664368807.762172,
+                "auxillary_file_paths": [
+                    "results\\exp1_reward_dmg\\DungeonMaster\\DungeonMaster-1999952.pt"
+                ]
+            },
+            {
+                "steps": 2000352,
+                "file_path": "results\\exp1_reward_dmg\\DungeonMaster\\DungeonMaster-2000352.onnx",
+                "reward": 0.0,
+                "creation_time": 1664368810.0844429,
+                "auxillary_file_paths": [
+                    "results\\exp1_reward_dmg\\DungeonMaster\\DungeonMaster-2000352.pt"
+                ]
+            }
+        ],
+        "elo": 1200.0,
+        "final_checkpoint": {
+            "steps": 2000352,
+            "file_path": "results\\exp1_reward_dmg\\DungeonMaster.onnx",
+            "reward": 0.0,
+            "creation_time": 1664368810.0844429,
+            "auxillary_file_paths": [
+                "results\\exp1_reward_dmg\\DungeonMaster\\DungeonMaster-2000352.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.11.0+cpu"
+    }
+}

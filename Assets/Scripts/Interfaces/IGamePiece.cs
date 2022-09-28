@@ -23,6 +23,7 @@ public interface IGamePiece
     int GetPlayerTeam();
     PlayerType GetPlayerType();
     Tokens GetTokenType();
+    void ChangeTokenType(Tokens newTokenType);
 
     // Action functions
     ActionScriptableObject[] GetActions();

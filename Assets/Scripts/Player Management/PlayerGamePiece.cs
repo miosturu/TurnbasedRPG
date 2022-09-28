@@ -229,4 +229,10 @@ public class PlayerGamePiece : MonoBehaviour, IGamePiece
     {
         return tokenType;
     }
+
+
+    public void ChangeTokenType(Tokens newTokenType)
+    {
+        tokenType = newTokenType;
+    }
 }

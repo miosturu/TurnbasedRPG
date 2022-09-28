@@ -66,15 +66,6 @@ public class GameManager : MonoBehaviour
         StartCoroutine(SetUpCombat());
     }
 
-    // TODO: This is for testing the reset function. Should be remove when the testing is done
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            ResetGame();
-        }
-    }
-
 
     /// <summary>
     /// Start combat. Create the needed arrays and set the players on gameboard
@@ -128,6 +119,7 @@ public class GameManager : MonoBehaviour
         player.maxActionsPerTurn = hero.maxActionsPerTurn;
         player.actionsLeft = hero.maxActionsPerTurn;
         player.playerType = hero.playerType;
+        player.tokenType = hero.token;
 
         PlacePlayer(player.gameObject, playerTokenPositions[player][0], playerTokenPositions[player][1]);
         turnManager.AddPlayerToList(player.GetComponent<PlayerGamePiece>(), player.GetPlayerTeam(), new DiceRoller().RollDice(1, initiativeDie) + hero.initiativeBonus);
@@ -388,6 +380,7 @@ public class GameManager : MonoBehaviour
         gamePiece.maxActionsPerTurn = hero.maxActionsPerTurn;
         gamePiece.actionsLeft = hero.maxActionsPerTurn;
         gamePiece.playerType = hero.playerType;
+        gamePiece.tokenType = hero.token;
 
         PlacePlayer(player, x, z);
         turnManager.AddPlayerToList(player.GetComponent<PlayerGamePiece>(), team, new DiceRoller().RollDice(1, initiativeDie) + hero.initiativeBonus);
@@ -1112,5 +1105,33 @@ public class GameManager : MonoBehaviour
         float dz = currentTile.zCoord - teamZ;
 
         return new Vector2(dx, dz).magnitude;
+    }
+
+
+    /// <summary>
+    /// Get tokens' HPs on each tile.
+    /// This function is used by AI agent to observe, how healthy each token is.
+    /// This method doesn't differentiate between team, rather AI has to learn it by its self.
+    /// </summary>
+    /// <returns>54 float long list</returns>
+    public List<float> GetHPonTiles()
+    {
+        List<float> hpOnTile = new List<float>();
+
+        foreach(GameObject tileObject in gameboard.map)
+        {
+            Tile tile = tileObject.GetComponent<Tile>();
+            if (tile.currentObject != null)
+            {
+                PlayerGamePiece token = tile.currentObject.GetComponent<PlayerGamePiece>();
+                hpOnTile.Add((float)token.currentHp / (float)token.maxHp);
+            }
+            else
+            {
+                hpOnTile.Add(0.0f);
+            }
+        }
+
+        return hpOnTile;
     }
 }
