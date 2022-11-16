@@ -63,7 +63,7 @@ using Unity.MLAgents.Actuators;
 ///     > DoAction(actionSlot).
 ///     > EndTurn().
 /// </summary>
-public class MLAgent : Agent
+public class MLAgentShapedActions : Agent
 {
     [SerializeField] private GameManager gameManager;
     EnvironmentParameters environmentParameters;
@@ -170,80 +170,101 @@ public class MLAgent : Agent
 
 
     /// <summary>
-    /// Called when the agent has to do an action.
-    /// Also include the reward, which is in this case total damage done or negated.
-    /// 
-    /// The plan is forthe AI to move one tile at the time.
-    /// Actions can get values starting from 0, so we need to rethink this a bit
+    /// Remade actions to include less useless actions.
+    /// This is done by instead of making AI choose the coordinates of the action, we make it choose the valid target from the list.
+    /// This way the AI doesn't need to learn about proper targeting, instead it can focus on the strategy aspect.
     /// </summary>
-    /// <param name="actions">List of inputs that will determine actions</param>
+    /// <param name="actions"></param>
     public override void OnActionReceived(ActionBuffers actions)
     {
         // If it's not current AI's turn, then don't do anything
         if (currentAIState != AIState.playingTurn)
             return;
 
-        int movementDirection = actions.DiscreteActions[0] - 1;
-        int actionNumber = actions.DiscreteActions[1] - 1; // -1, 0, 1, 2, 3
-        int actionCoordX = actions.DiscreteActions[2] - 1; // 0...6
-        int actionCoordZ = actions.DiscreteActions[3] - 1; // 0...9
-        int endTurn = actions.DiscreteActions[4];
+        int actionMoveOrEnd = actions.DiscreteActions[0]; // 3 values
+        int actionIdex = actions.DiscreteActions[1]; // 4 values
+        int actionTargetIdex = actions.DiscreteActions[2]; // 9 values
+        int moveDirection = actions.DiscreteActions[3]; // 8 values
 
-        int moveOrAction = actions.DiscreteActions[5]; // 0 = move, 1 = action
-
-        int ownTeamHP = gameManager.GetTeamHP(ownTeamNumber);
-        int enemyTeamHP = gameManager.GetTeamHP(enemyTeamNumber);
-
-        // Do one of the token's actions, if failed, set reward as negative
-        if (moveOrAction == 1 && actionNumber != -1 && actionCoordX != -1 && actionCoordZ != -1)
+        gameManager.selectedAction = gameManager.heroActions[actionIdex];
+        gameManager.GetValidTargets();
+        List<Tile> validTargets = gameManager.validTargets;
+        if (validTargets.Count < 9)
         {
-            // Select new action and the do it
-            gameManager.selectedAction = gameManager.heroActions[actionNumber];
-            if (gameManager.DoSelectedAction(actionCoordX, actionCoordZ))
+            while (validTargets.Count < 9)
             {
-                if (ownTeamHP < gameManager.GetTeamHP(ownTeamNumber) || enemyTeamHP > gameManager.GetTeamHP(enemyTeamNumber))
+                validTargets.Add(null);
+            }
+        }
+
+        // If there's valid targets but the AI doesn't try to do actions
+        if (!validTargets.Contains(null) && actionMoveOrEnd != 0)
+        {
+            AddReward(-0.5f);
+        }
+
+        switch (actionMoveOrEnd)
+        {
+            case (0):
+                // Do action
+                // Give reward for trying to do actions
+                AddReward(0.5f);
+
+                Tile originTile = gameManager.currentPlayer.GetGameObject().GetComponentInParent<Tile>();
+                Tile targetTile = gameManager.validTargets[actionTargetIdex];
+
+                if (gameManager.DoSelectedAction(originTile, targetTile))
                 {
-                    AddReward(1f);
+                    // Give really big reward for doing action correctly
+                    AddReward(2.5f);
                 }
-            }
-            else
-            {
-                // If the AI tries to do bad action
-                invalidMoveCount++;
-            }
-        }
-
-        // If the AI tries to move and can move
-        if (moveOrAction == 0 && movementDirection != -1 && gameManager.movementArea.Keys.Count >= 1)
-        {
-            float previousDistance = gameManager.AverageDistanceToTeam(enemyTeamNumber);
-
-            int relativeXmove = directions[movementDirection, 0];
-            int relativeZmove = directions[movementDirection, 1];
-
-            // If the move is a success
-            if (gameManager.MovePlayer(relativeXmove, relativeZmove))
-            {
-                /*if (gameManager.AverageDistanceToTeam(enemyTeamNumber) < previousDistance)
+                else
                 {
-                    AddReward(0.5f);
-                }*/
-            }
-            else // if fail
-            {
-                invalidMoveCount++;
-            }
+                    invalidMoveCount++;
+                }
+                
+                break;
+            case (1):
+                // Move to direction
+                int relativeXmove = directions[moveDirection, 0];
+                int relativeZmove = directions[moveDirection, 1];
+
+                float previousDistance = gameManager.AverageDistanceToTeam(enemyTeamNumber);
+
+                if (gameManager.MovePlayer(relativeXmove, relativeZmove))
+                {
+                    // Give reward for moving towards the enemies
+                    if (gameManager.AverageDistanceToTeam(enemyTeamNumber) < previousDistance)
+                    {
+                        AddReward(0.25f);
+                    }
+                }
+                else
+                {
+                    invalidMoveCount++;
+                }
+                break;
+            case (2):
+                // End turn
+                gameManager.EndTurn();
+                invalidMoveCount = 0;
+                currentAIState = AIState.waitingTurn;
+                AddReward(0.1f);
+                // Give reward for ending turn
+                break;
         }
 
-        // End turn
-        if (endTurn == 1)
+        // If AI does too many invalid moves during the turn
+        if (invalidMoveCount >= maxInvalidMoves)
         {
+            invalidMoveCount = 0;
             currentAIState = AIState.waitingTurn;
             gameManager.EndTurn();
         }
 
-        // If AI does too many invalid moves in a row
-        if (invalidMoveCount >= maxInvalidMoves)
+        // If AI can't do anything else on the turn
+        // Seperated so the reward can be different from invalid moves
+        if (gameManager.movementArea.Count <= 0 && gameManager.playerActionsLeftOnTurn <= 0)
         {
             invalidMoveCount = 0;
             currentAIState = AIState.waitingTurn;

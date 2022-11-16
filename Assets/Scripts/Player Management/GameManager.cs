@@ -54,7 +54,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AIManager aIManager;
     [SerializeField] private EnemyAI ai;
     public EnemyPartyScriptableObject enemyParty;
-    [SerializeField] private bool trainingMode = false;
     [SerializeField] private HeroScriptableObject[] tokenPool; // Used for random selection of tokens
     [SerializeField] [Range(0, 100)] private int tokenProb; // How likely is it to get token in percent
     [SerializeField] private bool[] aIOnTeamX = new bool[2] { true, true };
@@ -64,6 +63,14 @@ public class GameManager : MonoBehaviour
     {
         gameboard.GenerateLevel(MapType.Blank);
         StartCoroutine(SetUpCombat());
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R) && selectedAction != null)
+        {
+            Debug.Log("Expected value: " + selectedAction.GetExpectedValue());
+        }
     }
 
 
@@ -76,17 +83,8 @@ public class GameManager : MonoBehaviour
         //ai = new EnemyAI(gameboard, this);
         heroActions = new ActionScriptableObject[4];
 
-        if (!trainingMode)
-        {
-            turnManager = new TurnManager();
-            SetPlayerTokens();
-            SetEnemyTokens();
-        }
-        else
-        {
-            AddDummyTokens();
-            SelectRandomTokens();
-        }
+        AddDummyTokens();
+        SelectRandomTokens();      
 
         yield return new WaitForSeconds(combatStartDelay); // Wait before the actual combat starts
         InitializeFirstTurn();

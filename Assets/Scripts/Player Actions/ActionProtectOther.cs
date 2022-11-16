@@ -21,6 +21,11 @@ public class ActionProtectOther : ActionScriptableObject
         return actionDescription;
     }
 
+    public override float GetExpectedValue()
+    {
+        throw new System.NotImplementedException();
+    }
+
     public override bool TargetIsValid(Tile origin, Tile target)
     {
         throw new System.NotImplementedException();

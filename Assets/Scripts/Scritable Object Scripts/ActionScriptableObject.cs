@@ -16,4 +16,5 @@ public abstract class ActionScriptableObject : ScriptableObject
     public abstract bool Action(Tile origin, Tile target);
     public abstract bool TargetIsValid(Tile origin, Tile target);
     public abstract string GetDescription();
+    public abstract float GetExpectedValue();
 }

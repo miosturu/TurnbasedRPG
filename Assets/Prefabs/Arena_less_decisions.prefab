@@ -981,8 +981,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agents:
-  - {fileID: 1886964060463756895}
-  - {fileID: 1886964060513650089}
+  - {fileID: 8882684339821320016}
+  - {fileID: 3685441887548716122}
   gameManager: {fileID: 1886964060356906170}
 --- !u!1 &1886964059799871134
 GameObject:
@@ -2387,7 +2387,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1886964060463756894}
-  - component: {fileID: 1886964060463756895}
+  - component: {fileID: 8882684339821320016}
   - component: {fileID: 1886964060463756888}
   - component: {fileID: 4098941011188886790}
   m_Layer: 0
@@ -2411,7 +2411,7 @@ Transform:
   m_Father: {fileID: 1886964060356906171}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1886964060463756895
+--- !u!114 &8882684339821320016
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2420,7 +2420,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1886964060463756893}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c12d6651b4ae6e046abeac8dfb2be730, type: 3}
+  m_Script: {fileID: 11500000, guid: e1dce50b1b4370947aadefa93be0ef8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   agentParameters:
@@ -2445,15 +2445,15 @@ MonoBehaviour:
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
-      BranchSizes: 0900000005000000070000000a0000000200000002000000
-    VectorActionSize: 0900000005000000070000000a0000000200000002000000
+      BranchSizes: 03000000040000000900000008000000
+    VectorActionSize: 03000000040000000900000008000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: DungeonMasterSAC
+  m_BehaviorName: DungeonMaster
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -2484,7 +2484,7 @@ GameObject:
   - component: {fileID: 1886964060483528456}
   - component: {fileID: 5282775981703801756}
   m_Layer: 0
-  m_Name: Arena
+  m_Name: Arena_less_decisions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2528,7 +2528,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1886964060513650090}
-  - component: {fileID: 1886964060513650089}
+  - component: {fileID: 3685441887548716122}
   - component: {fileID: 1886964060513650088}
   - component: {fileID: 1078000885374502302}
   m_Layer: 0
@@ -2552,7 +2552,7 @@ Transform:
   m_Father: {fileID: 1886964060356906171}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1886964060513650089
+--- !u!114 &3685441887548716122
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2561,7 +2561,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1886964060513650095}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c12d6651b4ae6e046abeac8dfb2be730, type: 3}
+  m_Script: {fileID: 11500000, guid: e1dce50b1b4370947aadefa93be0ef8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   agentParameters:
@@ -2586,16 +2586,16 @@ MonoBehaviour:
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
-      BranchSizes: 0900000005000000070000000a0000000200000002000000
-    VectorActionSize: 0900000005000000070000000a0000000200000002000000
+      BranchSizes: 03000000040000000900000008000000
+    VectorActionSize: 03000000040000000900000008000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: DungeonMasterSAC
-  TeamId: 1
+  m_BehaviorName: DungeonMaster
+  TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
   m_DeterministicInference: 0

@@ -39,6 +39,17 @@ public class ActionHealSigleTarget : ActionScriptableObject
 
 
     /// <summary>
+    /// Get heal's expected value.
+    /// Because we're using a die, the expected value is: die's value / 2 + 0.5.
+    /// </summary>
+    /// <returns></returns>
+    public override float GetExpectedValue()
+    {
+        return healDie / 2 + 0.5f;
+    }
+
+
+    /// <summary>
     /// Check if the heal target is valid. Requirements are:
     ///     1) Target tile is not empty
     ///     2) Target's and origin's teams are same

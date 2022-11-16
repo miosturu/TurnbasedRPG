@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class AIManager : MonoBehaviour
 {
-    [SerializeField] private MLAgent[] agents;
+    [SerializeField] private MLAgentShapedActions[] agents;
     [SerializeField] private GameManager gameManager;
 
     private void Start()

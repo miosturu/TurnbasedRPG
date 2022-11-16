@@ -31,9 +31,21 @@ public class ActionDoDamage : ActionScriptableObject
         }
     }
 
+
     public override string GetDescription()
     {
         return string.Format("Damage die: {0} \nRange: {1}", damageDie, range);
+    }
+
+
+    /// <summary>
+    /// Return attack's expected value.
+    /// Because we're using a die, the expected value is: die's value / 2 + 0.5.
+    /// </summary>
+    /// <returns>Attack's expected value</returns>
+    public override float GetExpectedValue()
+    {
+        return damageDie / 2 + 0.5f;
     }
 
 
